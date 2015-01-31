@@ -1,0 +1,39 @@
+.img_height_80 {
+    height: 80px;
+    display: inline-block;
+}
+.img_height_100 {
+    height: 100px;
+    display: inline-block;
+}
+.img_height_150 {
+    height: 150px;
+    display: inline-block;
+}
+
+.img_height_200 {
+    height: 200px;
+    display: inline-block;
+}
+
+.line_horizontal_height_21{
+    border:1px solid #CCC;
+    margin: 10px 0;
+}
+
+a:link{
+    text-decoration:none;
+    color: inherit;
+}
+a:visited{
+    text-decoration:none;
+    color: inherit;
+}
+a:hover{
+    text-decoration:none;
+    color: inherit;
+}
+a:active{
+    text-decoration:none;
+    color: inherit;
+}

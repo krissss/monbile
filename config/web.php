@@ -40,8 +40,14 @@ $config = [
             ],
         ],
         'db' => require(__DIR__ . '/db.php'),
+
     ],
     'params' => $params,
+    'modules' => [
+        'user' => [
+            'class' => 'app\modules\user\User',
+        ],
+    ],
 ];
 
 if (YII_ENV_DEV) {

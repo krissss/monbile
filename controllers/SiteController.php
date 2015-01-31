@@ -2,6 +2,7 @@
 
 namespace app\controllers;
 
+use app\models\forms\RegisterForm;
 use Yii;
 use yii\filters\AccessControl;
 use yii\web\Controller;
@@ -93,4 +94,19 @@ class SiteController extends Controller
     {
         return $this->render('about');
     }
+
+    public function actionRegister()
+    {
+        $model = new RegisterForm();
+        if ($model->load(Yii::$app->request->post()) && $model->register()) {
+            Yii::$app->session->setFlash('contactFormSubmitted');
+            return $this->refresh();
+        } else {
+            return $this->render('register', [
+                'model' => $model,
+            ]);
+        }
+    }
+
+
 }
