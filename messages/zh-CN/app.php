@@ -6,6 +6,7 @@
  * Time: 16:50
  */
 return [
+    'monbile' => '萌邦',
     'Login' => '登录',
     'Signup' => '注册',
 ];
