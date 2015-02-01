@@ -11,18 +11,15 @@ use yii\base\Model;
  */
 class RegisterForm extends Model
 {
+    public $nickname;
     public $email;
     public $password;
 
-    /**
-     * @return array the validation rules.
-     */
     public function rules()
     {
         return [
-            [['email', 'password'], 'required'],
+            [['email', 'nickname'], 'required'],
             ['email', 'email'],
-            ['password', 'validatePassword'],
         ];
     }
 
@@ -30,53 +27,21 @@ class RegisterForm extends Model
     {
         return [
             'email' => Yii::t('app', 'Email'),
-            'password' => Yii::t('app', 'Password'),
+            'nickname' => Yii::t('app', 'Nickname'),
         ];
     }
 
-    /**
-     * Validates the password.
-     * This method serves as the inline validation for password.
-     *
-     * @param string $attribute the attribute currently being validated
-     * @param array $params the additional name-value pairs given in the rule
-     */
-    public function validatePassword($attribute, $params)
+    public function sendPassword($model)
     {
-        if (!$this->hasErrors()) {
-            $user = $this->getUser();
-
-            if (!$user || !$user->validatePassword($this->password)) {
-                $this->addError($attribute, 'Incorrect username or password.');
-            }
-        }
-    }
-
-    /**
-     * Logs in a user using the provided username and password.
-     * @return boolean whether the user is logged in successfully
-     */
-    public function register()
-    {
-        /*if ($this->validate()) {
-            return Yii::$app->user->login($this->getUser(), $this->rememberMe ? 3600*24*30 : 0);
+        $password = '123456789';
+        $mail = Yii::$app->mailer->compose();
+        $mail->setTo($model->email);
+        $mail->setSubject('monbile用户注册');
+        $mail->setHtmlBody('亲爱的"'.$model->nickname.'",您可以使用该邮箱号和密码：'.$password.'进行登录');
+        if ($mail->send()) {
+            return true;
         } else {
             return false;
-        }*/
-        return false;
-    }
-
-    /**
-     * Finds user by [[username]]
-     *
-     * @return User|null
-     */
-    public function getUser()
-    {
-        if ($this->_user === false) {
-            $this->_user = User::findByUsername($this->username);
         }
-
-        return $this->_user;
     }
 }

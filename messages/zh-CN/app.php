@@ -10,7 +10,7 @@ return [
     'Login' => '登录',
     'Signup' => '注册',
 
-    'Username' => '用户名',
     'Email' => '邮箱',
+    'Nickname' => '昵称',
     'Password' => '密码'
 ];

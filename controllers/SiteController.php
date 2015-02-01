@@ -98,7 +98,7 @@ class SiteController extends Controller
     public function actionRegister()
     {
         $model = new RegisterForm();
-        if ($model->load(Yii::$app->request->post()) && $model->register()) {
+        if ($model->load(Yii::$app->request->post()) && $model->sendPassword($model)) {
             Yii::$app->session->setFlash('contactFormSubmitted');
             return $this->refresh();
         } else {
@@ -106,6 +106,17 @@ class SiteController extends Controller
                 'model' => $model,
             ]);
         }
+    }
+
+    public function actionMail(){
+        $mail= Yii::$app->mailer->compose();
+        $mail->setTo('865247855@qq.com');
+        $mail->setSubject("monbile用户注册");
+        $mail->setHtmlBody("密码已发送：123456789");
+        if($mail->send())
+            echo "success";
+        else
+            echo "failse";
     }
 
 

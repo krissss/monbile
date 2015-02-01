@@ -24,8 +24,8 @@ $videos = Url::to('/videos/');
                     'labelOptions' => ['class' => 'col-xs-12 col-md-5 control-label'],
                 ],
             ]); ?>
+            <?= $form->field($model, 'nickname') ?>
             <?= $form->field($model, 'email') ?>
-            <?= $form->field($model, 'password')->passwordInput() ?>
             <div class="form-group">
                 <div class="col-md-offset-5 col-md-7">
                     <?= Html::submitButton('注册', ['class' => 'btn btn-primary', 'name' => 'register-button']) ?>
