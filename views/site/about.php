@@ -23,5 +23,18 @@ $this->params['breadcrumbs'][] = $this->title;
             ...
         </div>
     </div>
+
+    <br/>
     <a href="<?=Url::to(['/site/mail'])?>">发邮件</a>
+
+    <br/>
+    <?php echo date('Y-m-d H:i:s'); ?>
+
+    <br/>
+    <?php echo md5(md5('admin'))?>
+    <br/>
+    <?php echo md5(12345)?>
+
+    <br/>
+    <?php require(__DIR__.'/fragment/video_send.php');?>
 </div>

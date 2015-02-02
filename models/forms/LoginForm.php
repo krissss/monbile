@@ -2,7 +2,7 @@
 
 namespace app\models\forms;
 
-use app\models\User;
+use app\models\Users;
 use Yii;
 use yii\base\Model;
 
@@ -11,70 +11,62 @@ use yii\base\Model;
  */
 class LoginForm extends Model
 {
-    public $username;
+    public $email;
     public $password;
-    public $rememberMe = true;
 
-    private $_user = false;
+    public $_user = false;
 
-
-    /**
-     * @return array the validation rules.
-     */
     public function rules()
     {
         return [
-            // username and password are both required
-            [['username', 'password'], 'required'],
-            // rememberMe must be a boolean value
-            ['rememberMe', 'boolean'],
-            // password is validated by validatePassword()
-            ['password', 'validatePassword'],
+            [['email', 'password'], 'required'],
+            ['email', 'email'],
+            ['email', 'validateRole'],
+            ['password', 'validatePassword']
         ];
     }
 
-    /**
-     * Validates the password.
-     * This method serves as the inline validation for password.
-     *
-     * @param string $attribute the attribute currently being validated
-     * @param array $params the additional name-value pairs given in the rule
-     */
-    public function validatePassword($attribute, $params)
+    public function attributeLabels()
     {
-        if (!$this->hasErrors()) {
-            $user = $this->getUser();
+        return [
+            'email' => Yii::t('app', 'Email'),
+            'password' => Yii::t('app', 'Password'),
+        ];
+    }
 
-            if (!$user || !$user->validatePassword($this->password)) {
-                $this->addError($attribute, 'Incorrect username or password.');
-            }
+    public function validateRole($attribute)
+    {
+        $user = $this->getUser();
+        if(!$user){
+            $this->addError($attribute, '该用户不存在');
+        }elseif($user->role_id == Users::ROLE_USER_DISABLE){
+            $this->addError($attribute, '该用户已被禁止登录');
         }
     }
 
-    /**
-     * Logs in a user using the provided username and password.
-     * @return boolean whether the user is logged in successfully
-     */
+    public function validatePassword($attribute)
+    {
+        $user = $this->getUser();
+        if(!$user){
+        }elseif($user->password!=md5(md5($this->password))){
+            $this->addError($attribute, '密码错误');
+        }
+    }
+
     public function login()
     {
-        if ($this->validate()) {
-            return Yii::$app->user->login($this->getUser(), $this->rememberMe ? 3600*24*30 : 0);
+        if ($this->validate() && $user = $this->getUser()) {
+            return $user;
         } else {
             return false;
         }
     }
 
-    /**
-     * Finds user by [[username]]
-     *
-     * @return User|null
-     */
     public function getUser()
     {
         if ($this->_user === false) {
-            $this->_user = User::findByUsername($this->username);
+            $this->_user = Users::findByEmail($this->email);
         }
-
         return $this->_user;
     }
 }

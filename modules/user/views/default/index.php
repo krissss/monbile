@@ -9,10 +9,19 @@ $this->title = '个人主页';
 $imgs = Url::to('/imgs/');
 $heads = Url::to('/heads/');
 $videos = Url::to('/videos/');
+
+$user = Yii::$app->getSession()->get('user');
 ?>
 <div class="user-default-index">
     <div class="row">
-
+        <?php if($user && $user->create_date == $user->update_date): ?>
+            <div class="alert alert-warning alert-dismissible" role="alert">
+                <button type="button" class="close" data-dismiss="alert"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
+                <strong>警告!</strong>
+                &nbsp;&nbsp;&nbsp;&nbsp;您的密码未修改，存在不安全因素，也可能给您下次登录带来麻烦，请尽快修改。&nbsp;&nbsp;&nbsp;&nbsp;
+                <Strong><a href="<?=Url::to(['/site/about'])?>" class="alert-link">点我修改</a></Strong>
+            </div>
+        <?php endif; ?>
         <div class="col-xs-12 col-md-8">
             <div class="btn-group">
                 <button type="button" class="btn btn-default btn-sm">全部</button>
@@ -103,23 +112,7 @@ $videos = Url::to('/videos/');
             </div>
         </div>
         <div class="col-xs-12 col-md-4">
-            <div class="text-center">
-                <img src="<?= Url::to($heads . 'head (5).jpg') ?>" alt="" class="img-circle img-responsiv img_height_150">
-                <h3>超级管理员</h3>
-            </div>
-            <div class="panel panel-default">
-                <div class="panel-body text-center">
-                    <div class="col-xs-3">关注<a href="<?=Url::to(['/user/default/index'])?>"><span class="badge">45</span></a></div>
-                    <div class="col-xs-1">|</div>
-                    <div class="col-xs-3">粉丝<a href="<?=Url::to(['/user/default/index'])?>"><span class="badge">45</span></a></div>
-                    <div class="col-xs-1">|</div>
-                    <div class="col-xs-3">动态<a href="<?=Url::to(['/user/default/index'])?>"><span class="badge">45</span></a></div>
-                    <div class="col-xs-12 line_horizontal_height_21"></div>
-                    <div class="col-xs-5"><a href="<?=Url::to(['/user/default/index'])?>">我的主页</a></div>
-                    <div class="col-xs-1">|</div>
-                    <div class="col-xs-5"><a href="<?=Url::to(['/user/default/videos'])?>">我的视频</a></div>
-                </div>
-            </div>
+           <?php require(__DIR__.'/../../../../views/site/fragment/user_info.php');?>
         </div>
     </div>
 </div>

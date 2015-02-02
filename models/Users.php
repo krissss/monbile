@@ -25,6 +25,10 @@ use Yii;
  */
 class Users extends \yii\db\ActiveRecord
 {
+    const ROLE_USER_DISABLE = 0;
+    const ROLE_USER_GENERAL = 1;
+    const ROLE_USER_SUPER_ADMIN =10;
+
     /**
      * @inheritdoc
      */
@@ -39,14 +43,10 @@ class Users extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
-            [['username', 'email', 'password', 'nickname', 'head', 'role_id', 'create_date', 'update_date'], 'required'],
+            [['email', 'password', 'nickname', 'head', 'role_id', 'create_date', 'update_date'], 'required'],
             [['role_id', 'telphone', 'sex', 'love_game_id', 'love_game_partition_id'], 'integer'],
             [['create_date', 'update_date', 'birthday'], 'safe'],
-            [['username', 'nickname'], 'string', 'max' => 20],
-            [['email'], 'string', 'max' => 30],
-            [['password'], 'string', 'max' => 50],
-            [['head', 'currentplace'], 'string', 'max' => 100],
-            [['username', 'email', 'nickname', 'telphone'], 'unique', 'targetAttribute' => ['username', 'email', 'nickname', 'telphone'], 'message' => 'The combination of Username, Email, Nickname and Telphone has already been taken.']
+            [['nickname'], 'string','min'=>2, 'max' => 20],
         ];
     }
 
@@ -72,5 +72,34 @@ class Users extends \yii\db\ActiveRecord
             'love_game_id' => Yii::t('app', 'Love Game ID'),
             'love_game_partition_id' => Yii::t('app', 'Love Game Partition ID'),
         ];
+    }
+
+    public static function getRandHead(){
+        return 'head ('.rand(1,10).').jpg';
+    }
+
+    public static function getRandPassword(){
+        $str = null;
+        $length = 9;
+        $strPol = "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789abcdefghijklmnopqrstuvwxyz";
+        $max = strlen($strPol)-1;
+
+        for($i=0;$i<$length;$i++){
+            $str.=$strPol[rand(0,$max)];
+        }
+
+        return $str;
+    }
+
+    public static function password_encrypt($password)
+    {
+        return md5(md5($password));
+    }
+
+    public static function findByEmail($email){
+        $user = Users::findOne([
+            'email' => $email,
+        ]);
+        return $user;
     }
 }

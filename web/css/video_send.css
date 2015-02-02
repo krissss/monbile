@@ -1,0 +1,25 @@
+#video_send_div {
+    position: relative;
+}
+
+#video_send_div .counter_label {
+    font-size: 16px;
+    font-weight: bold;
+    color: #2e6da4;
+}
+
+#video_send_div .counter {
+    position: absolute;
+    right: 0;
+    top: 0;
+    font-size: 14px;
+    color: #2e6da4;
+}
+
+#video_send_div .warning {
+    color: #f0ad4e;
+}
+
+#video_send_div .exceeded {
+    color: #d9534f;
+}

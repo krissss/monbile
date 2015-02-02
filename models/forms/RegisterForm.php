@@ -2,7 +2,8 @@
 
 namespace app\models\forms;
 
-use app\models\User;
+use app\models\Users;
+use Faker\Provider\DateTime;
 use Yii;
 use yii\base\Model;
 
@@ -19,7 +20,10 @@ class RegisterForm extends Model
     {
         return [
             [['email', 'nickname'], 'required'],
+            [['email', 'nickname'], 'filter', 'filter' => 'trim'],
+            [['nickname'], 'string','min'=>2, 'max' => 20],
             ['email', 'email'],
+            [['email', 'nickname'], 'unique', 'targetClass'=>'app\models\Users',  'message' => '{attribute}"{value}"已被占用。']
         ];
     }
 
@@ -31,17 +35,35 @@ class RegisterForm extends Model
         ];
     }
 
-    public function sendPassword($model)
+    public function sendPassword()
     {
-        $password = '123456789';
-        $mail = Yii::$app->mailer->compose();
-        $mail->setTo($model->email);
-        $mail->setSubject('monbile用户注册');
-        $mail->setHtmlBody('亲爱的"'.$model->nickname.'",您可以使用该邮箱号和密码：'.$password.'进行登录');
-        if ($mail->send()) {
-            return true;
-        } else {
-            return false;
+        if ($this->validate()) {
+            $this ->password = Users::getRandPassword();
+            $mail = Yii::$app->mailer->compose();
+            $mail->setTo($this->email);
+            $mail->setSubject('monbile用户注册');
+            $mail->setHtmlBody('亲爱的"' . $this->nickname . '",您可以使用该邮箱号和密码：' . $this ->password . '进行登录22');
+            if ($mail->send()) {
+                return true;
+            } else {
+                return false;
+            }
         }
+        return false;
+    }
+
+    public function register(){
+        $user = new Users();
+        $user->email = $this->email;
+        $user->nickname = $this->nickname;
+        $user->password = Users::password_encrypt($this->password);
+        $user->head = Users::getRandHead();
+        $user->role_id = Users::ROLE_USER_GENERAL;
+        $user->create_date = date('Y-m-d H:i:s');
+        $user->update_date = date('Y-m-d H:i:s');
+        if($user->save()){
+            return $user;
+        }
+        return null;
     }
 }

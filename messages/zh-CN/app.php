@@ -10,6 +10,7 @@ return [
     'Login' => '登录',
     'Signup' => '注册',
 
+    /* site/login  site/register */
     'Email' => '邮箱',
     'Nickname' => '昵称',
     'Password' => '密码'

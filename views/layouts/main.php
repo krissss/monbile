@@ -11,6 +11,7 @@ use app\assets\AppAsset;
 
 AppAsset::register($this);
 $imgs = Url::to('/imgs/');
+$user = Yii::$app->getSession()->get('user');
 ?>
 <?php $this->beginPage() ?>
 <!DOCTYPE html>
@@ -80,8 +81,12 @@ $imgs = Url::to('/imgs/');
                         </li>
                         <li><a href="<?=Url::to(['/site/about'])?>">关于我们</a></li>
                         <li><a href="<?=Url::to(['/site/contact'])?>">联系我们</a></li>
+                        <?php if(!$user):?>
                         <li><a href="<?=Url::to(['/site/register'])?>">注册</a></li>
-                        <li><a href="<?=Url::to(['/user/default/index', 'uid' =>'1'])?>">登录</a></li>
+                        <li><a href="<?=Url::to(['/site/login'])?>">登录</a></li>
+                        <?php else: ?>
+                            <li><a href="<?=Url::to(['/site/logout'])?>">退出</a></li>
+                        <?php endif;?>
                     </ul>
                 </div><!-- /.navbar-collapse -->
             </div><!-- /.container-fluid -->

@@ -6,6 +6,7 @@ use yii\helpers\Url;
 $this->title = Yii::t('app', 'monbile');
 $heads = Url::to('/heads/');
 $videos = Url::to('/videos/');
+$user = Yii::$app->getSession()->get('user');
 ?>
 <div class="site-index">
     <div class="row">
@@ -232,45 +233,10 @@ $videos = Url::to('/videos/');
 
         </div>
         <div class="col-xs-12 col-md-4">
-            <div class="user-info">
-                <div class="text-center">
-                    <img src="<?= Url::to($heads . 'head (5).jpg') ?>" alt=""
-                         class="img-circle img-responsiv img_height_150">
-
-                    <h3>超级管理员</h3>
-                </div>
-                <div class="panel panel-default">
-                    <div class="panel-body text-center">
-                        <div class="col-xs-3">关注<a href="<?= Url::to(['/user/default/index']) ?>"><span class="badge">45</span></a>
-                        </div>
-                        <div class="col-xs-1">|</div>
-                        <div class="col-xs-3">粉丝<a href="<?= Url::to(['/user/default/index']) ?>"><span class="badge">45</span></a>
-                        </div>
-                        <div class="col-xs-1">|</div>
-                        <div class="col-xs-3">动态<a href="<?= Url::to(['/user/default/index']) ?>"><span class="badge">45</span></a>
-                        </div>
-                        <div class="col-xs-12 line_horizontal_height_21"></div>
-                        <div class="col-xs-5"><a href="<?= Url::to(['/user/default/index']) ?>">我的主页</a></div>
-                        <div class="col-xs-1">|</div>
-                        <div class="col-xs-5"><a href="<?= Url::to(['/user/default/videos']) ?>">我的视频</a></div>
-                    </div>
-                </div>
-            </div>
-            <div class="hot-tag">
-                <div class="panel panel-default">
-                    <div class="panel-body">
-                        <h2 class="text-center text-danger">热门标签</h2>
-                        <a href="#" class="btn"><span class="label label-danger">英雄联盟</span></a>
-                        <a href="#" class="btn"><span class="label label-primary">Dota</span></a>
-                        <a href="#" class="btn"><span class="label label-success">Success</span></a>
-                        <a href="#" class="btn"><span class="label label-info">英雄联盟</span></a>
-                        <a href="#" class="btn"> <span class="label label-default">Default</span></a>
-                        <a href="#" class="btn"><span class="label label-primary">Primary</span></a>
-                        <a href="#" class="btn"><span class="label label-success">Success</span></a>
-                        <a href="#" class="btn"><span class="label label-info">Info</span></a>
-                    </div>
-                </div>
-            </div>
+            <?php if($user): ?>
+                <?php require(__DIR__.'/fragment/user_info.php');?>
+            <?php endif; ?>
+            <?php require(__DIR__.'/fragment/tag_cloud.php');?>
             <div class="hot-user">
                 <div class="panel panel-default">
                     <div class="panel-body">

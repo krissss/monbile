@@ -86,24 +86,7 @@ $videos = Url::to('/videos/');
             </div>
         </div>
         <div class="col-xs-12 col-md-4">
-            <div class="text-center">
-                <img src="<?= Url::to($heads . 'head (5).jpg') ?>" alt="" class="img-circle img-responsiv img_height_150">
-
-                <h3>超级管理员</h3>
-            </div>
-            <div class="panel panel-default">
-                <div class="panel-body text-center">
-                    <div class="col-xs-3">关注<a href="<?= Url::to(['/user/default/index']) ?>"><span class="badge">45</span></a></div>
-                    <div class="col-xs-1">|</div>
-                    <div class="col-xs-3">粉丝<a href="<?= Url::to(['/user/default/index']) ?>"><span class="badge">45</span></a></div>
-                    <div class="col-xs-1">|</div>
-                    <div class="col-xs-3">动态<a href="<?= Url::to(['/user/default/index']) ?>"><span class="badge">45</span></a></div>
-                    <div class="col-xs-12 line_horizontal_height_21"></div>
-                    <div class="col-xs-5"><a href="<?= Url::to(['/user/default/index']) ?>">我的主页</a></div>
-                    <div class="col-xs-1">|</div>
-                    <div class="col-xs-5"><a href="<?= Url::to(['/user/default/videos']) ?>">我的视频</a></div>
-                </div>
-            </div>
+            <?php require(__DIR__.'/../../../../views/site/fragment/user_info.php');?>
         </div>
     </div>
 </div>

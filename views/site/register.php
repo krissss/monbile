@@ -3,12 +3,9 @@ use yii\helpers\Html;
 use yii\helpers\Url;
 use yii\bootstrap\ActiveForm;
 
-/* @var $this yii\web\View */
 $this->title = '注册';
 
 $imgs = Url::to('/imgs/');
-$heads = Url::to('/heads/');
-$videos = Url::to('/videos/');
 ?>
 <div class="site-register">
     <div class="text-center">

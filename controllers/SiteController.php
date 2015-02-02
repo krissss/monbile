@@ -3,37 +3,40 @@
 namespace app\controllers;
 
 use app\models\forms\RegisterForm;
+use app\models\Users;
 use Yii;
 use yii\filters\AccessControl;
+use yii\helpers\Url;
 use yii\web\Controller;
 use yii\filters\VerbFilter;
 use app\models\forms\LoginForm;
 use app\models\forms\ContactForm;
+use yii\web\User;
 
 class SiteController extends Controller
 {
-    public function behaviors()
+/*    public function behaviors()
     {
         return [
-            'access' => [
-                'class' => AccessControl::className(),
-                'only' => ['logout'],
-                'rules' => [
-                    [
-                        'actions' => ['logout'],
-                        'allow' => true,
-                        'roles' => ['@'],
-                    ],
+        'access' => [
+            'class' => AccessControl::className(),
+            'only' => ['logout'],
+            'rules' => [
+                [
+                    'actions' => ['logout'],
+                    'allow' => true,
+                    'roles' => ['@'],
                 ],
             ],
-            'verbs' => [
-                'class' => VerbFilter::className(),
-                'actions' => [
-                    'logout' => ['post'],
-                ],
+        ],
+        'verbs' => [
+            'class' => VerbFilter::className(),
+            'actions' => [
+                'logout' => ['post'],
             ],
-        ];
-    }
+        ],
+    ];
+    }*/
 
     public function actions()
     {
@@ -60,8 +63,9 @@ class SiteController extends Controller
         }
 
         $model = new LoginForm();
-        if ($model->load(Yii::$app->request->post()) && $model->login()) {
-            return $this->goBack();
+        if ($model->load(Yii::$app->request->post()) && $user = $model->login()) {
+            Yii::$app->getSession()->set('user', $user);
+            return $this->goHome();
         } else {
             return $this->render('login', [
                 'model' => $model,
@@ -71,8 +75,9 @@ class SiteController extends Controller
 
     public function actionLogout()
     {
-        Yii::$app->user->logout();
-
+       // Yii::$app->user->logout();
+        Yii::$app->getSession()->removeAll();
+        Yii::$app->getSession()->destroy();
         return $this->goHome();
     }
 
@@ -98,25 +103,20 @@ class SiteController extends Controller
     public function actionRegister()
     {
         $model = new RegisterForm();
-        if ($model->load(Yii::$app->request->post()) && $model->sendPassword($model)) {
-            Yii::$app->session->setFlash('contactFormSubmitted');
-            return $this->refresh();
-        } else {
-            return $this->render('register', [
-                'model' => $model,
-            ]);
+        if ($model->load(Yii::$app->request->post()) && $model->sendPassword()) {
+            if ($user = $model->register()) {
+                return $this->redirect(Yii::$app->getRequest()->getBaseUrl() . 'index.php?r=site/login');
+            } else {
+                return $this->render('error', [
+                    'name' => '注册出错',
+                    'message' => '验证出错',
+                ]);
+            }
         }
-    }
 
-    public function actionMail(){
-        $mail= Yii::$app->mailer->compose();
-        $mail->setTo('865247855@qq.com');
-        $mail->setSubject("monbile用户注册");
-        $mail->setHtmlBody("密码已发送：123456789");
-        if($mail->send())
-            echo "success";
-        else
-            echo "failse";
+        return $this->render('register', [
+            'model' => $model,
+        ]);
     }
 
 
