@@ -20,16 +20,17 @@ class AppAsset extends AssetBundle
     public $css = [
         'css/site.css',
         'css/style.css',
-        'css/tag_cloud.css',
         'css/video_send.css',
-        'css/jquery-sinaEmotion-2.1.0.css'
+        'css/jquery-sinaEmotion-2.1.0.css',
+        'css/jquery-tag-this.css',
     ];
     public $js = [
         //'js/jquery.cookie.js',
-       // 'js/tag_cloud.js',
         'js/charCount.js',
         'js/jquery-sinaEmotion-2.1.0.js',
         'js/jquery.tagcanvas.js',
+        'js/jquery-tag-this.js',
+
         'js/monbile.js',
     ];
     public $depends = [

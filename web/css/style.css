@@ -38,4 +38,33 @@ a:active{
     color: inherit;
 }
 
-/* 标签云 */
+.div_inline{
+    display: inline-block;
+}
+
+#tag_popover{
+    z-index: 999;
+    width: 373px;
+    padding: 10px;
+    display: block;
+    font-size: 12px;
+    background: #fff;
+    overflow: hidden;
+    position: absolute;
+    border: 1px solid #E8E8E8;
+}
+
+#tag_popover #body_popover_inner{
+    padding-top: 20px;
+}
+
+#tag_popover .popover_close{
+    cursor: pointer;
+}
+
+#tag_popover .popover_ok{
+    width: 80px;
+    padding: 3px;
+    color: #fff;
+}
+

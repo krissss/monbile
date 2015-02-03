@@ -11,17 +11,7 @@ $user = Yii::$app->getSession()->get('user');
 <div class="site-index">
     <div class="row">
         <div class="col-xs-12 col-md-8">
-            <div class="panel panel-default collapse" id="send_video">
-                <div class="panel-body">
-                    <form>
-                        <textarea class="form-control" rows="3"></textarea>
-                        <button type="button" class="btn btn-warning">视频</button>
-                        <button type="button" class="btn btn-primary">表情</button>
-                        <button type="button" class="btn btn-success">标签</button>
-                        <button type="button" class="btn btn-warning pull-right">发布</button>
-                    </form>
-                </div>
-            </div>
+            <?php require(__DIR__.'/fragment/video_send.php');?>
             <div role="tabpanel">
 
                 <!-- Nav tabs -->
@@ -48,7 +38,7 @@ $user = Yii::$app->getSession()->get('user');
                                     <div class="media-body">
                                         <h4 class="media-heading">超级管理员</h4>
 
-                                        <p>哈哈哈哈哈哈哈哈哈哈超级管理员,超级管理员,哈哈哈哈哈哈哈哈哈哈超级管理员@哈哈哈哈哈哈哈哈哈哈超级管理员wa哈哈哈哈哈哈哈哈哈哈超级管理员</p>
+                                        <p class="has_face">[呵呵]三杀 四杀 五杀 还有谁</p>
 
                                         <div class="">
                                             <span class="label label-default">Default</span>
