@@ -31,10 +31,10 @@ $(document).ready(function () {
      * 使用charCount.js
      */
         //default usage
-        //$("#video_message").charCount();
+        //$("#videosendform-video_title").charCount();
 
         //custom usage
-    $("#video_message").charCount({
+    $("#videosendform-video_title").charCount({
         allowed: 100,
         warning: 20,
         counterText: '剩余字数: '
@@ -57,7 +57,7 @@ $(document).ready(function () {
     //点击显示表情
     $('#show_face').bind({
         click: function () {
-            var content = $(this).parents('form').find('#video_message').val();
+            var content = $(this).parents('form').find('#videosendform-video_title').val();
             $('.has_face').html(content).parseEmotion();
         }
     });
@@ -76,7 +76,7 @@ $(document).ready(function () {
             if (!$("#tag_popover").is(':visible')) {
                 //如果tags不存在  创建
                 if ($("#tag_popover").length < 1) {
-                    $('body').append('<div id="tag_popover"><span class="glyphicon glyphicon-remove pull-right popover_close" aria-hidden="true"></span><div id="tag_popover_inner"></div><span class="glyphicon glyphicon-ok pull-right popover_ok btn btn-primary" aria-hidden="true"></span></div>');
+                    $('body').append('<div id="tag_popover" class="popover_div"><span id="tag_popover_close" class="glyphicon glyphicon-remove pull-right popover_close" aria-hidden="true"></span><div id="tag_popover_inner" class="popover_inner"></div><span id="tag_popover_ok" class="glyphicon glyphicon-ok pull-right popover_ok btn btn-primary" aria-hidden="true"></span></div>');
 
                     function tagAdded(data) {
                         var val = data.addedInput.text;
@@ -98,7 +98,7 @@ $(document).ready(function () {
                         }
                     });
 
-                    var content = $('#video_message').val();
+                    var content = $('#videosendform-video_title').val();
                     var tags = ["三杀", "四杀", "五杀", "还有谁"];
                     $.each(tags, function (key, val) {
                         if (content.indexOf(val) > -1) {
@@ -123,30 +123,62 @@ $(document).ready(function () {
      * 选择分类
      */
     $("#change_classify_ul>li").bind({
-        click: function (event) {
-            $("#classify").attr("value",$(this).attr("data-gid"));
-            $("#change_classify").html($(this).text()+" <span class=\"caret\"></span>").addClass('btn-primary');
+        click: function () {
+            $("#classify").attr("value", $(this).attr("data-gid"));
+            $("#change_classify").html($(this).text() + " <span class=\"caret\"></span>").addClass('btn-primary');
         }
     });
 
+    /**
+     * 添加视频
+     */
+    $('#upload_file').parent().removeClass('col-xs-12').addClass('uploader white').end()
+        .after('<input type="text" class="filename" readonly/><input type="button" name="file" class="uploader_button" value="选择视频"/>')
+    $("input[type=file]").change(function () {
+        $(this).parents(".uploader").find(".filename").val($(this).val());
+        $(this).parents(".uploader").removeClass("white").addClass("blue").find(".uploader_button").val("已选择");
+    }).each(function () {
+        if ($(this).val() == "") {
+            $(this).parents(".uploader").find(".filename").val("请选择文件...");
+        }
+    });
 
     //绑定动态事件
     $("body").on("click", function () {
         $("#tag_popover").hide();
     }).on("click", "#tag_popover", function (event) {
         event.stopPropagation();
-    }).on("click", ".popover_close", function () {
+    }).on("click", "#tag_popover_close", function () {
         $("#tag_popover").hide();
-    }).on("click", ".popover_ok", function () {
+    }).on("click", "#tag_popover_ok", function () {
         var spans = $(".tag-this").children('span');
         var value = "";
         $.each(spans, function (key, val) {
             value += $(val).children('span').text() + '#';
         });
-        $("input[name='tag']").attr("value", value);
+        $("#tags").attr("value", value);
         $("#tag_popover").hide();
-        $('#add_tag').addClass('btn-primary');
+        if ($("#tags").val()) {
+            $('#add_tag').removeClass('btn-default').addClass('btn-primary');
+        } else {
+            $('#add_tag').removeClass('btn-primary').addClass('btn-default');
+        }
     });
 
+    /**
+     *
+     * video_send表单提交出错
+     */
+    var value = "";
+    $.each($('.error_hide'), function (key) {
+        if ($(this).text()) {
+            $('#send_video').addClass('in');
+            value += $(this).text()+'<br/>';
+        }
+        if(key == $('.error_hide').length-1 && value){
+            $('#error_message').removeClass('display_none').append(value);
+        }
+
+    });
 
 });

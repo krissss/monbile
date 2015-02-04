@@ -10,17 +10,31 @@ $user = Yii::$app->getSession()->get('user');
 ?>
 <div class="site-index">
     <div class="row">
-        <div class="col-xs-12 col-md-8">
-            <?php require(__DIR__.'/fragment/video_send.php');?>
-            <div role="tabpanel">
+        <div id="error_message" class="alert alert-danger alert-dismissible display_none" role="alert">
+            <button type="button" class="close" data-dismiss="alert"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
 
+        </div>
+        <?php if(isset($message)&&$message): ?>
+        <div class="alert alert-success alert-dismissible" role="alert">
+            <button type="button" class="close" data-dismiss="alert"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
+            <strong><?=$message?></strong>
+        </div>
+        <?php endif; ?>
+        <div class="col-xs-12 col-md-8">
+            <?php if($user): ?>
+                <?php require(__DIR__.'/fragment/video_send.php');?>
+            <?php endif; ?>
+
+            <div role="tabpanel">
                 <!-- Nav tabs -->
                 <ul class="nav nav-pills" role="tablist">
                     <li role="presentation" class="active"><a href="#one_hour" aria-controls="one_hour" role="tab" data-toggle="tab">1小时内</a></li>
                     <li role="presentation"><a href="#one_day" aria-controls="one_day" role="tab" data-toggle="tab">24小时内</a></li>
                     <li role="presentation"><a href="#one_week" aria-controls="one_week" role="tab" data-toggle="tab">周榜</a></li>
                     <li role="presentation"><a href="#one_month" aria-controls="one_month" role="tab" data-toggle="tab">月榜</a></li>
-                    <li role="presentation" class="pull-right"><a href="#send_video" data-toggle="collapse" aria-expanded="false" aria-controls="send_video" role="tab">我要发视频</a></li>
+                    <?php if($user): ?>
+                        <li role="presentation" class="pull-right"><a href="#send_video" data-toggle="collapse" aria-expanded="false" aria-controls="send_video" role="tab">我要发视频</a></li>
+                    <?php endif; ?>
                 </ul>
 
                 <!-- Tab panes -->

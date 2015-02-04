@@ -20,7 +20,6 @@ class AppAsset extends AssetBundle
     public $css = [
         'css/site.css',
         'css/style.css',
-        'css/video_send.css',
         'css/jquery-sinaEmotion-2.1.0.css',
         'css/jquery-tag-this.css',
     ];

@@ -3,6 +3,7 @@
 namespace app\controllers;
 
 use app\models\forms\RegisterForm;
+use app\models\forms\VideoSendForm;
 use app\models\Users;
 use Yii;
 use yii\filters\AccessControl;
@@ -11,32 +12,32 @@ use yii\web\Controller;
 use yii\filters\VerbFilter;
 use app\models\forms\LoginForm;
 use app\models\forms\ContactForm;
-use yii\web\User;
+use yii\web\UploadedFile;
 
 class SiteController extends Controller
 {
-/*    public function behaviors()
-    {
-        return [
-        'access' => [
-            'class' => AccessControl::className(),
-            'only' => ['logout'],
-            'rules' => [
-                [
-                    'actions' => ['logout'],
-                    'allow' => true,
-                    'roles' => ['@'],
+    /*    public function behaviors()
+        {
+            return [
+            'access' => [
+                'class' => AccessControl::className(),
+                'only' => ['logout'],
+                'rules' => [
+                    [
+                        'actions' => ['logout'],
+                        'allow' => true,
+                        'roles' => ['@'],
+                    ],
                 ],
             ],
-        ],
-        'verbs' => [
-            'class' => VerbFilter::className(),
-            'actions' => [
-                'logout' => ['post'],
+            'verbs' => [
+                'class' => VerbFilter::className(),
+                'actions' => [
+                    'logout' => ['post'],
+                ],
             ],
-        ],
-    ];
-    }*/
+        ];
+        }*/
 
     public function actions()
     {
@@ -53,6 +54,12 @@ class SiteController extends Controller
 
     public function actionIndex()
     {
+        if (Yii::$app->getSession()->get('user')) {
+            $video_send = new VideoSendForm();
+            return $this->render('index', [
+                'video_send' => $video_send,
+            ]);
+        }
         return $this->render('index');
     }
 
@@ -116,6 +123,33 @@ class SiteController extends Controller
         return $this->render('register', [
             'model' => $model,
         ]);
+    }
+
+    public function actionVideoSend()
+    {
+        $video_send = new VideoSendForm();
+
+        if ($video_send->load(Yii::$app->request->post()) && $video_send->validate(['user_id', 'video_title', 'tags', 'game_id'])) {
+            $video_send->video_path = UploadedFile::getInstance($video_send, 'video_path');
+            if ($video_send->validate(['video_path']) && $video_send->video_path) {
+                $video_name = uniqid();
+                $video_send->video_path->saveAs('videos/' . $video_name . '.' . $video_send->video_path->extension);
+                $video_send->video_path = $video_name . '.' . $video_send->video_path->extension;
+                $video_send->videoSave();
+                return $this->refresh('&state=ok');
+            }
+        }
+        $state = Yii::$app->request->get('state');
+        if ($state == 'ok') {
+            return $this->render('index', [
+                'video_send' => $video_send,
+                'message' => '发布成功',
+            ]);
+        }
+        return $this->render('index', [
+            'video_send' => $video_send,
+        ]);
+
     }
 
 

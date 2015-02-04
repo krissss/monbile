@@ -46,7 +46,8 @@
 			$(obj).next().html(options.counterText + available);
 		};
 				
-		this.each(function() {  			
+		this.each(function() {
+			$(this).before('<label for="video_message" class="counter_label">说点啥</label>');
 			$(this).after('<'+ options.counterElement +' class="' + options.css + '">'+ options.counterText +'</'+ options.counterElement +'>');
 			calculate(this);
 			$(this).keyup(function(){calculate(this)});

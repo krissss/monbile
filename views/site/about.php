@@ -36,5 +36,5 @@ $this->params['breadcrumbs'][] = $this->title;
     <?php echo md5(12345)?>
 
     <br/>
-    <?php require(__DIR__.'/fragment/video_send.php');?>
+<!--    --><?php //require(__DIR__.'/fragment/video_send.php');?>
 </div>
