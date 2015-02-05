@@ -19,6 +19,9 @@ use Yii;
  */
 class Videos extends \yii\db\ActiveRecord
 {
+    const VIDEO_ACTIVE = 1;
+    const VIDEO_DISABLE = 0;
+
     /**
      * @inheritdoc
      */
@@ -57,5 +60,22 @@ class Videos extends \yii\db\ActiveRecord
             'praise_count' => Yii::t('app', 'Praise Count'),
             'video_state' => Yii::t('app', 'Video State'),
         ];
+    }
+
+    public function getUser()
+    {
+        return $this->hasOne(Users::className(), ['uid' => 'user_id']);
+    }
+
+    public static function oneHourVideo()
+    {
+        $one_hour_front_timestamp  = time()-3600;
+        $one_hour_front = date('Y-m-d H:i:s',$one_hour_front_timestamp);
+        //, 'between','video_date', $one_hour_front , date('Y-m-d H:i:s')
+        return Videos::find()
+            ->joinWith('user')
+            ->where(['video_state' => Videos::VIDEO_ACTIVE])
+            ->orderBy(['video_date' => SORT_DESC])
+            ->all();
     }
 }

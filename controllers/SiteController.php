@@ -4,7 +4,9 @@ namespace app\controllers;
 
 use app\models\forms\RegisterForm;
 use app\models\forms\VideoSendForm;
+use app\models\Games;
 use app\models\Users;
+use app\models\Videos;
 use Yii;
 use yii\filters\AccessControl;
 use yii\helpers\Url;
@@ -54,13 +56,39 @@ class SiteController extends Controller
 
     public function actionIndex()
     {
+        //$videos_info = Videos::find()->joinWith('user')->where(['video_state' => Videos::VIDEO_ACTIVE])->orderBy(['video_date' => SORT_DESC])->all();
+        $videos_info = Videos::oneHourVideo();
         if (Yii::$app->getSession()->get('user')) {
             $video_send = new VideoSendForm();
+            $games = Games::find()->all();
+            if ($video_send->load(Yii::$app->request->post()) && $video_send->validate(['user_id', 'video_title', 'tags', 'game_id'])) {
+                $video_send->video_path = UploadedFile::getInstance($video_send, 'video_path');
+                if ($video_send->validate(['video_path']) && $video_send->video_path) {
+                    $video_name = uniqid();
+                    $video_send->video_path->saveAs('videos/' . $video_name . '.' . $video_send->video_path->extension);
+                    $video_send->video_path = $video_name . '.' . $video_send->video_path->extension;
+                    $video_send->videoSave();
+                    return $this->refresh('&state=ok');
+                }
+            }
+            $state = Yii::$app->request->get('state');
+            if ($state == 'ok') {
+                return $this->render('index', [
+                    'videos_info' => $videos_info,
+                    'video_send' => $video_send,
+                    'games' => $games,
+                    'message' => '发布成功',
+                ]);
+            }
             return $this->render('index', [
+                'videos_info' => $videos_info,
                 'video_send' => $video_send,
+                'games' => $games,
             ]);
         }
-        return $this->render('index');
+        return $this->render('index', [
+            'videos_info' => $videos_info,
+        ]);
     }
 
     public function actionLogin()
@@ -103,7 +131,10 @@ class SiteController extends Controller
 
     public function actionAbout()
     {
-        return $this->render('about');
+        $videos = Videos::find()->joinWith('user')->all();
+        return $this->render('about',[
+            'videos' => $videos,
+        ]);
     }
 
     public function actionRegister()
@@ -123,33 +154,6 @@ class SiteController extends Controller
         return $this->render('register', [
             'model' => $model,
         ]);
-    }
-
-    public function actionVideoSend()
-    {
-        $video_send = new VideoSendForm();
-
-        if ($video_send->load(Yii::$app->request->post()) && $video_send->validate(['user_id', 'video_title', 'tags', 'game_id'])) {
-            $video_send->video_path = UploadedFile::getInstance($video_send, 'video_path');
-            if ($video_send->validate(['video_path']) && $video_send->video_path) {
-                $video_name = uniqid();
-                $video_send->video_path->saveAs('videos/' . $video_name . '.' . $video_send->video_path->extension);
-                $video_send->video_path = $video_name . '.' . $video_send->video_path->extension;
-                $video_send->videoSave();
-                return $this->refresh('&state=ok');
-            }
-        }
-        $state = Yii::$app->request->get('state');
-        if ($state == 'ok') {
-            return $this->render('index', [
-                'video_send' => $video_send,
-                'message' => '发布成功',
-            ]);
-        }
-        return $this->render('index', [
-            'video_send' => $video_send,
-        ]);
-
     }
 
 

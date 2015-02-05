@@ -10,7 +10,7 @@ $user = Yii::$app->getSession()->get('user');
     <div class="panel-body">
         <?php $form = ActiveForm::begin([
             'id' => 'video-send-form',
-            'action' => ['/site/video-send'],
+            'action' => ['/site/index'],
             'options' => ['enctype' => 'multipart/form-data','class' => 'form-horizontal'],
             'fieldConfig' => [
                 'template' => "<div class=\"col-xs-12\">{input}</div>\n{error}",
@@ -30,14 +30,9 @@ $user = Yii::$app->getSession()->get('user');
                 类型 <span class="caret"></span>
             </button>
             <ul id="change_classify_ul" class="dropdown-menu" role="menu" aria-labelledby="change_classify">
-                <li role="presentation" data-gid="1"><a role="menuitem" tabindex="-1"
-                                                        href="javascript:void(0);">英雄联盟</a></li>
-                <li role="presentation" data-gid="2"><a role="menuitem" tabindex="-1"
-                                                        href="javascript:void(0);">Dota</a></li>
-                <li role="presentation" data-gid="3"><a role="menuitem" tabindex="-1"
-                                                        href="javascript:void(0);">炉石传说</a></li>
-                <li role="presentation" data-gid="4"><a role="menuitem" tabindex="-1" href="javascript:void(0);">剑灵</a>
-                </li>
+                <?php foreach ($games as $game):?>
+                    <li role="presentation" data-gid="<?=$game->gid?>"><a role="menuitem" tabindex="-1" href="javascript:void(0);"><?=$game->game_name_zh?></a></li>
+                <?php endforeach;?>
             </ul>
         </div>
         <?= Html::submitButton('发布', ['class' => 'btn btn-primary pull-right', 'name' => 'video-send-button']) ?>
