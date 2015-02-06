@@ -47,7 +47,10 @@ $user = Yii::$app->getSession()->get('user');
                 <!-- Tab panes -->
                 <div class="tab-content">
                             <div role="tabpanel" class="tab-pane fade in active" id="one_hour">
-                                <?php foreach ($videos_info as $video_info): ?>
+                                <?php if(!is_array($videos_one_hour)|| count($videos_one_hour)<1):?>
+                                <div class="alert alert-info" role="alert">该时段没有动态</div>
+                                <?php else:?>
+                                <?php foreach ($videos_one_hour as $video_info): ?>
                                 <div class="panel panel-default">
                                     <div class="panel-body">
                                         <div class="media">
@@ -61,11 +64,10 @@ $user = Yii::$app->getSession()->get('user');
 
                                                 <p class="has_face"><?= $video_info->video_title ?></p>
 
-                                                <div class="">
-                                                    <span class="label label-default">Default</span>
-                                                    <span class="label label-primary">Primary</span>
-                                                    <span class="label label-success">Success</span>
-                                                    <span class="label label-info">Info</span>
+                                                <div class="has_tag">
+                                                    <?php foreach ($video_info->tagRelations as $tagRelation_info): ?>
+                                                        <span class="tag tag-color-<?=rand(0,6)?>"><?=$tagRelation_info->tag->tag_name?></span>
+                                                    <?php endforeach; ?>
                                                 </div>
                                                 <div class="media">
                                                     <div class="media-middle">
@@ -100,9 +102,14 @@ $user = Yii::$app->getSession()->get('user');
                                     </div>
                                 </div>
                                 <?php endforeach; ?>
+                                <?endif;?>
                             </div>
                             <div role="tabpanel" class="tab-pane fade" id="one_day">
-                                <?php foreach ($videos_info as $video_info): ?>
+                                <?php if(!is_array($videos_one_day)|| count($videos_one_day)<1):?>
+                                    <div class="alert alert-info" role="alert">该时段没有动态</div>
+                                <?php else:?>
+                                <?php foreach ($videos_one_day as $video_info): ?>
+
                                 <div class="panel panel-default">
                                     <div class="panel-body">
                                         <div class="media">
@@ -116,11 +123,10 @@ $user = Yii::$app->getSession()->get('user');
 
                                                 <p class="has_face"><?= $video_info->video_title ?></p>
 
-                                                <div class="">
-                                                    <span class="label label-default">Default</span>
-                                                    <span class="label label-primary">Primary</span>
-                                                    <span class="label label-success">Success</span>
-                                                    <span class="label label-info">Info</span>
+                                                <div class="has_tag">
+                                                    <?php foreach ($video_info->tagRelations as $tagRelation_info): ?>
+                                                        <span class="tag tag-color-<?=rand(0,6)?>"><?=$tagRelation_info->tag->tag_name?></span>
+                                                    <?php endforeach; ?>
                                                 </div>
                                                 <div class="media">
                                                     <div class="media-middle">
@@ -155,6 +161,7 @@ $user = Yii::$app->getSession()->get('user');
                                     </div>
                                 </div>
                                 <?php endforeach; ?>
+                                <?endif;?>
                             </div>
                             <div role="tabpanel" class="tab-pane fade" id="one_week">
                                 <div class="panel panel-default">

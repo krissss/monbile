@@ -43,4 +43,20 @@ class TagRelation extends \yii\db\ActiveRecord
             'user_id' => Yii::t('app', 'User ID'),
         ];
     }
+
+    /**
+     * 一对一的关联，一个tagRelation有一个video
+     * @return \yii\db\ActiveQuery
+     */
+    public function getVideo(){
+        return $this->hasOne(Videos::className(),['vid' =>'video_id']);
+    }
+
+    /**
+     * 一对一的关联，一个tagRelation有一个tag
+     * @return \yii\db\ActiveQuery
+     */
+    public function getTag(){
+        return $this->hasOne(Tags::className(),['tid' => 'tag_id']);
+    }
 }

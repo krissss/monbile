@@ -10,7 +10,6 @@ $user = Yii::$app->getSession()->get('user');
     <div class="panel-body">
         <?php $form = ActiveForm::begin([
             'id' => 'video-send-form',
-            'action' => ['/site/index'],
             'options' => ['enctype' => 'multipart/form-data','class' => 'form-horizontal'],
             'fieldConfig' => [
                 'template' => "<div class=\"col-xs-12\">{input}</div>\n{error}",

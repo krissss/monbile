@@ -1,3 +1,4 @@
+/* common */
 .img_height_80 {
     height: 80px;
     display: inline-block;
@@ -47,6 +48,15 @@ a:active {
     display: inline-block;
 }
 
+.error_hide{
+    display: none;
+}
+
+.display_none{
+    display: none;
+}
+
+/* video_send textarea 文本域样式 */
 .field-videosendform-user_id {
     margin-bottom: 0px;
 }
@@ -85,6 +95,7 @@ a:active {
     color: #d9534f;
 }
 
+/* video_send  弹出框样式 */
 .popover_div {
     z-index: 999;
     width: 373px;
@@ -113,6 +124,7 @@ a:active {
     color: #fff;
 }
 
+/*  video_send  文件上传样式*/
 .uploader {
     position: relative;
     display: inline-block;
@@ -212,10 +224,54 @@ a:active {
     border-color: #204d74;
 }
 
-.error_hide{
-    display: none;
+/* index 标签样式 */
+.has_tag {
+    padding:5px;
+    width:100%;
+    height:auto;
+    overflow-y: auto;
+    margin: 20px 20px 10px 0;
+}
+.has_tag .tag {
+    -moz-border-radius:2px;
+    -webkit-border-radius:2px;
+    border-radius: 2px;
+    display: block;
+    float: left;
+    padding: 5px;
+    text-decoration:none;
+    margin-right: 5px;
+    margin-bottom:5px;
+    font-family: tahoma, sans-serif;
+    font-size:13px;
+    max-width: 90%;
+}
+.has_tag .tag-color-0{
+    background: #FF0033;
+    color: #FFF;
+}
+.has_tag .tag-color-1{
+    background: #FF9933;
+    color: #FFF;
+}
+.has_tag .tag-color-2{
+    background: #ffcc00;
+    color: #FFF;
+}
+.has_tag .tag-color-3{
+    background: #006633;
+    color: #FFF;
+}
+.has_tag .tag-color-4{
+    background: #0099CC;
+    color: #FFF;
+}
+.has_tag .tag-color-5{
+    background: #9999FF;
+    color: #FFF;
+}
+.has_tag .tag-color-6{
+    background: #9966CC;
+    color: #FFF;
 }
 
-.display_none{
-    display: none;
-}

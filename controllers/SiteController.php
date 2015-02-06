@@ -5,13 +5,11 @@ namespace app\controllers;
 use app\models\forms\RegisterForm;
 use app\models\forms\VideoSendForm;
 use app\models\Games;
+use app\models\Tags;
 use app\models\Users;
 use app\models\Videos;
 use Yii;
-use yii\filters\AccessControl;
-use yii\helpers\Url;
 use yii\web\Controller;
-use yii\filters\VerbFilter;
 use app\models\forms\LoginForm;
 use app\models\forms\ContactForm;
 use yii\web\UploadedFile;
@@ -56,9 +54,12 @@ class SiteController extends Controller
 
     public function actionIndex()
     {
-        //$videos_info = Videos::find()->joinWith('user')->where(['video_state' => Videos::VIDEO_ACTIVE])->orderBy(['video_date' => SORT_DESC])->all();
-        $videos_info = Videos::oneHourVideo();
+        $videos_one_hour = Videos::findOneHourVideos();
+        $videos_on_day = Videos::findOneDayVideos();
+        $tags_hot = Tags::findHotTags();
         if (Yii::$app->getSession()->get('user')) {
+            $user = Yii::$app->getSession()->get('user');
+            $user_info = Users::findRelationById($user->uid);
             $video_send = new VideoSendForm();
             $games = Games::find()->all();
             if ($video_send->load(Yii::$app->request->post()) && $video_send->validate(['user_id', 'video_title', 'tags', 'game_id'])) {
@@ -74,33 +75,37 @@ class SiteController extends Controller
             $state = Yii::$app->request->get('state');
             if ($state == 'ok') {
                 return $this->render('index', [
-                    'videos_info' => $videos_info,
+                    'user_info' => $user_info,
+                    'videos_one_hour' => $videos_one_hour,
+                    'videos_one_day' => $videos_on_day,
+                    'tags_hot' => $tags_hot,
                     'video_send' => $video_send,
                     'games' => $games,
                     'message' => '发布成功',
                 ]);
             }
             return $this->render('index', [
-                'videos_info' => $videos_info,
+                'user_info' => $user_info,
+                'videos_one_hour' => $videos_one_hour,
+                'videos_one_day' => $videos_on_day,
+                'tags_hot' => $tags_hot,
                 'video_send' => $video_send,
                 'games' => $games,
             ]);
         }
         return $this->render('index', [
-            'videos_info' => $videos_info,
+            'videos_one_hour' => $videos_one_hour,
+            'videos_one_day' => $videos_on_day,
+            'tags_hot' => $tags_hot,
         ]);
     }
 
     public function actionLogin()
     {
-        if (!\Yii::$app->user->isGuest) {
-            return $this->goHome();
-        }
-
         $model = new LoginForm();
         if ($model->load(Yii::$app->request->post()) && $user = $model->login()) {
             Yii::$app->getSession()->set('user', $user);
-            return $this->goHome();
+            return $this->redirect(['/user/default/index']);
         } else {
             return $this->render('login', [
                 'model' => $model,

@@ -48,7 +48,18 @@ class Tags extends \yii\db\ActiveRecord
         ];
     }
 
-    public function isExist($tag_name){
-        //Tags::findOne()
+    /**
+     * 一对多关联，一个tag有多个tagRelation
+     * @return \yii\db\ActiveQuery
+     */
+    public function getTagRelations(){
+        return $this->hasMany(TagRelation::className(), ['tag_id' => 'tid']);
+    }
+
+    public static function findHotTags($num = 20){
+        return Tags::find()
+            ->orderBy(['tag_count' => SORT_DESC])
+            ->limit($num)
+            ->all();
     }
 }

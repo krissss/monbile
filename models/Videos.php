@@ -62,19 +62,53 @@ class Videos extends \yii\db\ActiveRecord
         ];
     }
 
+    /**
+     * 一对一关联，一个video只有一个user
+     * @return \yii\db\ActiveQuery
+     */
     public function getUser()
     {
         return $this->hasOne(Users::className(), ['uid' => 'user_id']);
     }
 
-    public static function oneHourVideo()
+    /**
+     * 一对多关联，一个video有多个tagRelation
+     * @return \yii\db\ActiveQuery
+     */
+    public function getTagRelations(){
+        return $this->hasMany(TagRelation::className(), ['video_id' => 'vid']);
+    }
+
+    /**
+     * 获取一小时前的视频
+     * @return array|\yii\db\ActiveRecord[]
+     */
+    public static function findOneHourVideos()
     {
         $one_hour_front_timestamp  = time()-3600;
         $one_hour_front = date('Y-m-d H:i:s',$one_hour_front_timestamp);
-        //, 'between','video_date', $one_hour_front , date('Y-m-d H:i:s')
+        return Videos::find()
+            ->joinWith(['user','tagRelations.tag'])
+            ->where(['video_state' => Videos::VIDEO_ACTIVE])
+            ->andWhere(['between','video_date', $one_hour_front , date('Y-m-d H:i:s')])
+            ->orderBy(['video_date' => SORT_DESC])
+            ->all();
+    }
+
+    /**
+     * 获取一天前的视频，排除一小时前
+     * @return array|\yii\db\ActiveRecord[]
+     */
+    public static function findOneDayVideos()
+    {
+        $one_day_front_timestamp  = time()-3600*24;
+        $one_day_front = date('Y-m-d H:i:s',$one_day_front_timestamp);
+        $one_hour_front_timestamp  = time()-3600;
+        $one_hour_front = date('Y-m-d H:i:s',$one_hour_front_timestamp);
         return Videos::find()
             ->joinWith('user')
             ->where(['video_state' => Videos::VIDEO_ACTIVE])
+            ->andWhere(['between','video_date', $one_day_front , $one_hour_front])
             ->orderBy(['video_date' => SORT_DESC])
             ->all();
     }

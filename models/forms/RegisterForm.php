@@ -38,7 +38,7 @@ class RegisterForm extends Model
     public function sendPassword()
     {
         if ($this->validate()) {
-            $this ->password = Users::getRandPassword();
+            $this ->password = Users::createRandPassword();
             $mail = Yii::$app->mailer->compose();
             $mail->setTo($this->email);
             $mail->setSubject('monbile用户注册');
@@ -57,7 +57,7 @@ class RegisterForm extends Model
         $user->email = $this->email;
         $user->nickname = $this->nickname;
         $user->password = Users::password_encrypt($this->password);
-        $user->head = Users::getRandHead();
+        $user->head = Users::createRandHead();
         $user->role_id = Users::ROLE_USER_GENERAL;
         $user->create_date = date('Y-m-d H:i:s');
         $user->update_date = date('Y-m-d H:i:s');

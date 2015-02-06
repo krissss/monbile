@@ -1,88 +1,38 @@
 <?php
-use yii\helpers\Html;
 use yii\helpers\Url;
-use yii\bootstrap\ActiveForm;
 
-/* @var $this yii\web\View */
-$this->title = '个人主页';
+$this->title = '个人视频';
 
-$imgs = Url::to('/imgs/');
-$heads = Url::to('/heads/');
 $videos = Url::to('/videos/');
 ?>
 <div class="user-default-index">
     <div class="row">
-
         <div class="col-xs-12 col-md-8">
             <div class="row">
+                <?php if(!is_array($user_info->videos)|| count($user_info->videos)<1):?>
+                    <div class="alert alert-info col-xs-12" role="alert">您还没有发布任何视频</div>
+                <?php else:?>
+                <?php foreach (array_reverse($user_info->videos) as $video_info): ?>
                 <div class="col-xs-12 col-md-6">
                     <div class="thumbnail">
-                        <video src="<?= Url::to($videos . 'a.mp4') ?>" controls="controls"
+                        <video src="<?= Url::to($videos . $video_info->video_path) ?>" controls="controls"
                                class="col-xs-12">
                             <p>您的浏览器不支持html5，请更换浏览器</p>
                         </video>
                         <div class="caption">
-                            <p>今天 21:35</p>
-                            <div class="">
-                                <span class="label label-default">Default</span>
-                                <span class="label label-primary">Primary</span>
-                                <span class="label label-success">Success</span>
-                                <span class="label label-info">Info</span>
+                            <h5 class="col-xs-12">
+                                <small><?=$video_info->video_date; ?></small>
+                            </h5>
+                            <div class="has_tag">
+                                <?php foreach ($video_info->tagRelations as $tagRelation_info): ?>
+                                    <span class="tag tag-color-<?=rand(0,6)?>"><?=$tagRelation_info->tag->tag_name?></span>
+                                <?php endforeach; ?>
                             </div>
                         </div>
                     </div>
                 </div>
-                <div class="col-xs-12 col-md-6">
-                    <div class="thumbnail">
-                        <video src="<?= Url::to($videos . 'a.mp4') ?>" controls="controls"
-                               class="col-xs-12">
-                            <p>您的浏览器不支持html5，请更换浏览器</p>
-                        </video>
-                        <div class="caption">
-                            <p>今天 21:35</p>
-                            <div class="">
-                                <span class="label label-default">Default</span>
-                                <span class="label label-primary">Primary</span>
-                                <span class="label label-success">Success</span>
-                                <span class="label label-info">Info</span>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                <div class="col-xs-12 col-md-6">
-                    <div class="thumbnail">
-                        <video src="<?= Url::to($videos . 'a.mp4') ?>" controls="controls"
-                               class="col-xs-12">
-                            <p>您的浏览器不支持html5，请更换浏览器</p>
-                        </video>
-                        <div class="caption">
-                            <p>今天 21:35</p>
-                            <div class="">
-                                <span class="label label-default">Default</span>
-                                <span class="label label-primary">Primary</span>
-                                <span class="label label-success">Success</span>
-                                <span class="label label-info">Info</span>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                <div class="col-xs-12 col-md-6">
-                    <div class="thumbnail">
-                        <video src="<?= Url::to($videos . 'a.mp4') ?>" controls="controls"
-                               class="col-xs-12">
-                            <p>您的浏览器不支持html5，请更换浏览器</p>
-                        </video>
-                        <div class="caption">
-                            <p>今天 21:35</p>
-                            <div class="">
-                                <span class="label label-default">Default</span>
-                                <span class="label label-primary">Primary</span>
-                                <span class="label label-success">Success</span>
-                                <span class="label label-info">Info</span>
-                            </div>
-                        </div>
-                    </div>
-                </div>
+                <?php endforeach; ?>
+                <?php endif; ?>
             </div>
         </div>
         <div class="col-xs-12 col-md-4">

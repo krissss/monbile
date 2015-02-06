@@ -74,32 +74,97 @@ class Users extends \yii\db\ActiveRecord
         ];
     }
 
-    public static function getRandHead(){
+    /**
+     * 一对多关联，一个user有多个video
+     * @return \yii\db\ActiveQuery
+     */
+    public function getVideos(){
+        return $this->hasMany(Videos::className(), ['user_id' => 'uid']);
+    }
+
+    /**
+     * 一对多关联，一个user有多个关注对象
+     * @return \yii\db\ActiveQuery
+     */
+    public function getRelationsFront(){
+        return $this->hasMany(Relations::className(), ['front_id' => 'uid']);
+    }
+
+    /**
+     * 一对多关联，一个user有多个粉丝
+     * @return \yii\db\ActiveQuery
+     */
+    public function getRelationsBack(){
+        return $this->hasMany(Relations::className(), ['back_id' => 'uid']);
+    }
+
+
+    /**
+     * 创建随机头像
+     * @return string
+     */
+    public static function createRandHead(){
         return 'head ('.rand(1,10).').jpg';
     }
 
-    public static function getRandPassword(){
+    /**
+     * 创建随机密码，默认9位
+     * @return null|string
+     */
+    public static function createRandPassword($length = 9){
         $str = null;
-        $length = 9;
         $strPol = "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789abcdefghijklmnopqrstuvwxyz";
         $max = strlen($strPol)-1;
-
         for($i=0;$i<$length;$i++){
             $str.=$strPol[rand(0,$max)];
         }
-
         return $str;
     }
 
+    /*
+     * 加密密码
+     */
     public static function password_encrypt($password)
     {
         return md5(md5($password));
     }
 
+    /**
+     * 通过邮箱查找用户
+     * @param $email
+     * @return static
+     */
     public static function findByEmail($email){
         $user = Users::findOne([
             'email' => $email,
         ]);
         return $user;
+    }
+
+    /**
+     * 查询用户的关注和粉丝
+     * @return array|\yii\db\ActiveRecord[]
+     */
+    public static function findRelation(){
+        return Users::find()
+            ->joinWith(['relationsFront'=>function($query){
+                $query->from('mb_relations f');
+            },'relationsBack'])
+            ->all();
+    }
+
+    /**
+     * 查询某个用户的关注和粉丝和视频
+     * @param $uid
+     * @return array|\yii\db\ActiveRecord[]
+     */
+    public static function findRelationById($uid){
+        return Users::find()
+            ->joinWith(['relationsFront'=>function($query){
+                $query->from('mb_relations f');
+            },'relationsBack',
+            'videos'])
+            ->where(['uid'=>$uid])
+            ->one();
     }
 }

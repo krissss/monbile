@@ -21,13 +21,13 @@ $user = Yii::$app->getSession()->get('user');
     </div>
     <div class="panel panel-default">
         <div class="panel-body text-center">
-            <div class="col-xs-3">关注<a href="<?= Url::to(['/user/default/index']) ?>"><span class="badge">45</span></a>
+            <div class="col-xs-3">关注<a href="<?= Url::to(['/user/default/index']) ?>"><span class="badge"><?=count($user_info->relationsFront)?></span></a>
             </div>
             <div class="col-xs-1">|</div>
-            <div class="col-xs-3">粉丝<a href="<?= Url::to(['/user/default/index']) ?>"><span class="badge">45</span></a>
+            <div class="col-xs-3">粉丝<a href="<?= Url::to(['/user/default/index']) ?>"><span class="badge"><?=count($user_info->relationsBack)?></span></a>
             </div>
             <div class="col-xs-1">|</div>
-            <div class="col-xs-3">动态<a href="<?= Url::to(['/user/default/index']) ?>"><span class="badge">45</span></a>
+            <div class="col-xs-3">动态<a href="<?= Url::to(['/user/default/index']) ?>"><span class="badge"><?=count($user_info->videos)?></span></a>
             </div>
             <div class="col-xs-12 line_horizontal_height_21"></div>
             <div class="col-xs-5"><a href="<?= Url::to(['/user/default/index']) ?>">我的主页</a></div>
