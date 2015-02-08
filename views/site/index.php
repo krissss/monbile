@@ -60,7 +60,7 @@ $user = Yii::$app->getSession()->get('user');
                                                                  class="img-circle img-responsiv img_height_80"></a>
                                             </div>
                                             <div class="media-body">
-                                                <h4 class="media-heading">超级管理员</h4>
+                                                <h4 class="media-heading"><?=$video_info->user->nickname?></h4>
 
                                                 <p class="has_face"><?= $video_info->video_title ?></p>
 
@@ -119,7 +119,7 @@ $user = Yii::$app->getSession()->get('user');
                                                                  class="img-circle img-responsiv img_height_80"></a>
                                             </div>
                                             <div class="media-body">
-                                                <h4 class="media-heading">超级管理员</h4>
+                                                <h4 class="media-heading"><?=$video_info->user->nickname?></h4>
 
                                                 <p class="has_face"><?= $video_info->video_title ?></p>
 

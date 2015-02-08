@@ -27,32 +27,32 @@ class Users extends \yii\db\ActiveRecord
 {
     const ROLE_USER_DISABLE = 0;
     const ROLE_USER_GENERAL = 1;
-    const ROLE_USER_SUPER_ADMIN =10;
+    const ROLE_USER_SUPER_ADMIN = 10;
 
-    /**
-     * @inheritdoc
-     */
+    public $password_2;
+
+    public function setPassword_2($password_2)
+    {
+        $this->password_2 = $password_2;
+    }
+
     public static function tableName()
     {
         return '{{%users}}';
     }
 
-    /**
-     * @inheritdoc
-     */
     public function rules()
     {
         return [
             [['email', 'password', 'nickname', 'head', 'role_id', 'create_date', 'update_date'], 'required'],
-            [['role_id', 'telphone', 'sex', 'love_game_id', 'love_game_partition_id'], 'integer'],
+            [['role_id', 'sex', 'love_game_id', 'love_game_partition_id'], 'integer'],
+            ['telphone', 'string', 'max' => 11],
+            ['telphone', 'match', 'pattern' => '^1(3[0-9]|5[0-35-9]|8[025-9])\\d{8}$^'],
             [['create_date', 'update_date', 'birthday'], 'safe'],
-            [['nickname'], 'string','min'=>2, 'max' => 20],
+            [['nickname'], 'string', 'min' => 2, 'max' => 20],
         ];
     }
 
-    /**
-     * @inheritdoc
-     */
     public function attributeLabels()
     {
         return [
@@ -78,7 +78,8 @@ class Users extends \yii\db\ActiveRecord
      * 一对多关联，一个user有多个video
      * @return \yii\db\ActiveQuery
      */
-    public function getVideos(){
+    public function getVideos()
+    {
         return $this->hasMany(Videos::className(), ['user_id' => 'uid']);
     }
 
@@ -86,7 +87,8 @@ class Users extends \yii\db\ActiveRecord
      * 一对多关联，一个user有多个关注对象
      * @return \yii\db\ActiveQuery
      */
-    public function getRelationsFront(){
+    public function getRelationsFront()
+    {
         return $this->hasMany(Relations::className(), ['front_id' => 'uid']);
     }
 
@@ -94,7 +96,8 @@ class Users extends \yii\db\ActiveRecord
      * 一对多关联，一个user有多个粉丝
      * @return \yii\db\ActiveQuery
      */
-    public function getRelationsBack(){
+    public function getRelationsBack()
+    {
         return $this->hasMany(Relations::className(), ['back_id' => 'uid']);
     }
 
@@ -103,20 +106,22 @@ class Users extends \yii\db\ActiveRecord
      * 创建随机头像
      * @return string
      */
-    public static function createRandHead(){
-        return 'head ('.rand(1,10).').jpg';
+    public static function createRandHead()
+    {
+        return 'head (' . rand(1, 10) . ').jpg';
     }
 
     /**
      * 创建随机密码，默认9位
      * @return null|string
      */
-    public static function createRandPassword($length = 9){
+    public static function createRandPassword($length = 9)
+    {
         $str = null;
         $strPol = "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789abcdefghijklmnopqrstuvwxyz";
-        $max = strlen($strPol)-1;
-        for($i=0;$i<$length;$i++){
-            $str.=$strPol[rand(0,$max)];
+        $max = strlen($strPol) - 1;
+        for ($i = 0; $i < $length; $i++) {
+            $str .= $strPol[rand(0, $max)];
         }
         return $str;
     }
@@ -134,7 +139,8 @@ class Users extends \yii\db\ActiveRecord
      * @param $email
      * @return static
      */
-    public static function findByEmail($email){
+    public static function findByEmail($email)
+    {
         $user = Users::findOne([
             'email' => $email,
         ]);
@@ -145,11 +151,12 @@ class Users extends \yii\db\ActiveRecord
      * 查询用户的关注和粉丝
      * @return array|\yii\db\ActiveRecord[]
      */
-    public static function findRelation(){
+    public static function findRelation()
+    {
         return Users::find()
-            ->joinWith(['relationsFront'=>function($query){
+            ->joinWith(['relationsFront' => function ($query) {
                 $query->from('mb_relations f');
-            },'relationsBack'])
+            }, 'relationsBack'])
             ->all();
     }
 
@@ -158,13 +165,14 @@ class Users extends \yii\db\ActiveRecord
      * @param $uid
      * @return array|\yii\db\ActiveRecord[]
      */
-    public static function findRelationById($uid){
+    public static function findRelationById($uid)
+    {
         return Users::find()
-            ->joinWith(['relationsFront'=>function($query){
+            ->joinWith(['relationsFront' => function ($query) {
                 $query->from('mb_relations f');
-            },'relationsBack',
-            'videos'])
-            ->where(['uid'=>$uid])
+            }, 'relationsBack',
+                'videos'])
+            ->where(['uid' => $uid])
             ->one();
     }
 }

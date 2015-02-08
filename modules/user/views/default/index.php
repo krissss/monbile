@@ -19,7 +19,7 @@ $user = Yii::$app->getSession()->get('user');
                 <button type="button" class="close" data-dismiss="alert"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
                 <strong>警告!</strong>
                 &nbsp;&nbsp;&nbsp;&nbsp;您的密码未修改，存在不安全因素，也可能给您下次登录带来麻烦，请尽快修改。&nbsp;&nbsp;&nbsp;&nbsp;
-                <Strong><a href="<?=Url::to(['/site/about'])?>" class="alert-link">点我修改</a></Strong>
+                <Strong><a href="<?=Url::to(['/user/default/updateinfo'])?>" class="alert-link">点我修改</a></Strong>
             </div>
         <?php endif; ?>
         <?php if (isset($message) && $message): ?>

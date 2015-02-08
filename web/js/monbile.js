@@ -166,19 +166,62 @@ $(document).ready(function () {
     });
 
     /**
-     *
      * video_send表单提交出错
      */
     var value = "";
     $.each($('.error_hide'), function (key) {
         if ($(this).text()) {
             $('#send_video').addClass('in');
-            value += $(this).text()+'<br/>';
+            value += $(this).text() + '<br/>';
         }
-        if(key == $('.error_hide').length-1 && value){
+        if (key == $('.error_hide').length - 1 && value) {
             $('#error_message').removeClass('display_none').append(value);
         }
-
     });
 
+    /**
+     * 用户头像上传
+     */
+    swfobject.addDomLoadEvent(function () {
+        var swf = new fullAvatarEditor("fullAvatarEditor.swf", "expressInstall.swf", "swfContainer",{
+                id: 'swf',
+                upload_url: 'upload.php',	//上传接口
+                method: 'post',	//传递到上传接口中的查询参数的提交方式。更改该值时，请注意更改上传接口中的查询参数的接收方式
+                //src_url: $("#oldHead").val(), //默认加载的原图片的url
+                src_upload: 0,		//是否上传原图片的选项，有以下值：0-不上传；1-上传；2-显示复选框由用户选择
+                tab_visible: false,  //是否显示选项卡
+                avatar_intro: '最终会使用以下尺寸的头像，请注意是否清晰',    //头像简介，默认：最终会生成以下尺寸的头像，请注意是否清晰
+                avatar_box_border_width: 0, //头像框的边框宽度
+                avatar_sizes: '150*150|80*80',  //表示一组或多组头像的尺寸。其间用"|"号分隔。
+                avatar_sizes_desc: '150*150像素|80*80像素'  //头像尺寸的提示文本。多个用"|"号分隔，与上一项对应。
+            }, function (msg) {
+                switch (msg.code) {
+                    case 1 :
+                        //alert("页面成功加载了组件！");
+                        break;
+                    case 2 :
+                        //alert("已成功加载图片到编辑面板。");
+                        document.getElementById("upload").style.display = "inline";
+                        break;
+                    case 5 :
+                        switch (msg.type) {
+                            //表示图片上传成功。
+                            case 0:
+                                //成功修改跳转到其他页面
+                                window.location.href="index.php?r=user/default/updateinfo&head="+msg.content.avatarUrls.join(',');
+                                break;
+                            case 1:
+                                alert('头像上传失败，原因：' + msg.content.msg);//will output:头像上传失败，原因：上传的原图文件大小超出限值了！
+                                break;
+                            case 2:
+                                alert('头像上传失败，原因：指定的上传地址不存在或有问题！');
+                                break;
+                            case 3:
+                                alert('头像上传失败，原因：发生了安全性错误！请联系站长添加crossdomain.xml到网站根目录。');
+                                break;
+                        }
+                }
+            }
+        );
+    });
 });

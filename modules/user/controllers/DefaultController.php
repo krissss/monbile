@@ -13,8 +13,7 @@ class DefaultController extends Controller
 {
     public function actionIndex()
     {
-        if (Yii::$app->getSession()->get('user')) {
-            $user = Yii::$app->getSession()->get('user');
+        if ($user = Yii::$app->getSession()->get('user')) {
             $user_info = Users::findRelationById($user->uid);
             $video_send = new VideoSendForm();
             $games = Games::find()->all();
@@ -48,13 +47,84 @@ class DefaultController extends Controller
 
     public function actionVideos()
     {
-        if (Yii::$app->getSession()->get('user')) {
-            $user = Yii::$app->getSession()->get('user');
+        if ($user = Yii::$app->getSession()->get('user')) {
             $user_info = Users::findRelationById($user->uid);
             return $this->render('videos', [
                 'user_info' => $user_info,
             ]);
         }
         return $this->goHome();
+    }
+
+    public function actionUpdateinfo()
+    {
+        if ($user = Yii::$app->getSession()->get('user')) {
+            if (Yii::$app->request->post('updateinfo-return')) {
+                exit;
+            }
+            if ($user_head = Yii::$app->request->get('head')) {
+                $new_user = Users::findOne($user->uid);
+                $new_user->head = $user_head;
+                $new_user->update();
+                Yii::$app->getSession()->set('user', $new_user);
+                $user = Yii::$app->getSession()->get('user');
+            }
+            $model = Users::findOne($user->uid);
+            $games = Games::find()->all();
+            if ($model->load(Yii::$app->request->post())) {
+                $model->update_date = date('Y-m-d H:i:s');
+                $model->update();
+                Yii::$app->getSession()->set('user', $model);
+                Yii::$app->getSession()->get('user');
+                return $this->redirect(['index']);
+            } else {
+                return $this->render('updateinfo', [
+                    'model' => $model,
+                    'games' => $games,
+                ]);
+            }
+        }
+        return $this->goHome();
+    }
+
+    public function actionChangehead()
+    {
+        if ($user = Yii::$app->getSession()->get('user')) {
+            return $this->render('changehead');
+        }
+        return $this->goHome();
+    }
+
+    public function actionUpdatepaw()
+    {
+        if ($user = Yii::$app->getSession()->get('user')) {
+            $model = Users::findOne($user->uid);
+            if ($model->load(Yii::$app->request->post())) {
+                if($model->password === $model->password_2){
+                    $model->password = Users::password_encrypt($model->password);
+                    $model->update();
+                    Yii::$app->getSession()->set('user', $model);
+                    Yii::$app->getSession()->get('user');
+                    return $this->redirect(['index']);
+                }else{
+                    echo $model->password;
+                    echo $model->password_2;
+                    exit;
+                    return $this->render('updatepaw', [
+                        'model' => $model,
+                    ]);
+                }
+            } else {
+                return $this->render('updatepaw', [
+                    'model' => $model,
+                ]);
+            }
+        }
+        return $this->goHome();
+    }
+
+    public function actionGoback()
+    {
+        return $this->goBack();
     }
 }
