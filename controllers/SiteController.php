@@ -57,8 +57,7 @@ class SiteController extends Controller
         $videos_one_hour = Videos::findOneHourVideos();
         $videos_on_day = Videos::findOneDayVideos();
         $tags_hot = Tags::findHotTags();
-        if (Yii::$app->getSession()->get('user')) {
-            $user = Yii::$app->getSession()->get('user');
+        if ($user = Yii::$app->getSession()->get('user')) {
             $user_info = Users::findRelationById($user->uid);
             $video_send = new VideoSendForm();
             $games = Games::find()->all();
@@ -69,20 +68,9 @@ class SiteController extends Controller
                     $video_send->video_path->saveAs('videos/' . $video_name . '.' . $video_send->video_path->extension);
                     $video_send->video_path = $video_name . '.' . $video_send->video_path->extension;
                     $video_send->videoSave();
-                    return $this->refresh('&state=ok');
+                    Yii::$app->session->setFlash('success_message','发布成功');
+                    return $this->refresh();
                 }
-            }
-            $state = Yii::$app->request->get('state');
-            if ($state == 'ok') {
-                return $this->render('index', [
-                    'user_info' => $user_info,
-                    'videos_one_hour' => $videos_one_hour,
-                    'videos_one_day' => $videos_on_day,
-                    'tags_hot' => $tags_hot,
-                    'video_send' => $video_send,
-                    'games' => $games,
-                    'message' => '发布成功',
-                ]);
             }
             return $this->render('index', [
                 'user_info' => $user_info,
@@ -103,6 +91,7 @@ class SiteController extends Controller
     public function actionLogin()
     {
         $model = new LoginForm();
+        $model->load(Yii::$app->request->post());
         if ($model->load(Yii::$app->request->post()) && $user = $model->login()) {
             Yii::$app->getSession()->set('user', $user);
             return $this->redirect(['/user/default/index']);

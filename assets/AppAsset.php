@@ -18,6 +18,7 @@ class AppAsset extends AssetBundle
         'css/style.css',//自己写的
         'css/jquery-sinaEmotion-2.1.0.css',//新浪表情
         'css/jquery-tag-this.css',//写标签
+        'css/sweet-alert.css',//弹出框
     ];
     public $js = [
         //'js/jquery.cookie.js',
@@ -28,6 +29,7 @@ class AppAsset extends AssetBundle
         /* 上传头像 */
         'js/fullAvatarEditor.js',
         'js/swfobject.js',
+        'js/sweet-alert.js',//弹出框
         /* 总方法调用 */
         'js/monbile.js',
     ];

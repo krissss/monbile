@@ -7,9 +7,6 @@ use Faker\Provider\DateTime;
 use Yii;
 use yii\base\Model;
 
-/**
- * LoginForm is the model behind the login form.
- */
 class RegisterForm extends Model
 {
     public $nickname;

@@ -56,6 +56,15 @@ a:active {
     display: none;
 }
 
+/* 修正bootstrup的样式*/
+.glyphicon{
+    top: 2px;
+    padding-right: 2px;
+}
+.glyphicon:hover{
+    color: #0a8cd2;
+}
+
 /* video_send textarea 文本域样式 */
 .field-videosendform-user_id {
     margin-bottom: 0px;

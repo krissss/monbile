@@ -5,7 +5,9 @@ namespace app\modules\user\controllers;
 use app\models\forms\VideoSendForm;
 use app\models\Games;
 use app\models\Users;
+use app\modules\user\models\forms\UpdatePawForm;
 use Yii;
+use yii\helpers\Url;
 use yii\web\Controller;
 use yii\web\UploadedFile;
 
@@ -24,17 +26,9 @@ class DefaultController extends Controller
                     $video_send->video_path->saveAs('videos/' . $video_name . '.' . $video_send->video_path->extension);
                     $video_send->video_path = $video_name . '.' . $video_send->video_path->extension;
                     $video_send->videoSave();
-                    return $this->refresh('&state=ok');
+                    Yii::$app->session->setFlash('success_message','发布成功');
+                    return $this->refresh();
                 }
-            }
-            $state = Yii::$app->request->get('state');
-            if ($state == 'ok') {
-                return $this->render('index', [
-                    'user_info' => $user_info,
-                    'video_send' => $video_send,
-                    'games' => $games,
-                    'message' => '发布成功',
-                ]);
             }
             return $this->render('index', [
                 'user_info' => $user_info,
@@ -59,27 +53,19 @@ class DefaultController extends Controller
     public function actionUpdateinfo()
     {
         if ($user = Yii::$app->getSession()->get('user')) {
-            if (Yii::$app->request->post('updateinfo-return')) {
-                exit;
-            }
-            if ($user_head = Yii::$app->request->get('head')) {
-                $new_user = Users::findOne($user->uid);
-                $new_user->head = $user_head;
-                $new_user->update();
-                Yii::$app->getSession()->set('user', $new_user);
-                $user = Yii::$app->getSession()->get('user');
-            }
-            $model = Users::findOne($user->uid);
             $games = Games::find()->all();
-            if ($model->load(Yii::$app->request->post())) {
-                $model->update_date = date('Y-m-d H:i:s');
-                $model->update();
-                Yii::$app->getSession()->set('user', $model);
-                Yii::$app->getSession()->get('user');
-                return $this->redirect(['index']);
+            if ($user->load(Yii::$app->request->post())) {
+                //update_date用于区分用户是否修改密码，这里就不更新修改日期了
+                //$model->update_date = date('Y-m-d H:i:s');
+//                var_dump($user->currentplace);
+//                exit;
+                $user->update();
+                Yii::$app->session->setFlash('success_message','修改成功');
+                Yii::$app->session->setFlash('success_go_url',Url::to(['/user/default/index']));
+                return $this->refresh();
             } else {
                 return $this->render('updateinfo', [
-                    'model' => $model,
+                    'model' => $user,
                     'games' => $games,
                 ]);
             }
@@ -87,10 +73,15 @@ class DefaultController extends Controller
         return $this->goHome();
     }
 
-    public function actionChangehead()
+    public function actionUpdatehead()
     {
         if ($user = Yii::$app->getSession()->get('user')) {
-            return $this->render('changehead');
+            if ($user_head = Yii::$app->request->get('head')) {
+                $user->head = $user_head;
+                $user->update();
+                return $this->redirect(Url::to(['/user/default/index']));
+            }
+            return $this->render('updatehead');
         }
         return $this->goHome();
     }
@@ -98,22 +89,14 @@ class DefaultController extends Controller
     public function actionUpdatepaw()
     {
         if ($user = Yii::$app->getSession()->get('user')) {
-            $model = Users::findOne($user->uid);
-            if ($model->load(Yii::$app->request->post())) {
-                if($model->password === $model->password_2){
-                    $model->password = Users::password_encrypt($model->password);
-                    $model->update();
-                    Yii::$app->getSession()->set('user', $model);
-                    Yii::$app->getSession()->get('user');
-                    return $this->redirect(['index']);
-                }else{
-                    echo $model->password;
-                    echo $model->password_2;
-                    exit;
-                    return $this->render('updatepaw', [
-                        'model' => $model,
-                    ]);
-                }
+            $model = new UpdatePawForm();
+            if ($model->load(Yii::$app->request->post()) && $model->validate()) {
+                $user->password = Users::password_encrypt($model->password);
+                $user->update_date = date('Y-m-d H:i:s');
+                $user->update();
+                Yii::$app->session->setFlash('success_message','修改成功');
+                Yii::$app->session->setFlash('success_go_url',Url::to(['/user/default/index']));
+                return $this->refresh();
             } else {
                 return $this->render('updatepaw', [
                     'model' => $model,
@@ -123,8 +106,4 @@ class DefaultController extends Controller
         return $this->goHome();
     }
 
-    public function actionGoback()
-    {
-        return $this->goBack();
-    }
 }

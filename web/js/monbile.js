@@ -208,7 +208,7 @@ $(document).ready(function () {
                             //表示图片上传成功。
                             case 0:
                                 //成功修改跳转到其他页面
-                                window.location.href="index.php?r=user/default/updateinfo&head="+msg.content.avatarUrls.join(',');
+                                window.location.href="index.php?r=user/default/updatehead&head="+msg.content.avatarUrls.join(',');
                                 break;
                             case 1:
                                 alert('头像上传失败，原因：' + msg.content.msg);//will output:头像上传失败，原因：上传的原图文件大小超出限值了！
@@ -224,4 +224,37 @@ $(document).ready(function () {
             }
         );
     });
+
+    /**
+     * 弹出框
+     */
+    var success_message;
+    var warning_message;
+    var success_go_url;
+    var warning_go_url;
+    if(success_message = $('.success_message').val()) {
+        swal({
+            title: success_message,
+            type: 'success'
+        },function(){
+            if(success_go_url = $('.success_go_url').val()){
+                window.location.href = success_go_url;
+            }
+        });
+    }
+    if(warning_message = $('.warning_message').val()){
+        swal({
+            //获取到的字符串以‘#’分割，前半部为title，后面为text
+            title:warning_message.split('#')[0],
+            text:warning_message.split('#')[1],
+            type: 'warning',
+            showCancelButton: true,
+        },function(isConfirm){
+            if(isConfirm){
+                if(warning_go_url = $('.warning_go_url').val()){
+                    window.location.href = warning_go_url;
+                }
+            }
+        });
+    }
 });

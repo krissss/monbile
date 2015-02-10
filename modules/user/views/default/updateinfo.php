@@ -6,10 +6,15 @@ use yii\bootstrap\ActiveForm;
 $this->title = '修改信息';
 
 $heads = Url::to('/heads/');
+
+$session = Yii::$app->getSession();
 ?>
-<div class="site-login">
+<input class="success_message" type="hidden" value="<?= $session->hasFlash('success_message')?$session->getFlash('success_message'):''?>">
+<input class="success_go_url" type="hidden" value="<?= $session->hasFlash('success_go_url')?$session->getFlash('success_go_url'):''?>">
+
+<div class="user-default-updateinfo">
     <div class="text-center">
-        <a href="<?=Url::to(['/user/default/changehead'])?>"><img src="<?= Url::to($heads . $model->head) ?>" alt="点我修改头像" title="点我修改头像" class="img-circle img-responsiv img_height_150"></a>
+        <a href="<?=Url::to(['/user/default/updatehead'])?>"><img src="<?= Url::to($heads . $model->head) ?>" alt="点我修改头像" title="点我修改头像" class="img-circle img-responsiv img_height_150"></a>
     </div>
     <div class="panel panel-default">
         <div class="panel-body">

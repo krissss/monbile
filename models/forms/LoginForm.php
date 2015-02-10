@@ -6,9 +6,6 @@ use app\models\Users;
 use Yii;
 use yii\base\Model;
 
-/**
- * LoginForm is the model behind the login form.
- */
 class LoginForm extends Model
 {
     public $email;

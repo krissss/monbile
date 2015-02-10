@@ -14,6 +14,7 @@ return [
     'Email' => '邮箱',
     'Nickname' => '昵称',
     'Password' => '密码',
+    'Password_2' => '确认密码',
     'Head' => '头像',
     'Telphone' => '手机号',
     'Sex' => '性别',

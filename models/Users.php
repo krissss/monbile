@@ -29,13 +29,6 @@ class Users extends \yii\db\ActiveRecord
     const ROLE_USER_GENERAL = 1;
     const ROLE_USER_SUPER_ADMIN = 10;
 
-    public $password_2;
-
-    public function setPassword_2($password_2)
-    {
-        $this->password_2 = $password_2;
-    }
-
     public static function tableName()
     {
         return '{{%users}}';
@@ -50,6 +43,7 @@ class Users extends \yii\db\ActiveRecord
             ['telphone', 'match', 'pattern' => '^1(3[0-9]|5[0-35-9]|8[025-9])\\d{8}$^'],
             [['create_date', 'update_date', 'birthday'], 'safe'],
             [['nickname'], 'string', 'min' => 2, 'max' => 20],
+            ['currentplace','string']
         ];
     }
 
