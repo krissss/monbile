@@ -15,6 +15,34 @@ class DefaultController extends Controller
 {
     public function actionIndex()
     {
+        if ($id = Yii::$app->request->get('id')) {
+            $user = Yii::$app->getSession()->get('user');
+            if ($user && $id == $user->uid) {
+                $user_info = Users::findRelationById($user->uid);
+                $video_send = new VideoSendForm();
+                $games = Games::find()->all();
+                if ($video_send->load(Yii::$app->request->post()) && $video_send->validate(['user_id', 'video_title', 'tags', 'game_id'])) {
+                    $video_send->video_path = UploadedFile::getInstance($video_send, 'video_path');
+                    if ($video_send->validate(['video_path']) && $video_send->video_path) {
+                        $video_name = uniqid();
+                        $video_send->video_path->saveAs('videos/' . $video_name . '.' . $video_send->video_path->extension);
+                        $video_send->video_path = $video_name . '.' . $video_send->video_path->extension;
+                        $video_send->videoSave();
+                        Yii::$app->session->setFlash('success_message', '发布成功');
+                        return $this->refresh();
+                    }
+                }
+                return $this->render('index', [
+                    'user_info' => $user_info,
+                    'video_send' => $video_send,
+                    'games' => $games,
+                ]);
+            }
+            $user_info = Users::findRelationById($id);
+            return $this->render('index', [
+                'other_user_info' => $user_info,
+            ]);
+        }
         if ($user = Yii::$app->getSession()->get('user')) {
             $user_info = Users::findRelationById($user->uid);
             $video_send = new VideoSendForm();
@@ -26,7 +54,7 @@ class DefaultController extends Controller
                     $video_send->video_path->saveAs('videos/' . $video_name . '.' . $video_send->video_path->extension);
                     $video_send->video_path = $video_name . '.' . $video_send->video_path->extension;
                     $video_send->videoSave();
-                    Yii::$app->session->setFlash('success_message','发布成功');
+                    Yii::$app->session->setFlash('success_message', '发布成功');
                     return $this->refresh();
                 }
             }
@@ -41,6 +69,19 @@ class DefaultController extends Controller
 
     public function actionVideos()
     {
+        if ($id = Yii::$app->request->get('id')) {
+            $user = Yii::$app->getSession()->get('user');
+            if ($user && $id == $user->uid) {
+                $user_info = Users::findRelationById($user->uid);
+                return $this->render('videos', [
+                    'user_info' => $user_info,
+                ]);
+            }
+            $user_info = Users::findRelationById($id);
+            return $this->render('videos', [
+                'other_user_info' => $user_info,
+            ]);
+        }
         if ($user = Yii::$app->getSession()->get('user')) {
             $user_info = Users::findRelationById($user->uid);
             return $this->render('videos', [
@@ -57,11 +98,9 @@ class DefaultController extends Controller
             if ($user->load(Yii::$app->request->post())) {
                 //update_date用于区分用户是否修改密码，这里就不更新修改日期了
                 //$model->update_date = date('Y-m-d H:i:s');
-//                var_dump($user->currentplace);
-//                exit;
                 $user->update();
-                Yii::$app->session->setFlash('success_message','修改成功');
-                Yii::$app->session->setFlash('success_go_url',Url::to(['/user/default/index']));
+                Yii::$app->session->setFlash('success_message', '修改成功');
+                Yii::$app->session->setFlash('success_go_url', Url::to(['/user/default/index']));
                 return $this->refresh();
             } else {
                 return $this->render('updateinfo', [
@@ -94,8 +133,8 @@ class DefaultController extends Controller
                 $user->password = Users::password_encrypt($model->password);
                 $user->update_date = date('Y-m-d H:i:s');
                 $user->update();
-                Yii::$app->session->setFlash('success_message','修改成功');
-                Yii::$app->session->setFlash('success_go_url',Url::to(['/user/default/index']));
+                Yii::$app->session->setFlash('success_message', '修改成功');
+                Yii::$app->session->setFlash('success_go_url', Url::to(['/user/default/index']));
                 return $this->refresh();
             } else {
                 return $this->render('updatepaw', [

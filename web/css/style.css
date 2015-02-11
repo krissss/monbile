@@ -1,21 +1,16 @@
 /* common */
+.img_height_35 {
+    height: 35px;
+    display: inline-block;
+}
+
 .img_height_80 {
     height: 80px;
     display: inline-block;
 }
 
-.img_height_100 {
-    height: 100px;
-    display: inline-block;
-}
-
 .img_height_150 {
     height: 150px;
-    display: inline-block;
-}
-
-.img_height_200 {
-    height: 200px;
     display: inline-block;
 }
 
@@ -282,5 +277,19 @@ a:active {
 .has_tag .tag-color-6{
     background: #9966CC;
     color: #FFF;
+}
+
+/* 评论框样式　*/
+.comments_list{
+    padding: 0 20px 0 65px;
+    overflow: hidden;
+}
+.comments_list .comments_item{
+    padding: 5px 0 5px 0;
+    border-bottom: 1px solid #CCCCCC;
+}
+.comments_list .comments_item:last-child{
+    border-bottom: 0;
+    margin-bottom: 5px;
 }
 

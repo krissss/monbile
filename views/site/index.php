@@ -1,17 +1,20 @@
 <?php
-use Yii\helpers\Html;
 use yii\helpers\Url;
 
-/* @var $this yii\web\View */
+/* @var $this \yii\web\View */
+/* @var $videos_one_hour object */
+/* @var $videos_one_day object */
+
 $this->title = Yii::t('app', 'monbile');
 $heads = Url::to('/heads/');
 $videos = Url::to('/videos/');
 
 $session = Yii::$app->getSession();
 $user = $session->get('user');
+$other_user = false;
 ?>
-<input class="success_message" type="hidden"
-       value="<?= $session->hasFlash('success_message') ? $session->getFlash('success_message') : '' ?>">
+<input class="success_message" type="hidden" value="<?= $session->hasFlash('success_message') ? $session->getFlash('success_message') : '' ?>">
+<?php require(__DIR__ . '/fragment/comments_modal.php'); ?>
 
 <div class="site-index">
     <div class="row">
@@ -23,13 +26,12 @@ $user = $session->get('user');
             <?php if ($user): ?>
                 <?php require(__DIR__ . '/fragment/video_send.php'); ?>
             <?php endif; ?>
-
             <div role="tabpanel">
-                <!-- Nav tabs -->
                 <ul class="nav nav-pills" role="tablist">
+                    <?php //因视频少，先改为一天内和七天内   原本是‘1小时内’和 ‘24小时内’ ?>
                     <li role="presentation" class="active"><a href="#one_hour" aria-controls="one_hour" role="tab"
-                                                              data-toggle="tab">1小时内</a></li>
-                    <li role="presentation"><a href="#one_day" aria-controls="one_day" role="tab" data-toggle="tab">24小时内</a>
+                                                              data-toggle="tab">一天内</a></li>
+                    <li role="presentation"><a href="#one_day" aria-controls="one_day" role="tab" data-toggle="tab">七天内</a>
                     </li>
                     <li role="presentation"><a href="#one_week" aria-controls="one_week" role="tab"
                                                data-toggle="tab">周榜</a></li>
@@ -41,137 +43,22 @@ $user = $session->get('user');
                                                                       role="tab">我要发视频</a></li>
                     <?php endif; ?>
                 </ul>
-
-                <!-- Tab panes -->
                 <div class="tab-content">
                     <div role="tabpanel" class="tab-pane fade in active" id="one_hour">
-                        <?php if (!is_array($videos_one_hour) || count($videos_one_hour) < 1): ?>
+                        <?php if (count($videos_one_hour) < 1): ?>
                             <div class="alert alert-info" role="alert">该时段没有动态</div>
                         <?php else: ?>
                             <?php foreach ($videos_one_hour as $video_info): ?>
-                                <div class="panel panel-default">
-                                    <div class="panel-body">
-                                        <div class="media">
-                                            <div class="media-left">
-                                                <a href="#"><img src="<?= Url::to($heads . $video_info->user->head) ?>"
-                                                                 alt="..."
-                                                                 class="img-circle img-responsiv img_height_80"></a>
-                                            </div>
-                                            <div class="media-body">
-                                                <h4 class="media-heading"><?= $video_info->user->nickname ?></h4>
-
-                                                <p class="has_face"><?= $video_info->video_title ?></p>
-
-                                                <div class="has_tag">
-                                                    <?php foreach ($video_info->tagRelations as $tagRelation_info): ?>
-                                                        <span
-                                                            class="tag tag-color-<?= rand(0, 6) ?>"><?= $tagRelation_info->tag->tag_name ?></span>
-                                                    <?php endforeach; ?>
-                                                </div>
-                                                <div class="media">
-                                                    <div class="media-middle">
-                                                        <video src="<?= Url::to($videos . $video_info->video_path) ?>"
-                                                               controls="controls"
-                                                               class="col-xs-12">
-                                                            <p>您的浏览器不支持html5，请更换浏览器</p>
-                                                        </video>
-                                                    </div>
-                                                </div>
-
-                                                <div class="row">
-                                                    <h5 class="col-xs-12">
-                                                        <small><?= (int)((time() - strtotime($video_info->video_date)) % (3600) / 60); ?>
-                                                            分钟前
-                                                        </small>
-                                                    </h5>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <div class="btn-group btn-group-justified" role="group" aria-label="...">
-                                        <a href="#" class="btn btn-default" role="button"><span
-                                                class="glyphicon glyphicon-star"
-                                                aria-hidden="true"></span>收藏</a>
-                                        <a href="#" class="btn btn-default" role="button"><span
-                                                class="glyphicon glyphicon-share-alt"
-                                                aria-hidden="true"></span>转发<span
-                                                class="badge"><?= $video_info->forward_count ?></span></a>
-                                        <a href="#" class="btn btn-default" role="button"><span
-                                                class="glyphicon glyphicon-comment"
-                                                aria-hidden="true"></span>评论<span
-                                                class="badge"><?= $video_info->forward_count ?></span></a>
-                                        <a href="#" class="btn btn-default"
-                                           role="button"><span class="glyphicon glyphicon-thumbs-up"
-                                                               aria-hidden="true"></span>赞<span
-                                                class="badge"><?= $video_info->praise_count ?></span></a>
-                                    </div>
-                                </div>
+                                <?php require(__DIR__ . '/fragment/video_info_panel.php'); ?>
                             <?php endforeach; ?>
                         <? endif; ?>
                     </div>
                     <div role="tabpanel" class="tab-pane fade" id="one_day">
-                        <?php if (!is_array($videos_one_day) || count($videos_one_day) < 1): ?>
+                        <?php if (count($videos_one_day) < 1): ?>
                             <div class="alert alert-info" role="alert">该时段没有动态</div>
                         <?php else: ?>
                             <?php foreach ($videos_one_day as $video_info): ?>
-
-                                <div class="panel panel-default">
-                                    <div class="panel-body">
-                                        <div class="media">
-                                            <div class="media-left">
-                                                <a href="#"><img src="<?= Url::to($heads . $video_info->user->head) ?>"
-                                                                 alt="..."
-                                                                 class="img-circle img-responsiv img_height_80"></a>
-                                            </div>
-                                            <div class="media-body">
-                                                <h4 class="media-heading"><?= $video_info->user->nickname ?></h4>
-
-                                                <p class="has_face"><?= $video_info->video_title ?></p>
-
-                                                <div class="has_tag">
-                                                    <?php foreach ($video_info->tagRelations as $tagRelation_info): ?>
-                                                        <span
-                                                            class="tag tag-color-<?= rand(0, 6) ?>"><?= $tagRelation_info->tag->tag_name ?></span>
-                                                    <?php endforeach; ?>
-                                                </div>
-                                                <div class="media">
-                                                    <div class="media-middle">
-                                                        <video src="<?= Url::to($videos . $video_info->video_path) ?>"
-                                                               controls="controls"
-                                                               class="col-xs-12">
-                                                            <p>您的浏览器不支持html5，请更换浏览器</p>
-                                                        </video>
-                                                    </div>
-                                                </div>
-
-                                                <div class="row">
-                                                    <h5 class="col-xs-12">
-                                                        <small><?= (int)(((time() - strtotime($video_info->video_date)) % (3600 * 24)) / (3600)); ?>
-                                                            小时前
-                                                        </small>
-                                                    </h5>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <div class="btn-group btn-group-justified" role="group" aria-label="...">
-                                        <a href="#" class="btn btn-default" role="button"><span
-                                                class="glyphicon glyphicon-star"
-                                                aria-hidden="true"></span>收藏</a>
-                                        <a href="#" class="btn btn-default" role="button"><span
-                                                class="glyphicon glyphicon-share-alt"
-                                                aria-hidden="true"></span>转发<span
-                                                class="badge"><?= $video_info->forward_count ?></span></a>
-                                        <a href="#" class="btn btn-default" role="button"><span
-                                                class="glyphicon glyphicon-comment"
-                                                aria-hidden="true"></span>评论<span
-                                                class="badge"><?= $video_info->forward_count ?></span></a>
-                                        <a href="#" class="btn btn-default"
-                                           role="button"><span class="glyphicon glyphicon-thumbs-up"
-                                                               aria-hidden="true"></span>赞<span
-                                                class="badge"><?= $video_info->praise_count ?></span></a>
-                                    </div>
-                                </div>
+                                <?php require(__DIR__ . '/fragment/video_info_panel.php'); ?>
                             <?php endforeach; ?>
                         <? endif; ?>
                     </div>
@@ -290,7 +177,7 @@ $user = $session->get('user');
             </div>
 
         </div>
-        <div class="col-xs-12 col-md-4">
+        <div class="col-xs-12 col-md-4 hidden-sm hidden-xs">
             <?php if ($user): ?>
                 <?php require(__DIR__ . '/fragment/user_info.php'); ?>
             <?php endif; ?>
@@ -346,3 +233,5 @@ $user = $session->get('user');
         </div>
     </div>
 </div>
+
+

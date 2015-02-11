@@ -1,8 +1,6 @@
 <?php
 use yii\helpers\Html;
 use yii\helpers\Url;
-use yii\bootstrap\Nav;
-use yii\bootstrap\NavBar;
 use yii\widgets\Breadcrumbs;
 use app\assets\AppAsset;
 
@@ -28,29 +26,6 @@ $user = Yii::$app->getSession()->get('user');
 
 <?php $this->beginBody() ?>
     <div class="wrap">
-        <?php
-/*            NavBar::begin([
-                'brandLabel' => '<img src="logo.png" alt="萌邦" title="萌邦">',
-                'brandUrl' => Yii::$app->homeUrl,
-                'options' => [
-                    'class' => 'navbar-default navbar-fixed-top',
-                ],
-            ]);
-            echo Nav::widget([
-                'options' => ['class' => 'navbar-nav navbar-right'],
-                'items' => [
-                    ['label' => '首页', 'url' => ['/site/index']],
-                    ['label' => '关于我们', 'url' => ['/site/about']],
-                    ['label' => '联系我们', 'url' => ['/site/contact']],
-                    Yii::$app->user->isGuest ?
-                        ['label' => 'Login', 'url' => ['/site/login']] :
-                        ['label' => 'Logout (' . Yii::$app->user->identity->username . ')',
-                            'url' => ['/site/logout'],
-                            'linkOptions' => ['data-method' => 'post']],
-                ],
-            ]);
-            NavBar::end();
-        */?>
         <nav class="navbar navbar-default navbar-fixed-top" role="navigation">
             <div class="container">
                 <div class="navbar-header">
@@ -64,12 +39,6 @@ $user = Yii::$app->getSession()->get('user');
                 </div>
 
                 <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
-<!--                    <form class="navbar-form navbar-left" role="search">
-                        <div class="form-group">
-                            <input type="text" class="form-control" placeholder="Search">
-                        </div>
-                        <button type="submit" class="btn btn-default">Submit</button>
-                    </form>-->
                     <ul class="nav navbar-nav navbar-right">
                         <li><a href="<?=Url::to(['/site/index'])?>"><span class="glyphicon glyphicon-home" aria-hidden="true"></span>首页</a></li>
                         <li class="dropdown">
@@ -80,8 +49,7 @@ $user = Yii::$app->getSession()->get('user');
                                 <li><a href="#">炉石传说</a></li>
                             </ul>
                         </li>
-                        <li><a href="<?=Url::to(['/site/about'])?>"><span class="glyphicon glyphicon-alert" aria-hidden="true"></span>关于我们</a></li>
-                        <li><a href="<?=Url::to(['/site/contact'])?>"><span class="glyphicon glyphicon-console" aria-hidden="true"></span>联系我们</a></li>
+                        <li><a href="<?=Url::to(['/site/about'])?>"><span class="glyphicon glyphicon-alert" aria-hidden="true"></span>测试代码</a></li>
                         <?php if(!$user):?>
                         <li><a href="<?=Url::to(['/site/register'])?>"><span class="glyphicon glyphicon-registration-mark" aria-hidden="true"></span>注册</a></li>
                         <li><a href="<?=Url::to(['/site/login'])?>"><span class="glyphicon glyphicon-log-in" aria-hidden="true"></span>登录</a></li>
@@ -98,8 +66,8 @@ $user = Yii::$app->getSession()->get('user');
                             <li><a href="<?=Url::to(['/site/logout'])?>"><span class="glyphicon glyphicon-log-out" aria-hidden="true"></span>退出</a></li>
                         <?php endif;?>
                     </ul>
-                </div><!-- /.navbar-collapse -->
-            </div><!-- /.container-fluid -->
+                </div>
+            </div>
         </nav>
 
         <div class="container">

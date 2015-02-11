@@ -1,4 +1,9 @@
 <?php
+/* @var $this \yii\web\View */
+
+$this->registerJsFile('js/fullAvatarEditor.js');
+$this->registerJsFile('js/swfobject.js');
+
 $this->title = '修改头像';
 ?>
 <div class="user-default-changehead">

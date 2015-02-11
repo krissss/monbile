@@ -3,6 +3,9 @@ use yii\helpers\Html;
 use yii\helpers\Url;
 use yii\bootstrap\ActiveForm;
 
+/* @var $this \yii\web\View */
+/* @var $model object */
+
 $this->title = '登录';
 
 $imgs = Url::to('/imgs/');

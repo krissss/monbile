@@ -3,10 +3,12 @@ use yii\helpers\Html;
 use yii\helpers\Url;
 use yii\bootstrap\ActiveForm;
 
+/* @var $this \yii\web\View */
+
 $this->title = '修改密码';
 
-$heads = Url::to('/heads/')
-;
+$heads = Url::to('/heads/');
+
 $session = Yii::$app->getSession();
 $user = $session->get('user');
 ?>

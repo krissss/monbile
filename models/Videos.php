@@ -85,8 +85,9 @@ class Videos extends \yii\db\ActiveRecord
      */
     public static function findOneHourVideos()
     {
-        $one_hour_front_timestamp  = time()-3600;
-        $one_hour_front = date('Y-m-d H:i:s',$one_hour_front_timestamp);
+        //因视频少，先改为一天内和七天内，下同
+        //$one_hour_front = date('Y-m-d H:i:s',strtotime('-1 hour'));
+        $one_hour_front = date('Y-m-d H:i:s',strtotime('-1 day'));
         return Videos::find()
             ->joinWith(['user','tagRelations.tag'])
             ->where(['video_state' => Videos::VIDEO_ACTIVE])
@@ -101,10 +102,10 @@ class Videos extends \yii\db\ActiveRecord
      */
     public static function findOneDayVideos()
     {
-        $one_day_front_timestamp  = time()-3600*24;
-        $one_day_front = date('Y-m-d H:i:s',$one_day_front_timestamp);
-        $one_hour_front_timestamp  = time()-3600;
-        $one_hour_front = date('Y-m-d H:i:s',$one_hour_front_timestamp);
+        //$one_day_front = date('Y-m-d H:i:s',strtotime('-1 day'));
+        //$one_hour_front = date('Y-m-d H:i:s',strtotime('-1 hour'));
+        $one_day_front = date('Y-m-d H:i:s',strtotime('-7 day'));
+        $one_hour_front = date('Y-m-d H:i:s',strtotime('-1 day'));
         return Videos::find()
             ->joinWith('user')
             ->where(['video_state' => Videos::VIDEO_ACTIVE])

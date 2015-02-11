@@ -3,6 +3,8 @@ use yii\helpers\Html;
 use yii\helpers\Url;
 use yii\bootstrap\ActiveForm;
 
+/* @var $this \yii\web\View */
+
 $this->title = '修改信息';
 
 $heads = Url::to('/heads/');

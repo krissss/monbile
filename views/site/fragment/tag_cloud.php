@@ -1,10 +1,10 @@
 <?php
 /**
- * Created by PhpStorm.
- * User: kriss
- * Date: 2015/2/2
- * Time: 17:12
+ * 热门标签
+ * site/index
+ * 在包含页面需定义以下变量
  */
+/* @var $tags_hot object */
 ?>
 
 <div class="hot-tag">

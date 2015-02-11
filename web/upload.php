@@ -1,4 +1,7 @@
 <?php
+if(!isset($_POST['headcookie']) || !$_POST['headcookie']){
+    header("Location: http://dev.monbile.cn");
+}
 header('Content-Type: text/html; charset=utf-8');
 $result = array();
 $result['success'] = false;
