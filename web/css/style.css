@@ -282,7 +282,8 @@ a:active {
 /* 评论框样式　*/
 .comments_list{
     padding: 0 20px 0 65px;
-    overflow: hidden;
+    max-height: 400px;
+    overflow: auto;
 }
 .comments_list .comments_item{
     padding: 5px 0 5px 0;
@@ -293,3 +294,74 @@ a:active {
     margin-bottom: 5px;
 }
 
+/* load样式 */
+.load{
+    width:100%;
+    height: 200px;
+}
+.load .loader {
+    font-size: 20px;
+    margin: 5em auto;
+    width: 1em;
+    height: 1em;
+    border-radius: 50%;
+    position: relative;
+    text-indent: -9999em;
+    -webkit-animation: load 1.3s infinite linear;
+    animation: load 1.3s infinite linear;
+}
+/* 修改颜色最好复制出去一键替换 */
+@-webkit-keyframes load {
+    0%,
+    100% {
+        box-shadow: 0 -3em 0 0.2em #9966FF, 2em -2em 0 0 #9966FF, 3em 0 0 -0.5em #9966FF, 2em 2em 0 -0.5em #9966FF, 0 3em 0 -0.5em #9966FF, -2em 2em 0 -0.5em #9966FF, -3em 0 0 -0.5em #9966FF, -2em -2em 0 0 #9966FF;
+    }
+    12.5% {
+        box-shadow: 0 -3em 0 0 #9966FF, 2em -2em 0 0.2em #9966FF, 3em 0 0 0 #9966FF, 2em 2em 0 -0.5em #9966FF, 0 3em 0 -0.5em #9966FF, -2em 2em 0 -0.5em #9966FF, -3em 0 0 -0.5em #9966FF, -2em -2em 0 -0.5em #9966FF;
+    }
+    25% {
+        box-shadow: 0 -3em 0 -0.5em #9966FF, 2em -2em 0 0 #9966FF, 3em 0 0 0.2em #9966FF, 2em 2em 0 0 #9966FF, 0 3em 0 -0.5em #9966FF, -2em 2em 0 -0.5em #9966FF, -3em 0 0 -0.5em #9966FF, -2em -2em 0 -0.5em #9966FF;
+    }
+    37.5% {
+        box-shadow: 0 -3em 0 -0.5em #9966FF, 2em -2em 0 -0.5em #9966FF, 3em 0 0 0 #9966FF, 2em 2em 0 0.2em #9966FF, 0 3em 0 0 #9966FF, -2em 2em 0 -0.5em #9966FF, -3em 0 0 -0.5em #9966FF, -2em -2em 0 -0.5em #9966FF;
+    }
+    50% {
+        box-shadow: 0 -3em 0 -0.5em #9966FF, 2em -2em 0 -0.5em #9966FF, 3em 0 0 -0.5em #9966FF, 2em 2em 0 0 #9966FF, 0 3em 0 0.2em #9966FF, -2em 2em 0 0 #9966FF, -3em 0 0 -0.5em #9966FF, -2em -2em 0 -0.5em #9966FF;
+    }
+    62.5% {
+        box-shadow: 0 -3em 0 -0.5em #9966FF, 2em -2em 0 -0.5em #9966FF, 3em 0 0 -0.5em #9966FF, 2em 2em 0 -0.5em #9966FF, 0 3em 0 0 #9966FF, -2em 2em 0 0.2em #9966FF, -3em 0 0 0 #9966FF, -2em -2em 0 -0.5em #9966FF;
+    }
+    75% {
+        box-shadow: 0 -3em 0 -0.5em #9966FF, 2em -2em 0 -0.5em #9966FF, 3em 0 0 -0.5em #9966FF, 2em 2em 0 -0.5em #9966FF, 0 3em 0 -0.5em #9966FF, -2em 2em 0 0 #9966FF, -3em 0 0 0.2em #9966FF, -2em -2em 0 0 #9966FF;
+    }
+    87.5% {
+        box-shadow: 0 -3em 0 0 #9966FF, 2em -2em 0 -0.5em #9966FF, 3em 0 0 -0.5em #9966FF, 2em 2em 0 -0.5em #9966FF, 0 3em 0 -0.5em #9966FF, -2em 2em 0 0 #9966FF, -3em 0 0 0 #9966FF, -2em -2em 0 0.2em #9966FF;
+    }
+}
+@keyframes load {
+    0%,
+    100% {
+        box-shadow: 0 -3em 0 0.2em #9966FF, 2em -2em 0 0 #9966FF, 3em 0 0 -0.5em #9966FF, 2em 2em 0 -0.5em #9966FF, 0 3em 0 -0.5em #9966FF, -2em 2em 0 -0.5em #9966FF, -3em 0 0 -0.5em #9966FF, -2em -2em 0 0 #9966FF;
+    }
+    12.5% {
+        box-shadow: 0 -3em 0 0 #9966FF, 2em -2em 0 0.2em #9966FF, 3em 0 0 0 #9966FF, 2em 2em 0 -0.5em #9966FF, 0 3em 0 -0.5em #9966FF, -2em 2em 0 -0.5em #9966FF, -3em 0 0 -0.5em #9966FF, -2em -2em 0 -0.5em #9966FF;
+    }
+    25% {
+        box-shadow: 0 -3em 0 -0.5em #9966FF, 2em -2em 0 0 #9966FF, 3em 0 0 0.2em #9966FF, 2em 2em 0 0 #9966FF, 0 3em 0 -0.5em #9966FF, -2em 2em 0 -0.5em #9966FF, -3em 0 0 -0.5em #9966FF, -2em -2em 0 -0.5em #9966FF;
+    }
+    37.5% {
+        box-shadow: 0 -3em 0 -0.5em #9966FF, 2em -2em 0 -0.5em #9966FF, 3em 0 0 0 #9966FF, 2em 2em 0 0.2em #9966FF, 0 3em 0 0 #9966FF, -2em 2em 0 -0.5em #9966FF, -3em 0 0 -0.5em #9966FF, -2em -2em 0 -0.5em #9966FF;
+    }
+    50% {
+        box-shadow: 0 -3em 0 -0.5em #9966FF, 2em -2em 0 -0.5em #9966FF, 3em 0 0 -0.5em #9966FF, 2em 2em 0 0 #9966FF, 0 3em 0 0.2em #9966FF, -2em 2em 0 0 #9966FF, -3em 0 0 -0.5em #9966FF, -2em -2em 0 -0.5em #9966FF;
+    }
+    62.5% {
+        box-shadow: 0 -3em 0 -0.5em #9966FF, 2em -2em 0 -0.5em #9966FF, 3em 0 0 -0.5em #9966FF, 2em 2em 0 -0.5em #9966FF, 0 3em 0 0 #9966FF, -2em 2em 0 0.2em #9966FF, -3em 0 0 0 #9966FF, -2em -2em 0 -0.5em #9966FF;
+    }
+    75% {
+        box-shadow: 0 -3em 0 -0.5em #9966FF, 2em -2em 0 -0.5em #9966FF, 3em 0 0 -0.5em #9966FF, 2em 2em 0 -0.5em #9966FF, 0 3em 0 -0.5em #9966FF, -2em 2em 0 0 #9966FF, -3em 0 0 0.2em #9966FF, -2em -2em 0 0 #9966FF;
+    }
+    87.5% {
+        box-shadow: 0 -3em 0 0 #9966FF, 2em -2em 0 -0.5em #9966FF, 3em 0 0 -0.5em #9966FF, 2em 2em 0 -0.5em #9966FF, 0 3em 0 -0.5em #9966FF, -2em 2em 0 0 #9966FF, -3em 0 0 0 #9966FF, -2em -2em 0 0.2em #9966FF;
+    }
+}

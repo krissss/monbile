@@ -37,7 +37,7 @@ class VideoSendForm extends Model
         $video->video_title = $this->video_title;
         $video->video_date = date('Y-m-d H:i:s');
         $video->video_path = $this->video_path;
-        $video->forward_count = 0;
+        $video->comment_count = 0;
         $video->praise_count = 0;
         $video->video_state = Videos::VIDEO_ACTIVE;
         if (!$video->save()) {

@@ -95,6 +95,15 @@ class Users extends \yii\db\ActiveRecord
         return $this->hasMany(Relations::className(), ['back_id' => 'uid']);
     }
 
+    /**
+     * 一对多关联，一个user有多个collections
+     * @return \yii\db\ActiveQuery
+     */
+    public function getCollections()
+    {
+        return $this->hasMany(Collections::className(), ['user_id' => 'uid']);
+    }
+
 
     /**
      * 创建随机头像

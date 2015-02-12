@@ -2,9 +2,12 @@
 
 namespace app\modules\user\controllers;
 
+use app\models\Collections;
+use app\models\Comments;
 use app\models\forms\VideoSendForm;
 use app\models\Games;
 use app\models\Users;
+use app\models\Videos;
 use app\modules\user\models\forms\UpdatePawForm;
 use Yii;
 use yii\helpers\Url;
@@ -18,7 +21,7 @@ class DefaultController extends Controller
         if ($id = Yii::$app->request->get('id')) {
             $user = Yii::$app->getSession()->get('user');
             if ($user && $id == $user->uid) {
-                $user_info = Users::findRelationById($user->uid);
+                //同以下没有id传参
                 $video_send = new VideoSendForm();
                 $games = Games::find()->all();
                 if ($video_send->load(Yii::$app->request->post()) && $video_send->validate(['user_id', 'video_title', 'tags', 'game_id'])) {
@@ -33,18 +36,17 @@ class DefaultController extends Controller
                     }
                 }
                 return $this->render('index', [
-                    'user_info' => $user_info,
                     'video_send' => $video_send,
                     'games' => $games,
                 ]);
             }
-            $user_info = Users::findRelationById($id);
+            $other_user = Users::findRelationById($id);
             return $this->render('index', [
-                'other_user_info' => $user_info,
+                'other_user' => $other_user,
             ]);
         }
+        //如果没有id传参且用户已经登录
         if ($user = Yii::$app->getSession()->get('user')) {
-            $user_info = Users::findRelationById($user->uid);
             $video_send = new VideoSendForm();
             $games = Games::find()->all();
             if ($video_send->load(Yii::$app->request->post()) && $video_send->validate(['user_id', 'video_title', 'tags', 'game_id'])) {
@@ -59,12 +61,11 @@ class DefaultController extends Controller
                 }
             }
             return $this->render('index', [
-                'user_info' => $user_info,
                 'video_send' => $video_send,
                 'games' => $games,
             ]);
         }
-        return $this->goHome();
+        return $this->redirect(Url::to(['/site/login']));
     }
 
     public function actionVideos()
@@ -72,23 +73,19 @@ class DefaultController extends Controller
         if ($id = Yii::$app->request->get('id')) {
             $user = Yii::$app->getSession()->get('user');
             if ($user && $id == $user->uid) {
-                $user_info = Users::findRelationById($user->uid);
-                return $this->render('videos', [
-                    'user_info' => $user_info,
-                ]);
+                //同以下没有id传参
+                return $this->render('videos');
             }
-            $user_info = Users::findRelationById($id);
+            $other_user = Users::findRelationById($id);
             return $this->render('videos', [
-                'other_user_info' => $user_info,
+                'other_user' => $other_user,
             ]);
         }
+        //如果没有id传参且用户已经登录
         if ($user = Yii::$app->getSession()->get('user')) {
-            $user_info = Users::findRelationById($user->uid);
-            return $this->render('videos', [
-                'user_info' => $user_info,
-            ]);
+            return $this->render('videos');
         }
-        return $this->goHome();
+        return $this->redirect(Url::to(['/site/login']));
     }
 
     public function actionUpdateinfo()
@@ -109,7 +106,7 @@ class DefaultController extends Controller
                 ]);
             }
         }
-        return $this->goHome();
+        return $this->redirect(Url::to(['/site/login']));
     }
 
     public function actionUpdatehead()
@@ -122,7 +119,7 @@ class DefaultController extends Controller
             }
             return $this->render('updatehead');
         }
-        return $this->goHome();
+        return $this->redirect(Url::to(['/site/login']));
     }
 
     public function actionUpdatepaw()
@@ -142,7 +139,80 @@ class DefaultController extends Controller
                 ]);
             }
         }
-        return $this->goHome();
+        return $this->redirect(Url::to(['/site/login']));
+    }
+
+    public function actionSendcomment()
+    {
+        if ($user = Yii::$app->getSession()->get('user')) {
+            $video_id = Yii::$app->request->post('video_id');
+            $comment_content = Yii::$app->request->post('comment_content');
+            $comment = new Comments();
+            $comment->video_id = $video_id;
+            $comment->user_id = $user -> uid;
+            $comment->comment_content = $comment_content;
+            $comment->comment_state = Comments::COMMENT_ENABLE;
+            $comment->comment_date = date('Y-m-d H:i:s');
+            if($comment->save() && Videos::updateCommentCountByVideoId($video_id)){
+                return 'ok';
+            }
+            return 'error';
+        }
+        return $this->redirect(Url::to(['/site/login']));
+    }
+
+    public function actionShowcomments()
+    {
+        $video_id = Yii::$app->request->post('video_id');
+        $comments = Comments::findCommentsByVideoId($video_id);
+        $arrs = array();
+        foreach( $comments as $comment){
+            $arr = array(
+                'uid'=>$comment->user->uid,
+                'head'=>$comment->user->head,
+                'nickname'=>$comment->user->nickname,
+                'comment_content'=>$comment->comment_content,
+                'comment_date'=>$comment->comment_date
+            );
+            array_push($arrs,$arr);
+        }
+        return json_encode($arrs);
+    }
+
+    public function actionPraise()
+    {
+        if ($user = Yii::$app->getSession()->get('user')) {
+            $video_id = Yii::$app->request->post('video_id');
+            $session_praise = Yii::$app->getSession()->get('praise_'.$video_id);
+            //每半小时只能赞一次
+            if(!$session_praise || time()>$session_praise+60*30) {
+                if(Videos::updatePraiseCountByVideoId($video_id)){
+                    Yii::$app->getSession()->set('praise_'.$video_id, time());
+                    return 'ok';
+                }
+            }
+            return '每半小时只能赞1次';
+        }
+        return $this->redirect(Url::to(['/site/login']));
+    }
+
+    public function actionCollect(){
+        if ($user = Yii::$app->getSession()->get('user')) {
+            $video_id = Yii::$app->request->post('video_id');
+            if(Collections::isExist($user->uid, $video_id)){
+                return '已经收藏过';
+            }else{
+                $collection = new Collections();
+                $collection->user_id = $user->uid;
+                $collection->video_id = $video_id;
+                $collection->collection_date = date('Y-m-d H:i:s');
+                if(!$collection->save()){
+                    return '保存收藏出错';
+                }
+                return 'ok';
+            }
+        }
+        return $this->redirect(Url::to(['/site/login']));
     }
 
 }

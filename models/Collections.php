@@ -14,17 +14,11 @@ use Yii;
  */
 class Collections extends \yii\db\ActiveRecord
 {
-    /**
-     * @inheritdoc
-     */
     public static function tableName()
     {
         return '{{%collections}}';
     }
 
-    /**
-     * @inheritdoc
-     */
     public function rules()
     {
         return [
@@ -34,9 +28,6 @@ class Collections extends \yii\db\ActiveRecord
         ];
     }
 
-    /**
-     * @inheritdoc
-     */
     public function attributeLabels()
     {
         return [
@@ -45,5 +36,17 @@ class Collections extends \yii\db\ActiveRecord
             'video_id' => Yii::t('app', 'Video ID'),
             'collection_date' => Yii::t('app', 'Collection Date'),
         ];
+    }
+
+    /**
+     * 判断某个收藏是否存在
+     * @param $user_id
+     * @param $video_id
+     * @return array|null|\yii\db\ActiveRecord
+     */
+    public static function isExist($user_id, $video_id){
+        return Collections::find()
+            ->where(['user_id'=>$user_id, 'video_id'=>$video_id])
+            ->one();
     }
 }

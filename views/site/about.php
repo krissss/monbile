@@ -30,9 +30,10 @@ $this->params['breadcrumbs'][] = $this->title;
                         </div>
                         <form class="form form-group col-xs-11">
                             <div class="input-group">
-                                <input type="text" class="form-control" placeholder="Search for...">
+                                <input type="hidden" value="3" class="comment_video_id" >
+                                <input type="text" class="form-control comment_content" placeholder="Search for...">
                             <span class="input-group-btn">
-                                <button class="btn btn-primary" type="button">OK</button>
+                                <button class="btn btn-primary comment_send" type="button">OK</button>
                             </span>
                             </div>
                         </form>
@@ -47,7 +48,7 @@ $this->params['breadcrumbs'][] = $this->title;
                                 </a>
                             </div>
                             <div class="media-body">
-                                <p><span class="text-danger">飒沓</span> : 哈哈哈</p>
+                                <p id="aaa"><span class="text-danger">飒沓</span> : 哈哈哈</p>
                                 <h5><small>2015-12-12 10:10:20</small></h5>
                             </div>
                         </div>

@@ -1,25 +1,32 @@
 <?php
+/**
+ * 个人主页 or XX的主页
+ */
+/* @var $this \yii\web\View */
+/* 若是查看自己的主页，需以下变量 */
+/* @var $user :: session */
+/* @var $video_send :: render */
+/* @var $games :: render */
+/* @var $is_other_user :: false; */
+/* 若是查看他人主页，需以下变量 */
+/* @var $user :: render($other_user) */
+/* @var $is_other_user :: true; */
+
 use yii\helpers\Url;
 
-/* @var $this \yii\web\View */
-/* @var $user_info object */
-/* #send_video在video_send.php文件中,使用时会被包含进来 */
-
-$this->title = '个人主页';
-
-$imgs = Url::to('/imgs/');
 $heads = Url::to('/heads/');
 $videos = Url::to('/videos/');
 
 $session = Yii::$app->getSession();
 $user = $session->get('user');
 
-$other_user = false;
-if(isset($other_user_info)&&$other_user_info){
-    $user = $other_user_info;
-    $user_info = $other_user_info;
-    $other_user = true;
+$is_other_user = false;
+if(isset($other_user)&&$other_user){
+    $user = $other_user;
+    $is_other_user = true;
 }
+
+$this->title = $user->nickname.'的主页';
 ?>
 <input class="success_message" type="hidden" value="<?= $session->hasFlash('success_message') ? $session->getFlash('success_message') : '' ?>">
 <input class="warning_message" type="hidden" value="<?= $user && $user->create_date == $user->update_date ? '您的密码未修改#存在不安全因素，也可能给您下次登录带来麻烦，请尽快修改。' : '' ?>">
@@ -35,7 +42,7 @@ if(isset($other_user_info)&&$other_user_info){
             <?php require(__DIR__ . '/../../../../views/site/fragment/user_info.php'); ?>
         </div>
         <div class="col-xs-12 col-md-8 pull-left">
-            <?php if (!$other_user): ?>
+            <?php if (!$is_other_user): ?>
                 <?php require(__DIR__ . '/../../../../views/site/fragment/video_send.php'); ?>
             <?php endif; ?>
             <div class="btn-group">
@@ -52,14 +59,14 @@ if(isset($other_user_info)&&$other_user_info){
                     <li role="presentation"><a role="menuitem" tabindex="-1" href="#">标签</a></li>
                 </ul>
             </div>
-            <?php if (!$other_user): ?>
+            <?php if (!$is_other_user): ?>
                 <a href="#send_video" data-toggle="collapse" aria-expanded="false" aria-controls="send_video" role="tab"
                    class="btn btn-default btn-sm pull-right">我要发视频</a>
             <?php endif; ?>
-            <?php if (count($user_info->videos) < 1): ?>
+            <?php if (count($user->videos) < 1): ?>
                 <div class="alert alert-info" role="alert">还没有发布任何视频</div>
             <?php else: ?>
-                <?php foreach (array_reverse($user_info->videos) as $video_info): ?>
+                <?php foreach (array_reverse($user->videos) as $video_info): ?>
                     <?php require(__DIR__ . '/../../../../views/site/fragment/video_info_panel.php'); ?>
                 <?php endforeach; ?>
             <? endif; ?>

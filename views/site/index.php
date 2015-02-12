@@ -1,26 +1,34 @@
 <?php
+/**
+ * 首页
+ */
+/* @var $this \yii\web\View */
+/* @var $videos_one_hour :: render */
+/* @var $videos_one_day :: render */
+/* @var $tags_hot :: render */
+/* @var $is_other_user :: false; */
+/* 若用户已经登录，还需以下变量 */
+/* @var $video_send :: render */
+/* @var $games :: render */
+/* @var $user :: session */
+
 use yii\helpers\Url;
 
-/* @var $this \yii\web\View */
-/* @var $videos_one_hour object */
-/* @var $videos_one_day object */
-
 $this->title = Yii::t('app', 'monbile');
+
 $heads = Url::to('/heads/');
 $videos = Url::to('/videos/');
 
 $session = Yii::$app->getSession();
 $user = $session->get('user');
-$other_user = false;
+$is_other_user = false;
 ?>
 <input class="success_message" type="hidden" value="<?= $session->hasFlash('success_message') ? $session->getFlash('success_message') : '' ?>">
 <?php require(__DIR__ . '/fragment/comments_modal.php'); ?>
-
 <div class="site-index">
     <div class="row">
         <div id="error_message" class="alert alert-danger alert-dismissible display_none" role="alert">
-            <button type="button" class="close" data-dismiss="alert"><span aria-hidden="true">&times;</span><span
-                    class="sr-only">Close</span></button>
+            <button type="button" class="close" data-dismiss="alert"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
         </div>
         <div class="col-xs-12 col-md-8">
             <?php if ($user): ?>
@@ -29,18 +37,12 @@ $other_user = false;
             <div role="tabpanel">
                 <ul class="nav nav-pills" role="tablist">
                     <?php //因视频少，先改为一天内和七天内   原本是‘1小时内’和 ‘24小时内’ ?>
-                    <li role="presentation" class="active"><a href="#one_hour" aria-controls="one_hour" role="tab"
-                                                              data-toggle="tab">一天内</a></li>
-                    <li role="presentation"><a href="#one_day" aria-controls="one_day" role="tab" data-toggle="tab">七天内</a>
-                    </li>
-                    <li role="presentation"><a href="#one_week" aria-controls="one_week" role="tab"
-                                               data-toggle="tab">周榜</a></li>
-                    <li role="presentation"><a href="#one_month" aria-controls="one_month" role="tab" data-toggle="tab">月榜</a>
-                    </li>
+                    <li role="presentation" class="active"><a href="#one_hour" aria-controls="one_hour" role="tab" data-toggle="tab">一天内</a></li>
+                    <li role="presentation"><a href="#one_day" aria-controls="one_day" role="tab" data-toggle="tab">七天内</a></li>
+                    <li role="presentation"><a href="#one_week" aria-controls="one_week" role="tab" data-toggle="tab">周榜</a></li>
+                    <li role="presentation"><a href="#one_month" aria-controls="one_month" role="tab" data-toggle="tab">月榜</a></li>
                     <?php if ($user): ?>
-                        <li role="presentation" class="pull-right"><a href="#send_video" data-toggle="collapse"
-                                                                      aria-expanded="false" aria-controls="send_video"
-                                                                      role="tab">我要发视频</a></li>
+                        <li role="presentation" class="pull-right"><a href="#send_video" data-toggle="collapse" aria-expanded="false" aria-controls="send_video" role="tab">我要发视频</a></li>
                     <?php endif; ?>
                 </ul>
                 <div class="tab-content">
@@ -63,119 +65,13 @@ $other_user = false;
                         <? endif; ?>
                     </div>
                     <div role="tabpanel" class="tab-pane fade" id="one_week">
-                        <div class="panel panel-default">
-                            <div class="panel-body">
-                                <div class="media">
-                                    <div class="media-left">
-                                        <a href="#"><img src="<?= Url::to($heads . 'head (3).jpg') ?>" alt="..."
-                                                         class="img-circle img-responsiv img_height_80"></a>
 
-                                        <div class="text-center"><a href="#" class="btn btn-warning"
-                                                                    role="button">+关注</a></div>
-                                    </div>
-                                    <div class="media-body">
-                                        <h4 class="media-heading">超级管理员</h4>
-
-                                        <p>
-                                            哈哈哈哈哈哈哈哈哈哈超级管理员,超级管理员,哈哈哈哈哈哈哈哈哈哈超级管理员@哈哈哈哈哈哈哈哈哈哈超级管理员wa哈哈哈哈哈哈哈哈哈哈超级管理员</p>
-
-                                        <div class="">
-                                            <span class="label label-default">Default</span>
-                                            <span class="label label-primary">Primary</span>
-                                            <span class="label label-success">Success</span>
-                                            <span class="label label-info">Info</span>
-                                        </div>
-                                        <div class="media">
-                                            <div class="media-middle">
-                                                <video
-                                                    src="http://k.youku.com/player/getFlvPath/sid/5422793613396126b296a_01/st/mp4/fileid/0300200100542EEB91F37D14A45C8B4678D38F-9ED6-E726-1718-6BA379FC9745?K=3d00ab04f40f7f2a261e2726&hd=0&ymovie=1&myp=0&ts=776&ypp=2&ctype=12&ev=1&token=7403&oip=3663591661&ep=dyaWGE6EVcgB5iDWjj8bYX7gfXFeXP4J9h%2BHgdJjALshTOrK7EzYxuuzSYtDEogdd1EOYu%2F3rNiTaUhiYfk23W4QqkmqP%2Frh%2BfHr5ashtZMHb29Fe8rTsVSZRzDy"
-                                                    controls="controls"
-                                                    class="col-xs-12">
-                                                    <p>您的浏览器不支持html5，请更换浏览器</p>
-                                                </video>
-                                            </div>
-                                        </div>
-
-                                        <div class="row">
-                                            <h5 class="col-xs-12">
-                                                <small>今天 21:35</small>
-                                            </h5>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="panel-footer">
-                                <div class="row text-center">
-                                    <a href="#" class="col-xs-3" role="button">收藏</a>
-                                    <a href="#" class="col-xs-3" role="button">转发<span
-                                            class="badge">12562</span></a>
-                                    <a href="#" class="col-xs-3" role="button">评论<span
-                                            class="badge">12562</span></a>
-                                    <a href="#" class="col-xs-3 glyphicon glyphicon-thumbs-up"
-                                       role="button"><span class="badge">12562</span></a>
-                                </div>
-                            </div>
-                        </div>
                     </div>
                     <div role="tabpanel" class="tab-pane fade" id="one_month">
-                        <div class="panel panel-default">
-                            <div class="panel-body">
-                                <div class="media">
-                                    <div class="media-left">
-                                        <a href="#"><img src="<?= Url::to($heads . 'head (2).jpg') ?>" alt="..."
-                                                         class="img-circle img-responsiv img_height_80"></a>
 
-                                        <div class="text-center"><a href="#" class="btn btn-warning"
-                                                                    role="button">+关注</a></div>
-                                    </div>
-                                    <div class="media-body">
-                                        <h4 class="media-heading">超级管理员</h4>
-
-                                        <p>
-                                            哈哈哈哈哈哈哈哈哈哈超级管理员,超级管理员,哈哈哈哈哈哈哈哈哈哈超级管理员@哈哈哈哈哈哈哈哈哈哈超级管理员wa哈哈哈哈哈哈哈哈哈哈超级管理员</p>
-
-                                        <div class="">
-                                            <span class="label label-default">Default</span>
-                                            <span class="label label-primary">Primary</span>
-                                            <span class="label label-success">Success</span>
-                                            <span class="label label-info">Info</span>
-                                        </div>
-                                        <div class="media">
-                                            <div class="media-middle">
-                                                <video src="<?= Url::to($videos . 'a.mp4') ?>"
-                                                       controls="controls"
-                                                       class="col-xs-12">
-                                                    <p>您的浏览器不支持html5，请更换浏览器</p>
-                                                </video>
-                                            </div>
-                                        </div>
-
-                                        <div class="row">
-                                            <h5 class="col-xs-12">
-                                                <small>今天 21:35</small>
-                                            </h5>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="panel-footer">
-                                <div class="row text-center">
-                                    <a href="#" class="col-xs-3" role="button">收藏</a>
-                                    <a href="#" class="col-xs-3" role="button">转发<span
-                                            class="badge">12562</span></a>
-                                    <a href="#" class="col-xs-3" role="button">评论<span
-                                            class="badge">12562</span></a>
-                                    <a href="#" class="col-xs-3 glyphicon glyphicon-thumbs-up"
-                                       role="button"><span class="badge">12562</span></a>
-                                </div>
-                            </div>
-                        </div>
                     </div>
-
                 </div>
-
             </div>
-
         </div>
         <div class="col-xs-12 col-md-4 hidden-sm hidden-xs">
             <?php if ($user): ?>

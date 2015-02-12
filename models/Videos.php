@@ -13,7 +13,7 @@ use Yii;
  * @property string $video_title
  * @property string $video_date
  * @property string $video_path
- * @property integer $forward_count
+ * @property integer $comment_count
  * @property integer $praise_count
  * @property integer $video_state
  */
@@ -22,31 +22,22 @@ class Videos extends \yii\db\ActiveRecord
     const VIDEO_ACTIVE = 1;
     const VIDEO_DISABLE = 0;
 
-    /**
-     * @inheritdoc
-     */
     public static function tableName()
     {
         return '{{%videos}}';
     }
 
-    /**
-     * @inheritdoc
-     */
     public function rules()
     {
         return [
-            [['user_id', 'game_id', 'video_title', 'video_date', 'video_path', 'forward_count', 'praise_count', 'video_state'], 'required'],
-            [['user_id', 'game_id', 'forward_count', 'praise_count', 'video_state'], 'integer'],
+            [['user_id', 'game_id', 'video_title', 'video_date', 'video_path', 'comment_count', 'praise_count', 'video_state'], 'required'],
+            [['user_id', 'game_id', 'comment_count', 'praise_count', 'video_state'], 'integer'],
             [['video_date'], 'safe'],
             [['video_title'], 'string', 'max' => 100],
             [['video_path'], 'string', 'max' => 255]
         ];
     }
 
-    /**
-     * @inheritdoc
-     */
     public function attributeLabels()
     {
         return [
@@ -56,7 +47,7 @@ class Videos extends \yii\db\ActiveRecord
             'video_title' => Yii::t('app', 'Video Title'),
             'video_date' => Yii::t('app', 'Video Date'),
             'video_path' => Yii::t('app', 'Video Path'),
-            'forward_count' => Yii::t('app', 'Forward Count'),
+            'comment_count' => Yii::t('app', 'Forward Count'),
             'praise_count' => Yii::t('app', 'Praise Count'),
             'video_state' => Yii::t('app', 'Video State'),
         ];
@@ -77,6 +68,14 @@ class Videos extends \yii\db\ActiveRecord
      */
     public function getTagRelations(){
         return $this->hasMany(TagRelation::className(), ['video_id' => 'vid']);
+    }
+
+    /**
+     * 一对多关联，一个video有多个comments
+     * @return \yii\db\ActiveQuery
+     */
+    public function getComments(){
+        return $this->hasMany(Comments::className(), ['video_id' => 'vid']);
     }
 
     /**
@@ -112,5 +111,35 @@ class Videos extends \yii\db\ActiveRecord
             ->andWhere(['between','video_date', $one_day_front , $one_hour_front])
             ->orderBy(['video_date' => SORT_DESC])
             ->all();
+    }
+
+    /**
+     * 更新一个视频的评论数
+     * @param $video_id
+     * @return bool
+     * @throws \Exception
+     */
+    public static function updateCommentCountByVideoId($video_id){
+        $video = Videos::findOne($video_id);
+        $video->comment_count += 1;
+        if($video->update()){
+            return true;
+        }
+        return false;
+    }
+
+    /**
+     * 更新一个视频的赞数量
+     * @param $video_id
+     * @return bool
+     * @throws \Exception
+     */
+    public static function updatePraiseCountByVideoId($video_id){
+        $video = Videos::findOne($video_id);
+        $video->praise_count += 1;
+        if($video->update()){
+            return true;
+        }
+        return false;
     }
 }

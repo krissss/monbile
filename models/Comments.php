@@ -16,30 +16,23 @@ use Yii;
  */
 class Comments extends \yii\db\ActiveRecord
 {
-    /**
-     * @inheritdoc
-     */
+    const COMMENT_ENABLE = 1;
+
     public static function tableName()
     {
         return '{{%comments}}';
     }
 
-    /**
-     * @inheritdoc
-     */
     public function rules()
     {
         return [
             [['video_id', 'user_id', 'comment_content', 'comment_date', 'comment_state'], 'required'],
             [['video_id', 'user_id', 'comment_state'], 'integer'],
             [['comment_date'], 'safe'],
-            [['comment_content'], 'string', 'max' => 100]
+            [['comment_content'], 'string', 'max' => 30]
         ];
     }
 
-    /**
-     * @inheritdoc
-     */
     public function attributeLabels()
     {
         return [
@@ -50,5 +43,22 @@ class Comments extends \yii\db\ActiveRecord
             'comment_date' => Yii::t('app', 'Comment Date'),
             'comment_state' => Yii::t('app', 'Comment State'),
         ];
+    }
+
+    /**
+     * 一对一关联，一个comment只有一个user
+     * @return \yii\db\ActiveQuery
+     */
+    public function getUser()
+    {
+        return $this->hasOne(Users::className(), ['uid' => 'user_id']);
+    }
+
+    public static function findCommentsByVideoId($video_id){
+        return Comments::find()
+            ->joinWith('user')
+            ->where(['video_id' => $video_id])
+            ->orderBy(['comment_date' => SORT_DESC])
+            ->all();
     }
 }

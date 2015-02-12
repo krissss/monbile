@@ -4,7 +4,7 @@
  * site/index
  * 在包含页面需定义以下变量
  */
-/* @var $tags_hot object */
+/* @var $tags_hot :: render */
 ?>
 
 <div class="hot-tag">

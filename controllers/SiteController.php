@@ -58,7 +58,6 @@ class SiteController extends Controller
         $videos_on_day = Videos::findOneDayVideos();
         $tags_hot = Tags::findHotTags();
         if ($user = Yii::$app->getSession()->get('user')) {
-            $user_info = Users::findRelationById($user->uid);
             $video_send = new VideoSendForm();
             $games = Games::find()->all();
             if ($video_send->load(Yii::$app->request->post()) && $video_send->validate(['user_id', 'video_title', 'tags', 'game_id'])) {
@@ -73,7 +72,6 @@ class SiteController extends Controller
                 }
             }
             return $this->render('index', [
-                'user_info' => $user_info,
                 'videos_one_hour' => $videos_one_hour,
                 'videos_one_day' => $videos_on_day,
                 'tags_hot' => $tags_hot,

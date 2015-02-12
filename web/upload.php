@@ -1,6 +1,7 @@
 <?php
 if(!isset($_POST['headcookie']) || !$_POST['headcookie']){
-    header("Location: http://dev.monbile.cn");
+    echo '<script>window.location.href="index.php"</script>';
+    exit;
 }
 header('Content-Type: text/html; charset=utf-8');
 $result = array();

@@ -4,7 +4,7 @@
  * site/index   user/default/index
  * 在包含页面需定义以下变量
  */
-/* @var $video_info object */
+/* @var $video_info :: foreach */
 /* #commentsModal在comments_modal.php文件中，使用时需被包含一起使用 */
 
 use \yii\helpers\Url;
@@ -42,10 +42,9 @@ use \app\functions\Functions;
             </div>
         </div>
     </div>
-    <div class="btn-group btn-group-justified" role="group" aria-label="菜单">
-        <a href="#" class="btn btn-default" role="button"><span class="glyphicon glyphicon-star" aria-hidden="true"></span>收藏</a>
-        <a href="#" class="btn btn-default" role="button"><span class="glyphicon glyphicon-share-alt" aria-hidden="true"></span>转发<span class="badge"><?= $video_info->forward_count ?></span></a>
-        <a href="javascript:void(0);" class="btn btn-default" role="button" data-toggle="modal" data-target="#commentsModal"><span class="glyphicon glyphicon-comment" aria-hidden="true"></span>评论<span class="badge"><?= $video_info->forward_count ?></span></a>
-        <a href="#" class="btn btn-default" role="button"><span class="glyphicon glyphicon-thumbs-up" aria-hidden="true"></span>赞<span class="badge"><?= $video_info->praise_count ?></span></a>
+    <div class="btn-group btn-group-justified" role="group" aria-label="菜单" data-video-id="<?= $video_info->vid ?>">
+        <a href="javascript:void(0);" class="btn btn-default add_collection" role="button"><span class="glyphicon glyphicon-star" aria-hidden="true"></span>收藏</a>
+        <a href="javascript:void(0);" class="btn btn-default show_comments" role="button" data-toggle="modal" data-target="#commentsModal"><span class="glyphicon glyphicon-comment" aria-hidden="true"></span>评论<span class="badge"><?= $video_info->comment_count ?></span></a>
+        <a href="javascript:void(0);" class="btn btn-default give_praise" role="button"><span class="glyphicon glyphicon-thumbs-up" aria-hidden="true"></span>赞<span class="badge praise_count"><?= $video_info->praise_count ?></span></a>
     </div>
 </div>

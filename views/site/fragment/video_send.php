@@ -4,10 +4,9 @@
  * site/index   user/default/index
  * 在包含页面需定义以下变量
  */
-/* @var $video_send object */
-/* @var $games object */
-/* @var $imgs = Url::to('/imgs/') */
-/* @var $user = Yii::$app->getSession()->get('user'); */
+/* @var $video_send :: render */
+/* @var $games :: render */
+/* @var $user :: session */
 
 use yii\helpers\Html;
 use yii\bootstrap\ActiveForm;
@@ -31,8 +30,7 @@ use yii\bootstrap\ActiveForm;
         <button type="button" class="btn btn-default" id="add_face">添加表情</button>
         <button type="button" class="btn btn-default" id="add_tag">标签</button>
         <div class="dropdown div_inline">
-            <button class="btn btn-default dropdown-toggle" type="button" id="change_classify" data-toggle="dropdown"
-                    aria-expanded="true">
+            <button class="btn btn-default dropdown-toggle" type="button" id="change_classify" data-toggle="dropdown" aria-expanded="true">
                 类型 <span class="caret"></span>
             </button>
             <ul id="change_classify_ul" class="dropdown-menu" role="menu" aria-labelledby="change_classify">

@@ -193,8 +193,8 @@ $(document).ready(function () {
                     tab_visible: false,  //是否显示选项卡
                     avatar_intro: '最终会使用以下尺寸的头像，请注意是否清晰',    //头像简介，默认：最终会生成以下尺寸的头像，请注意是否清晰
                     avatar_box_border_width: 0, //头像框的边框宽度
-                    avatar_sizes: '150*150|80*80',  //表示一组或多组头像的尺寸。其间用"|"号分隔。
-                    avatar_sizes_desc: '150*150像素|80*80像素'  //头像尺寸的提示文本。多个用"|"号分隔，与上一项对应。
+                    avatar_sizes: '150*150|80*80|35*35',  //表示一组或多组头像的尺寸。其间用"|"号分隔。
+                    avatar_sizes_desc: '150*150像素|80*80像素|35*35像素'  //头像尺寸的提示文本。多个用"|"号分隔，与上一项对应。
                 }, function (msg) {
                     switch (msg.code) {
                         case 1 :
@@ -250,7 +250,7 @@ $(document).ready(function () {
             title:warning_message.split('#')[0],
             text:warning_message.split('#')[1],
             type: 'warning',
-            showCancelButton: true,
+            showCancelButton: true
         },function(isConfirm){
             if(isConfirm){
                 if(warning_go_url = $('.warning_go_url').val()){
@@ -259,4 +259,184 @@ $(document).ready(function () {
             }
         });
     }
+
+    /**
+     * 获取并设置comments
+     * @param video_id
+     */
+    function getAndSetComments(video_id){
+        $.ajax({
+            type: "post",
+            url: "index.php?r=user/default/showcomments",
+            data: {video_id:video_id},
+            dataType: "json",
+            success: function(data){
+                var html = '';
+                $.each(data, function(index, content){
+                    /*comments原型
+                     <div class="comments_item">
+                     <div class="media">
+                     <div class="media-left">
+                     <a href="#">
+                     <img class="media-object img-circle img-responsiv img_height_35" src="heads/head (1).jpg" alt="飒沓" title="飒沓">
+                     </a>
+                     </div>
+                     <div class="media-body">
+                     <p><span class="text-danger">飒沓</span> : 哈哈哈</p>
+                     <h5><small>2015-12-12 10:10:20</small></h5>
+                     </div>
+                     </div>
+                     </div>
+                     */
+                    html += '<div class="comments_item"><div class="media"><div class="media-left">' +
+                    '<a href="index.php?r=user/default/index&id='+content.uid+'">' +
+                    '<img class="media-object img-circle img-responsiv img_height_35" src="heads/'+content.head+'" alt="'+content.nickname+'" title="'+content.nickname+'">' +
+                    '</a> </div> <div class="media-body">' +
+                    '<p><span class="text-danger">'+content.nickname+'</span> :'+content.comment_content+'</p> <h5><small>'+content.comment_date+'</small></h5></div></div></div>';
+                });
+                if(!html){
+                    html = '<div class="comments_item"><p>暂无评论</p></div>';
+                }
+                $('.comments_list').empty().html(html);
+            },
+            complete : function(XMLHttpRequest,status){
+                if(status != 'success'){
+                    swal({
+                        title:'出现问题，请稍后再试',
+                        type:'error'
+                    });
+                }
+            }
+        });
+    }
+
+    /**
+     * ajax获取评论
+     */
+    $('.show_comments').click(function(){
+        var obj =  $('.comment_video_id');
+        obj .val($(this).parent().attr('data-video-id'));
+        var video_id = obj.val();
+        var html = '<div class="load"><div class="loader">Loading...</div></div>';
+        $('.comments_list').empty().html(html);
+        getAndSetComments(video_id);
+    });
+
+    /**
+     * ajax提交评论
+     */
+    $('.comment_send').click(function() {
+        var comment_content = $(".comment_content").val();
+        var comment_video_id = $(".comment_video_id").val();
+        if (!comment_content || !comment_video_id) {
+            swal('评论内容未填写');
+        } else {
+            var html = '<div class="load"><div class="loader">Loading...</div></div>';
+            $('.comments_list').empty().html(html);
+            $.ajax({
+                type: "post",
+                url: "index.php?r=user/default/sendcomment",
+                data: {comment_content: comment_content, video_id: comment_video_id},
+                dataType: "text",
+                success: function ($date) {
+                    if($date == 'error'){
+                        alert('字数超出范围');
+                    }
+                    var video_id = $('.comment_video_id').val();
+                    getAndSetComments(video_id);
+                },
+                complete : function(XMLHttpRequest,status){
+                    if(status != 'success'){
+                        swal({
+                            title:'出现问题，请稍后再试',
+                            type:'error'
+                        });
+                    }
+                }
+            });
+        }
+    });
+
+    /**
+     * ajax赞
+     */
+    $('.give_praise').click(function() {
+        var video_id = $(this).parent().attr('data-video-id');
+        if (video_id) {
+            swal({
+                title: '<div class="load"><div class="loader">Loading...</div></div>',
+                html: true
+            });
+            var praise_count = $(this).find('.praise_count');
+            $.ajax({
+                type: "post",
+                url: "index.php?r=user/default/praise",
+                data: {video_id: video_id},
+                dataType: "text",
+                success: function ($date) {
+                    if($date == 'ok'){
+                        praise_count.text(Number(praise_count.text())+1);
+                        swal({
+                            title:'谢谢您的赞',
+                            type:'success'
+                        });
+                    }else{
+                        swal({
+                            title:$date,
+                            type:'error'
+                        });
+                    }
+                },
+                complete : function(XMLHttpRequest,status){
+                    if(status != 'success'){
+                        swal({
+                            title:'出现问题，请稍后再试',
+                            type:'error'
+                        });
+                    }
+                }
+            });
+        }
+    });
+
+    /**
+     * ajax收藏
+     */
+    $('.add_collection').click(function() {
+        var video_id = $(this).parent().attr('data-video-id');
+        if (video_id) {
+            swal({
+                title: '<div class="load"><div class="loader">Loading...</div></div>',
+                html: true
+            });
+            //var praise_count = $(this).find('.praise_count');
+            $.ajax({
+                type: "post",
+                url: "index.php?r=user/default/collect",
+                data: {video_id: video_id},
+                dataType: "text",
+                success: function ($date) {
+                    if($date == 'ok'){
+                        swal({
+                            title:'收藏成功',
+                            type:'success'
+                        });
+                    }else{
+                        swal({
+                            title:$date,
+                            type:'error'
+                        });
+                    }
+                },
+                complete : function(XMLHttpRequest,status){
+                    if(status != 'success'){
+                        swal({
+                            title:'出现问题，请稍后再试',
+                            type:'error'
+                        });
+                    }
+                }
+            });
+        }
+    });
 });
