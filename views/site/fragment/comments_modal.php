@@ -1,7 +1,7 @@
 <?php
 /**
  * 点击评论的弹出框
- * site/index   user/default/index
+ * site/index   user/default/index  user/default/collections
  * 在包含页面需定义以下变量
  */
 /* @var $user :: session */
@@ -13,7 +13,8 @@ use \yii\helpers\Url;
     <div class="modal-dialog">
         <div class="modal-content">
             <div class="modal-header">
-                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                <span data-dismiss="modal" class="glyphicon glyphicon-remove cursor_pointer pull-right" aria-hidden="true" title="关闭"></span>
+                <span class="glyphicon glyphicon-refresh pull-right margin_right_20 cursor_pointer comments_refresh" aria-hidden="true" title="刷新"></span>
                 <h5 class="modal-title" id="myModalLabel">评论</h5>
             </div>
             <div class="modal-body">

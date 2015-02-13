@@ -59,7 +59,8 @@ class Videos extends \yii\db\ActiveRecord
      */
     public function getUser()
     {
-        return $this->hasOne(Users::className(), ['uid' => 'user_id']);
+        return $this->hasOne(Users::className(), ['uid' => 'user_id'])
+            ->inverseOf('videos');
     }
 
     /**

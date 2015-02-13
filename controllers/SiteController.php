@@ -2,6 +2,7 @@
 
 namespace app\controllers;
 
+use app\models\Collections;
 use app\models\forms\RegisterForm;
 use app\models\forms\VideoSendForm;
 use app\models\Games;
@@ -60,6 +61,7 @@ class SiteController extends Controller
         if ($user = Yii::$app->getSession()->get('user')) {
             $video_send = new VideoSendForm();
             $games = Games::find()->all();
+            $collections_array = Collections::findAllVideoIdInCollectionsByUserId($user->uid);
             if ($video_send->load(Yii::$app->request->post()) && $video_send->validate(['user_id', 'video_title', 'tags', 'game_id'])) {
                 $video_send->video_path = UploadedFile::getInstance($video_send, 'video_path');
                 if ($video_send->validate(['video_path']) && $video_send->video_path) {
@@ -67,6 +69,9 @@ class SiteController extends Controller
                     $video_send->video_path->saveAs('videos/' . $video_name . '.' . $video_send->video_path->extension);
                     $video_send->video_path = $video_name . '.' . $video_send->video_path->extension;
                     $video_send->videoSave();
+                    $email = $user->email;
+                    Yii::$app->getSession()->remove('user');
+                    Yii::$app->getSession()->set('user',Users::findByEmail($email));
                     Yii::$app->session->setFlash('success_message','发布成功');
                     return $this->refresh();
                 }
@@ -77,6 +82,7 @@ class SiteController extends Controller
                 'tags_hot' => $tags_hot,
                 'video_send' => $video_send,
                 'games' => $games,
+                'collections_array' => $collections_array,
             ]);
         }
         return $this->render('index', [
@@ -142,7 +148,6 @@ class SiteController extends Controller
                 ]);
             }
         }
-
         return $this->render('register', [
             'model' => $model,
         ]);

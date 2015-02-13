@@ -7,6 +7,8 @@
 /* @var $videos_one_day :: render */
 /* @var $tags_hot :: render */
 /* @var $is_other_user :: false; */
+/* @var $is_other_user_video :: true; */
+/* @var $collections_array :: render or array()(用户未登录) */
 /* 若用户已经登录，还需以下变量 */
 /* @var $video_send :: render */
 /* @var $games :: render */
@@ -22,9 +24,14 @@ $videos = Url::to('/videos/');
 $session = Yii::$app->getSession();
 $user = $session->get('user');
 $is_other_user = false;
+$is_other_user_video = true;
+if(!isset($collections_array)){
+    $collections_array = array();
+}
 ?>
 <input class="success_message" type="hidden" value="<?= $session->hasFlash('success_message') ? $session->getFlash('success_message') : '' ?>">
 <?php require(__DIR__ . '/fragment/comments_modal.php'); ?>
+
 <div class="site-index">
     <div class="row">
         <div id="error_message" class="alert alert-danger alert-dismissible display_none" role="alert">
@@ -53,6 +60,7 @@ $is_other_user = false;
                             <?php foreach ($videos_one_hour as $video_info): ?>
                                 <?php require(__DIR__ . '/fragment/video_info_panel.php'); ?>
                             <?php endforeach; ?>
+                            <!--<button class="btn btn-primary btn-group-justified" value="加载更多">加载更多</button>-->
                         <? endif; ?>
                     </div>
                     <div role="tabpanel" class="tab-pane fade" id="one_day">

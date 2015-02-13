@@ -26,18 +26,17 @@ if(isset($other_user)&&$other_user){
 
 $this->title = $user->nickname.'的视频';
 ?>
-<div class="user-default-index">
+<div class="user-default-videos">
     <div class="row">
         <div class="col-xs-12 col-md-8">
             <div class="row">
-                <?php if (!is_array($user->videos) || count($user->videos) < 1): ?>
-                    <div class="alert alert-info col-xs-12" role="alert">您还没有发布任何视频</div>
+                <?php if (count($user->videos) < 1): ?>
+                    <div class="alert alert-info col-xs-12" role="alert">还没有发布任何视频</div>
                 <?php else: ?>
-                    <?php foreach (array_reverse($user->videos) as $video_info): ?>
+                    <?php foreach ($user->videos as $video_info): ?>
                         <div class="col-xs-12 col-md-6">
                             <div class="thumbnail">
-                                <video src="<?= Url::to($videos . $video_info->video_path) ?>" controls="controls"
-                                       class="col-xs-12">
+                                <video data-src="<?= Url::to($videos . $video_info->video_path) ?>" controls="controls" class="col-xs-12 lazyload">
                                     <p>您的浏览器不支持html5，请更换浏览器</p>
                                 </video>
                                 <div class="caption">

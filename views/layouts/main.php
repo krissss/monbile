@@ -54,7 +54,14 @@ $user = Yii::$app->getSession()->get('user');
                         <li><a href="<?=Url::to(['/site/register'])?>"><span class="glyphicon glyphicon-registration-mark" aria-hidden="true"></span>注册</a></li>
                         <li><a href="<?=Url::to(['/site/login'])?>"><span class="glyphicon glyphicon-log-in" aria-hidden="true"></span>登录</a></li>
                         <?php else: ?>
-                            <li><a href="<?=Url::to(['/user/default/index'])?>"><span class="glyphicon glyphicon-user" aria-hidden="true"></span><?=$user->nickname?></a></li>
+                            <li class="dropdown">
+                                <a href="javascript:void(0);" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false"><span class="glyphicon glyphicon-user" aria-hidden="true"></span><?=$user->nickname?><span class="caret"></span></a>
+                                <ul class="dropdown-menu" role="menu">
+                                    <li><a href="<?=Url::to(['/user/default/index'])?>">我的主页</a></li>
+                                    <li><a href="<?=Url::to(['/user/default/videos'])?>">我的视频</a></li>
+                                    <li><a href="<?=Url::to(['/user/default/collections'])?>">我的收藏</a></li>
+                                </ul>
+                            </li>
                             <li class="dropdown">
                                 <a href="javascript:void(0);" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false"><span class="glyphicon glyphicon-cog" aria-hidden="true"></span>个人设置<span class="caret"></span></a>
                                 <ul class="dropdown-menu" role="menu">

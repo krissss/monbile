@@ -51,13 +51,30 @@ a:active {
     display: none;
 }
 
+.margin_right_20{
+    margin-right: 20px;
+}
+
+.cursor_pointer{
+    cursor: pointer;
+}
+
 /* 修正bootstrup的样式*/
 .glyphicon{
     top: 2px;
     padding-right: 2px;
 }
+
 .glyphicon:hover{
-    color: #0a8cd2;
+    color: #d9534f;
+}
+
+.glyphicon-inverse{
+    color: #d9534f;
+}
+
+.glyphicon-inverse:hover{
+    color: #000;
 }
 
 /* video_send textarea 文本域样式 */

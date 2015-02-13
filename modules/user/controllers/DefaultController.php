@@ -12,6 +12,7 @@ use app\modules\user\models\forms\UpdatePawForm;
 use Yii;
 use yii\helpers\Url;
 use yii\web\Controller;
+use yii\web\Request;
 use yii\web\UploadedFile;
 
 class DefaultController extends Controller
@@ -24,6 +25,7 @@ class DefaultController extends Controller
                 //同以下没有id传参
                 $video_send = new VideoSendForm();
                 $games = Games::find()->all();
+                $collections_array = Collections::findAllVideoIdInCollectionsByUserId($user->uid);
                 if ($video_send->load(Yii::$app->request->post()) && $video_send->validate(['user_id', 'video_title', 'tags', 'game_id'])) {
                     $video_send->video_path = UploadedFile::getInstance($video_send, 'video_path');
                     if ($video_send->validate(['video_path']) && $video_send->video_path) {
@@ -31,6 +33,9 @@ class DefaultController extends Controller
                         $video_send->video_path->saveAs('videos/' . $video_name . '.' . $video_send->video_path->extension);
                         $video_send->video_path = $video_name . '.' . $video_send->video_path->extension;
                         $video_send->videoSave();
+                        $email = $user->email;
+                        Yii::$app->getSession()->remove('user');
+                        Yii::$app->getSession()->set('user',Users::findByEmail($email));
                         Yii::$app->session->setFlash('success_message', '发布成功');
                         return $this->refresh();
                     }
@@ -38,17 +43,21 @@ class DefaultController extends Controller
                 return $this->render('index', [
                     'video_send' => $video_send,
                     'games' => $games,
+                    'collections_array' => $collections_array,
                 ]);
             }
             $other_user = Users::findRelationById($id);
+            $collections_array = Collections::findAllVideoIdInCollectionsByUserId($user->uid);
             return $this->render('index', [
                 'other_user' => $other_user,
+                'collections_array' => $collections_array,
             ]);
         }
         //如果没有id传参且用户已经登录
         if ($user = Yii::$app->getSession()->get('user')) {
             $video_send = new VideoSendForm();
             $games = Games::find()->all();
+            $collections_array = Collections::findAllVideoIdInCollectionsByUserId($user->uid);
             if ($video_send->load(Yii::$app->request->post()) && $video_send->validate(['user_id', 'video_title', 'tags', 'game_id'])) {
                 $video_send->video_path = UploadedFile::getInstance($video_send, 'video_path');
                 if ($video_send->validate(['video_path']) && $video_send->video_path) {
@@ -56,6 +65,9 @@ class DefaultController extends Controller
                     $video_send->video_path->saveAs('videos/' . $video_name . '.' . $video_send->video_path->extension);
                     $video_send->video_path = $video_name . '.' . $video_send->video_path->extension;
                     $video_send->videoSave();
+                    $email = $user->email;
+                    Yii::$app->getSession()->remove('user');
+                    Yii::$app->getSession()->set('user',Users::findByEmail($email));
                     Yii::$app->session->setFlash('success_message', '发布成功');
                     return $this->refresh();
                 }
@@ -63,6 +75,7 @@ class DefaultController extends Controller
             return $this->render('index', [
                 'video_send' => $video_send,
                 'games' => $games,
+                'collections_array' => $collections_array,
             ]);
         }
         return $this->redirect(Url::to(['/site/login']));
@@ -84,6 +97,33 @@ class DefaultController extends Controller
         //如果没有id传参且用户已经登录
         if ($user = Yii::$app->getSession()->get('user')) {
             return $this->render('videos');
+        }
+        return $this->redirect(Url::to(['/site/login']));
+    }
+
+    public function actionCollections()
+    {
+        if ($id = Yii::$app->request->get('id')) {
+            $user = Yii::$app->getSession()->get('user');
+            $collections_array = Collections::findAllVideoIdInCollectionsByUserId($user->uid);
+            if ($user && $id == $user->uid) {
+                //同以下没有id传参
+                return $this->render('collections',[
+                    'collections_array' => $collections_array,
+                ]);
+            }
+            $other_user = Users::findRelationById($id);
+            return $this->render('collections', [
+                'other_user' => $other_user,
+                'collections_array' => $collections_array,
+            ]);
+        }
+        //如果没有id传参且用户已经登录
+        if ($user = Yii::$app->getSession()->get('user')) {
+            $collections_array = Collections::findAllVideoIdInCollectionsByUserId($user->uid);
+            return $this->render('collections',[
+                'collections_array' => $collections_array,
+            ]);
         }
         return $this->redirect(Url::to(['/site/login']));
     }
@@ -199,20 +239,56 @@ class DefaultController extends Controller
     public function actionCollect(){
         if ($user = Yii::$app->getSession()->get('user')) {
             $video_id = Yii::$app->request->post('video_id');
-            if(Collections::isExist($user->uid, $video_id)){
-                return '已经收藏过';
+            if($collection = Collections::isExist($user->uid, $video_id)){
+                if(!$collection->delete()){
+                    return '取消收藏出错，请稍后再试';
+                }
+                $email = $user->email;
+                Yii::$app->getSession()->remove('user');
+                Yii::$app->getSession()->set('user',Users::findByEmail($email));
+                return 'ok_delete';
             }else{
                 $collection = new Collections();
                 $collection->user_id = $user->uid;
                 $collection->video_id = $video_id;
                 $collection->collection_date = date('Y-m-d H:i:s');
                 if(!$collection->save()){
-                    return '保存收藏出错';
+                    return '保存收藏出错，请稍后再试';
                 }
+                $email = $user->email;
+                Yii::$app->getSession()->remove('user');
+                Yii::$app->getSession()->set('user',Users::findByEmail($email));
                 return 'ok';
             }
         }
         return $this->redirect(Url::to(['/site/login']));
+    }
+
+    public function actionDeleteVideo(){
+        if ($user = Yii::$app->getSession()->get('user')) {
+            $video_id = Yii::$app->request->post('video_id');
+            if($video = Videos::findOne($video_id)){
+                $dir = $_SERVER['DOCUMENT_ROOT'] . '\videos';
+                if(file_exists($dir.'/'.$video->video_path)){
+                    rename($dir.'/'.$video->video_path, $dir.'/delete_'.$video->video_path);
+                    Collections::deleteAll(['video_id'=>$video_id]);
+                    $video->delete();
+                    $email = $user->email;
+                    Yii::$app->getSession()->remove('user');
+                    Yii::$app->getSession()->set('user',Users::findByEmail($email));
+                    return 'ok';
+                }else{
+                    return '删除文件错误，请联系管理员';
+                }
+            }
+            return '删除出错，请稍后再试';
+        }
+        return $this->redirect(Url::to(['/site/login']));
+    }
+
+    public function actionRename(){
+       print_r(Yii::$app->getSession()) ;
+       //print_r(Yii::$app->getSession()->get('user')->videos) ;
     }
 
 }

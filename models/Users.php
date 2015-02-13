@@ -70,11 +70,14 @@ class Users extends \yii\db\ActiveRecord
 
     /**
      * 一对多关联，一个user有多个video
+     * 按时间倒序排序
      * @return \yii\db\ActiveQuery
      */
     public function getVideos()
     {
-        return $this->hasMany(Videos::className(), ['user_id' => 'uid']);
+        return $this->hasMany(Videos::className(), ['user_id' => 'uid'])
+            ->orderBy(['video_date'=>SORT_DESC])
+            ->inverseOf('user');
     }
 
     /**
@@ -98,10 +101,12 @@ class Users extends \yii\db\ActiveRecord
     /**
      * 一对多关联，一个user有多个collections
      * @return \yii\db\ActiveQuery
+     * 倒叙输出
      */
     public function getCollections()
     {
-        return $this->hasMany(Collections::className(), ['user_id' => 'uid']);
+        return $this->hasMany(Collections::className(), ['user_id' => 'uid'])
+            ->orderBy(['collection_date'=>SORT_DESC]);
     }
 
 
@@ -148,19 +153,6 @@ class Users extends \yii\db\ActiveRecord
             'email' => $email,
         ]);
         return $user;
-    }
-
-    /**
-     * 查询用户的关注和粉丝
-     * @return array|\yii\db\ActiveRecord[]
-     */
-    public static function findRelation()
-    {
-        return Users::find()
-            ->joinWith(['relationsFront' => function ($query) {
-                $query->from('mb_relations f');
-            }, 'relationsBack'])
-            ->all();
     }
 
     /**

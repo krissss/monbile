@@ -30,6 +30,7 @@ class AppAsset extends AssetBundle
        // 'js/fullAvatarEditor.js',
        // 'js/swfobject.js',
         'js/sweet-alert.js',//弹出框
+        'js/lazysizes.min.js',//懒加载图片和视频    需懒加载的src改为data-src ,添加class="lazyload"  目前仅仅用在video的加载上
         /* 总方法调用 */
         'js/monbile.js',
     ];

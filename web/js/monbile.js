@@ -265,6 +265,7 @@ $(document).ready(function () {
      * @param video_id
      */
     function getAndSetComments(video_id){
+        $(".comment_content").val('');
         $.ajax({
             type: "post",
             url: "index.php?r=user/default/showcomments",
@@ -272,6 +273,7 @@ $(document).ready(function () {
             dataType: "json",
             success: function(data){
                 var html = '';
+                var count = data.length;
                 $.each(data, function(index, content){
                     /*comments原型
                      <div class="comments_item">
@@ -297,6 +299,7 @@ $(document).ready(function () {
                 if(!html){
                     html = '<div class="comments_item"><p>暂无评论</p></div>';
                 }
+                $('.comment_count_'+video_id).text(count);
                 $('.comments_list').empty().html(html);
             },
             complete : function(XMLHttpRequest,status){
@@ -357,6 +360,17 @@ $(document).ready(function () {
         }
     });
 
+
+    /**
+     * ajax评论刷新
+     */
+    $('.comments_refresh').click(function(){
+        var video_id = $('.comment_video_id').val();
+        var html = '<div class="load"><div class="loader">Loading...</div></div>';
+        $('.comments_list').empty().html(html);
+        getAndSetComments(video_id);
+    });
+
     /**
      * ajax赞
      */
@@ -409,7 +423,9 @@ $(document).ready(function () {
                 title: '<div class="load"><div class="loader">Loading...</div></div>',
                 html: true
             });
-            //var praise_count = $(this).find('.praise_count');
+            var collect_html = '<span class="glyphicon glyphicon-star" aria-hidden="true"></span>收藏';
+            var collected_html = '<span class="glyphicon glyphicon-star glyphicon-inverse" aria-hidden="true"></span>已收藏';
+            var collect_success = $(this);
             $.ajax({
                 type: "post",
                 url: "index.php?r=user/default/collect",
@@ -417,8 +433,15 @@ $(document).ready(function () {
                 dataType: "text",
                 success: function ($date) {
                     if($date == 'ok'){
+                        collect_success.html(collected_html);
                         swal({
                             title:'收藏成功',
+                            type:'success'
+                        });
+                    }else if($date == 'ok_delete'){
+                        collect_success.html(collect_html);
+                        swal({
+                            title:'取消收藏成功',
                             type:'success'
                         });
                     }else{
@@ -436,6 +459,61 @@ $(document).ready(function () {
                         });
                     }
                 }
+            });
+        }
+    });
+
+    /**
+     * ajax删除视频
+     */
+    $('.delete_video').click(function(){
+        var $this = $(this);
+        var video_id = $this.attr('data-video-id');
+        if (video_id) {
+            swal({
+                title: "确定删除此条视频吗？",
+                text: "删除后将无法恢复此视频",
+                type: "warning",
+                showCancelButton: true,
+                confirmButtonColor: "#DD6B55",
+                cancelButtonText: "取消",
+                confirmButtonText: "确定删除",
+                closeOnConfirm: false
+            }, function(){
+                swal({
+                    title: '<div class="load"><div class="loader">Loading...</div></div>',
+                    html: true
+                });
+                $.ajax({
+                    type: "post",
+                    url: "index.php?r=user/default/delete-video",
+                    data: {video_id: video_id},
+                    dataType: "text",
+                    success: function ($date) {
+                        if($date == 'ok'){
+                            swal({
+                                title:'删除成功',
+                                type:'success'
+                            });
+                            $this.closest('.panel').fadeOut("slow", function (){
+                                $(this).remove();
+                            });
+                        }else{
+                            swal({
+                                title:$date,
+                                type:'error'
+                            });
+                        }
+                    },
+                    complete : function(XMLHttpRequest,status){
+                        if(status != 'success'){
+                            swal({
+                                title:'出现问题，请稍后再试',
+                                type:'error'
+                            });
+                        }
+                    }
+                });
             });
         }
     });

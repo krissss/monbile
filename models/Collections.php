@@ -39,6 +39,26 @@ class Collections extends \yii\db\ActiveRecord
     }
 
     /**
+     * 一对一关联，一个collection只有一个user
+     * @return \yii\db\ActiveQuery
+     */
+    public function getUser()
+    {
+        return $this->hasOne(Users::className(), ['uid' => 'user_id'])
+            ->inverseOf('collections');
+    }
+
+    /**
+     * 一对一关联，一个collection只有一个video
+     * @return \yii\db\ActiveQuery
+     */
+    public function getVideo()
+    {
+        return $this->hasOne(Videos::className(), ['vid' => 'video_id']);
+            //->inverseOf('collections');
+    }
+
+    /**
      * 判断某个收藏是否存在
      * @param $user_id
      * @param $video_id
@@ -48,5 +68,22 @@ class Collections extends \yii\db\ActiveRecord
         return Collections::find()
             ->where(['user_id'=>$user_id, 'video_id'=>$video_id])
             ->one();
+    }
+
+    /**
+     * 查询某个用户的所有收藏的视频的video_id，并以数组传出
+     * @param $user_id
+     * @return array
+     */
+    public static function findAllVideoIdInCollectionsByUserId($user_id){
+        $collections = Collections::find()
+            ->select('video_id')
+            ->where(['user_id'=>$user_id])
+            ->all();
+        $collections_array = array();
+        foreach($collections as $collection){
+            array_push($collections_array,$collection->video_id);
+        }
+        return $collections_array;
     }
 }
