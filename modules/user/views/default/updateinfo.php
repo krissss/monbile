@@ -16,12 +16,12 @@ $session = Yii::$app->getSession();
 
 <div class="user-default-updateinfo">
     <div class="text-center">
-        <a href="<?=Url::to(['/user/default/updatehead'])?>"><img src="<?= Url::to($heads . $model->head) ?>" alt="点我修改头像" title="点我修改头像" class="img-circle img-responsiv img_height_150"></a>
+        <img src="<?= Url::to($heads . $model->head) ?>" alt="点我修改头像" title="点我修改头像" class="img-circle img-responsiv img_height_150">
     </div>
     <div class="panel panel-default">
         <div class="panel-body">
             <?php $form = ActiveForm::begin([
-                'id' => 'updateinfo-form',
+                'id' => 'update-info-form',
                 'options' => ['class' => 'form-horizontal'],
                 'fieldConfig' => [
                     'template' => "{label}\n<div class=\"col-xs-12 col-md-3\">{input}</div>\n<div class=\"col-xs-12 col-md-4\">{error}</div>",
@@ -36,7 +36,7 @@ $session = Yii::$app->getSession();
             <?= $form->field($model, 'love_game_id')->dropDownList(['1'=>'英雄联盟','2'=>'DOTA','3'=>'剑灵'],['prompt'=>'请选择']) ?>
             <div class="form-group">
                 <div class="col-md-offset-5 col-md-7">
-                    <?= Html::submitButton('更新', ['class' => 'btn btn-primary', 'name' => 'updateinfo-button']) ?>
+                    <?= Html::submitButton('更新', ['class' => 'btn btn-primary', 'name' => 'update-info-button']) ?>
                 </div>
             </div>
             <?php ActiveForm::end(); ?>

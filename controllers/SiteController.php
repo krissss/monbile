@@ -6,6 +6,7 @@ use app\models\Collections;
 use app\models\forms\RegisterForm;
 use app\models\forms\VideoSendForm;
 use app\models\Games;
+use app\models\Relations;
 use app\models\Tags;
 use app\models\Users;
 use app\models\Videos;
@@ -57,11 +58,17 @@ class SiteController extends Controller
     {
         $videos_one_hour = Videos::findOneHourVideos();
         $videos_on_day = Videos::findOneDayVideos();
-        $tags_hot = Tags::findHotTags();
+        $relations_array = array();
+        if(!Yii::$app->getSession()->has('tags_hot')){
+            Yii::$app->getSession()->set('tags_hot',Tags::findHotTags());
+        }
+        if(!Yii::$app->getSession()->has('users_hot')){
+            Yii::$app->getSession()->set('users_hot',Users::findHotUsers());
+        }
         if ($user = Yii::$app->getSession()->get('user')) {
             $video_send = new VideoSendForm();
-            $games = Games::find()->all();
             $collections_array = Collections::findAllVideoIdInCollectionsByUserId($user->uid);
+            $relations_array = Relations::findAllBackIdInRelationsByFrontId($user->uid);
             if ($video_send->load(Yii::$app->request->post()) && $video_send->validate(['user_id', 'video_title', 'tags', 'game_id'])) {
                 $video_send->video_path = UploadedFile::getInstance($video_send, 'video_path');
                 if ($video_send->validate(['video_path']) && $video_send->video_path) {
@@ -79,16 +86,15 @@ class SiteController extends Controller
             return $this->render('index', [
                 'videos_one_hour' => $videos_one_hour,
                 'videos_one_day' => $videos_on_day,
-                'tags_hot' => $tags_hot,
                 'video_send' => $video_send,
-                'games' => $games,
                 'collections_array' => $collections_array,
+                'relations_array' => $relations_array,
             ]);
         }
         return $this->render('index', [
             'videos_one_hour' => $videos_one_hour,
             'videos_one_day' => $videos_on_day,
-            'tags_hot' => $tags_hot,
+            'relations_array' => $relations_array,
         ]);
     }
 
@@ -98,6 +104,7 @@ class SiteController extends Controller
         $model->load(Yii::$app->request->post());
         if ($model->load(Yii::$app->request->post()) && $user = $model->login()) {
             Yii::$app->getSession()->set('user', $user);
+            Yii::$app->getSession()->set('games', Games::find()->all());
             return $this->redirect(['/user/default/index']);
         } else {
             return $this->render('login', [

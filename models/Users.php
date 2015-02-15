@@ -86,7 +86,9 @@ class Users extends \yii\db\ActiveRecord
      */
     public function getRelationsFront()
     {
-        return $this->hasMany(Relations::className(), ['front_id' => 'uid']);
+        return $this->hasMany(Relations::className(), ['front_id' => 'uid'])
+            ->where(['relation_state' => Relations::RELATION_STABLE])
+            ->inverseOf('front');
     }
 
     /**
@@ -95,7 +97,19 @@ class Users extends \yii\db\ActiveRecord
      */
     public function getRelationsBack()
     {
-        return $this->hasMany(Relations::className(), ['back_id' => 'uid']);
+        return $this->hasMany(Relations::className(), ['back_id' => 'uid'])
+            ->where(['relation_state' => Relations::RELATION_STABLE])
+            ->inverseOf('back');
+    }
+
+    /**
+     * 获取粉丝数量，用于统计用户粉丝多的状况
+     * @return \yii\db\ActiveQuery
+     */
+    public function getHotBacks(){
+        return $this->hasMany(Relations::className(), ['back_id' => 'uid'])
+            ->select('count(back_id)')
+            ->where(['relation_state' => Relations::RELATION_STABLE]);
     }
 
     /**
@@ -108,7 +122,6 @@ class Users extends \yii\db\ActiveRecord
         return $this->hasMany(Collections::className(), ['user_id' => 'uid'])
             ->orderBy(['collection_date'=>SORT_DESC]);
     }
-
 
     /**
      * 创建随机头像
@@ -156,18 +169,14 @@ class Users extends \yii\db\ActiveRecord
     }
 
     /**
-     * 查询某个用户的关注和粉丝和视频
-     * @param $uid
+     * 查询拥有粉丝较多的用户
+     * @param $number
      * @return array|\yii\db\ActiveRecord[]
      */
-    public static function findRelationById($uid)
+    public static function findHotUsers()
     {
         return Users::find()
-            ->joinWith(['relationsFront' => function ($query) {
-                $query->from('mb_relations f');
-            }, 'relationsBack',
-                'videos'])
-            ->where(['uid' => $uid])
-            ->one();
+            ->joinWith(['hotBacks'])
+            ->all();
     }
 }

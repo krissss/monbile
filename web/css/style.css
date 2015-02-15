@@ -9,6 +9,16 @@
     display: inline-block;
 }
 
+.img_height_100 {
+    height: 100px;
+    display: inline-block;
+}
+
+.img_height_120 {
+    height: 120px;
+    display: inline-block;
+}
+
 .img_height_150 {
     height: 150px;
     display: inline-block;

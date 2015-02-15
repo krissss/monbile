@@ -6,6 +6,7 @@
  */
 /* @var $user :: session or render($other_user) */
 /* @var $is_other_user :: false or true */
+/* @var $relations_array :: render */
 /* @var $heads = Url::to('/heads/'); */
 
 use yii\helpers\Url;
@@ -14,18 +15,25 @@ use yii\helpers\Url;
 <div class="user-info">
     <div class="text-center">
         <img src="<?= Url::to($heads . $user->head) ?>" alt="<?=$user->nickname?>" title="<?=$user->nickname?>" class="img-circle img-responsiv img_height_150">
-        <h3><?= $user->nickname ?><?php if($is_other_user):?><small><span class="label label-primary"><span class="glyphicon glyphicon-plus" aria-hidden="true"></span>关注</span></small><?php endif; ?></h3>
+        <h3><?= $user->nickname ?>
+            <?php if($is_other_user):?>
+            <a href="javascript:void(0);" class="add_follow" data-user-id="<?=$user->uid?>">
+                <?php if(in_array($user->uid,$relations_array,true)):?>
+                    <small><span class="label label-warning"><span class="glyphicon glyphicon-ok" aria-hidden="true"></span>已关注</span></small>
+                <? else: ?>
+                    <small><span class="label label-primary"><span class="glyphicon glyphicon-plus" aria-hidden="true"></span>关注</span></small>
+                <? endif; ?>
+            </a>
+            <?php endif; ?>
+        </h3>
     </div>
     <div class="panel panel-default">
         <div class="panel-body text-center">
-            <div class="col-xs-3"><a href="<?= Url::to(['/user/default/index','id'=>$user->uid]) ?>">关注<span class="badge"><?=count($user->relationsFront)?></span></a>
-            </div>
+            <div class="col-xs-3"><a href="<?= Url::to(['/user/default/relations-front','id'=>$user->uid]) ?>">关注<span class="badge"><?=count($user->relationsFront)?></span></a></div>
             <div class="col-xs-1">|</div>
-            <div class="col-xs-3"><a href="<?= Url::to(['/user/default/index','id'=>$user->uid]) ?>">粉丝<span class="badge"><?=count($user->relationsBack)?></span></a>
-            </div>
+            <div class="col-xs-3"><a href="<?= Url::to(['/user/default/relations-back','id'=>$user->uid]) ?>">粉丝<span class="badge fans_<?=$user->uid?>"><?=count($user->relationsBack)?></span></a></div>
             <div class="col-xs-1">|</div>
-            <div class="col-xs-3"><a href="<?= Url::to(['/user/default/collections','id'=>$user->uid]) ?>">收藏<span class="badge"><?=count($user->collections)?></span></a>
-            </div>
+            <div class="col-xs-3"><a href="<?= Url::to(['/user/default/collections','id'=>$user->uid]) ?>">收藏<span class="badge"><?=count($user->collections)?></span></a></div>
             <div class="col-xs-12 line_horizontal_height_21"></div>
             <div class="col-xs-5"><a href="<?= Url::to(['/user/default/index','id'=>$user->uid]) ?>"><?=$is_other_user?'他的主页':'我的主页'?></a></div>
             <div class="col-xs-1">|</div>

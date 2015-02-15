@@ -71,7 +71,7 @@ class Collections extends \yii\db\ActiveRecord
     }
 
     /**
-     * 查询某个用户的所有收藏的视频的video_id，并以数组传出
+     * 查询某个用户的所有收藏的视频的video_id，并以数组传出，用以判断用户是否收藏了某个视频
      * @param $user_id
      * @return array
      */

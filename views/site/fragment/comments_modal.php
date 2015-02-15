@@ -4,9 +4,11 @@
  * site/index   user/default/index  user/default/collections
  * 在包含页面需定义以下变量
  */
-/* @var $user :: session */
+/* @var $session_user :: session */
 
 use \yii\helpers\Url;
+
+$session_user = Yii::$app->getSession()->get('user');
 ?>
 
 <div class="modal fade" id="commentsModal" tabindex="-1" role="dialog" aria-labelledby="commentsModalLabel" aria-hidden="true" aria-describedby="弹出的评论框">
@@ -20,9 +22,9 @@ use \yii\helpers\Url;
             <div class="modal-body">
                 <div class="row">
                     <input type="hidden" value="" class="comment_video_id" >
-                    <?php if($user): ?>
+                    <?php if($session_user): ?>
                     <div class="col-xs-1 text-center">
-                        <img src="<?= Url::to($heads . $user->head) ?>" alt="<?=$user->nickname?>" title="<?=$user->nickname?>" class="img-circle img-responsiv img_height_35">
+                        <img src="<?= Url::to($heads . $session_user->head) ?>" alt="<?=$session_user->nickname?>" title="<?=$session_user->nickname?>" class="img-circle img-responsiv img_height_35">
                     </div>
                     <form class="form form-group col-xs-11">
                         <div class="input-group">

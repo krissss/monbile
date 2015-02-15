@@ -5,7 +5,7 @@
  * 在包含页面需定义以下变量
  */
 /* @var $video_info :: foreach */
-/* @var $collections_array :: render or array()(用户未登录) */
+/* @var $collections_array :: render */
 /* @var $is_other_user_video :: false or true(其他用户的video) */
 /* #commentsModal在comments_modal.php文件中，使用时需被包含一起使用 */
 

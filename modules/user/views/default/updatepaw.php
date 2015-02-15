@@ -16,7 +16,7 @@ $user = $session->get('user');
 <input class="success_go_url" type="hidden" value="<?= $session->hasFlash('success_go_url')?$session->getFlash('success_go_url'):''?>">
 <div class="site-login">
     <div class="text-center">
-        <a href="<?=Url::to(['/user/default/updatehead'])?>"><img src="<?= Url::to($heads . $user->head) ?>" alt="点我修改头像" title="点我修改头像" class="img-circle img-responsiv img_height_150"></a>
+        <img src="<?= Url::to($heads . $user->head) ?>" alt="点我修改头像" title="点我修改头像" class="img-circle img-responsiv img_height_150">
     </div>
     <div class="panel panel-default">
         <div class="panel-body">
@@ -32,7 +32,7 @@ $user = $session->get('user');
             <?= $form->field($model, 'password_2')->passwordInput() ?>
             <div class="form-group">
                 <div class="col-md-offset-5 col-md-7">
-                    <?= Html::submitButton('更新', ['class' => 'btn btn-primary', 'name' => 'updatepaw-button']) ?>
+                    <?= Html::submitButton('更新', ['class' => 'btn btn-primary', 'name' => 'update-paw-button']) ?>
                 </div>
             </div>
             <?php ActiveForm::end(); ?>

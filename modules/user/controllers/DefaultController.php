@@ -5,58 +5,24 @@ namespace app\modules\user\controllers;
 use app\models\Collections;
 use app\models\Comments;
 use app\models\forms\VideoSendForm;
-use app\models\Games;
+use app\models\Relations;
 use app\models\Users;
 use app\models\Videos;
-use app\modules\user\models\forms\UpdatePawForm;
+use app\modules\user\models\forms\updatePawForm;
 use Yii;
 use yii\helpers\Url;
 use yii\web\Controller;
-use yii\web\Request;
 use yii\web\UploadedFile;
 
 class DefaultController extends Controller
 {
     public function actionIndex()
     {
-        if ($id = Yii::$app->request->get('id')) {
-            $user = Yii::$app->getSession()->get('user');
-            if ($user && $id == $user->uid) {
-                //同以下没有id传参
-                $video_send = new VideoSendForm();
-                $games = Games::find()->all();
-                $collections_array = Collections::findAllVideoIdInCollectionsByUserId($user->uid);
-                if ($video_send->load(Yii::$app->request->post()) && $video_send->validate(['user_id', 'video_title', 'tags', 'game_id'])) {
-                    $video_send->video_path = UploadedFile::getInstance($video_send, 'video_path');
-                    if ($video_send->validate(['video_path']) && $video_send->video_path) {
-                        $video_name = uniqid();
-                        $video_send->video_path->saveAs('videos/' . $video_name . '.' . $video_send->video_path->extension);
-                        $video_send->video_path = $video_name . '.' . $video_send->video_path->extension;
-                        $video_send->videoSave();
-                        $email = $user->email;
-                        Yii::$app->getSession()->remove('user');
-                        Yii::$app->getSession()->set('user',Users::findByEmail($email));
-                        Yii::$app->session->setFlash('success_message', '发布成功');
-                        return $this->refresh();
-                    }
-                }
-                return $this->render('index', [
-                    'video_send' => $video_send,
-                    'games' => $games,
-                    'collections_array' => $collections_array,
-                ]);
-            }
-            $other_user = Users::findRelationById($id);
-            $collections_array = Collections::findAllVideoIdInCollectionsByUserId($user->uid);
-            return $this->render('index', [
-                'other_user' => $other_user,
-                'collections_array' => $collections_array,
-            ]);
-        }
-        //如果没有id传参且用户已经登录
-        if ($user = Yii::$app->getSession()->get('user')) {
+        $id = Yii::$app->request->get('id');
+        $user = Yii::$app->getSession()->get('user');
+        //访问自己
+        if (($user && $id == $user->uid) || ($user && $id == null)) {
             $video_send = new VideoSendForm();
-            $games = Games::find()->all();
             $collections_array = Collections::findAllVideoIdInCollectionsByUserId($user->uid);
             if ($video_send->load(Yii::$app->request->post()) && $video_send->validate(['user_id', 'video_title', 'tags', 'game_id'])) {
                 $video_send->video_path = UploadedFile::getInstance($video_send, 'video_path');
@@ -74,64 +40,157 @@ class DefaultController extends Controller
             }
             return $this->render('index', [
                 'video_send' => $video_send,
-                'games' => $games,
                 'collections_array' => $collections_array,
             ]);
         }
+        //访问他人
+        if($id){
+            $relations_array = array();
+            $collections_array = array();
+            if($user){
+                $relations_array = Relations::findAllBackIdInRelationsByFrontId($user->uid);
+                $collections_array = Collections::findAllVideoIdInCollectionsByUserId($user->uid);
+            }
+            $other_user = Users::findOne($id);
+            return $this->render('index', [
+                'other_user' => $other_user,
+                'relations_array' => $relations_array,
+                'collections_array' => $collections_array,
+            ]);
+        }
+        //未登录且试图访问自己
         return $this->redirect(Url::to(['/site/login']));
     }
 
+    /**
+     * 视频页面
+     * @return string|\yii\web\Response
+     */
     public function actionVideos()
     {
-        if ($id = Yii::$app->request->get('id')) {
-            $user = Yii::$app->getSession()->get('user');
-            if ($user && $id == $user->uid) {
-                //同以下没有id传参
-                return $this->render('videos');
-            }
-            $other_user = Users::findRelationById($id);
-            return $this->render('videos', [
-                'other_user' => $other_user,
-            ]);
-        }
-        //如果没有id传参且用户已经登录
-        if ($user = Yii::$app->getSession()->get('user')) {
+        $id = Yii::$app->request->get('id');
+        $user = Yii::$app->getSession()->get('user');
+        //访问自己
+        if (($user && $id == $user->uid) || ($user && $id == null)) {
             return $this->render('videos');
         }
+        //访问他人
+        if($id){
+            $relations_array = array();
+            if($user){
+                $relations_array = Relations::findAllBackIdInRelationsByFrontId($user->uid);
+            }
+            $other_user = Users::findOne($id);
+            return $this->render('videos', [
+                'other_user' => $other_user,
+                'relations_array' => $relations_array,
+            ]);
+        }
+        //未登录且试图访问自己
         return $this->redirect(Url::to(['/site/login']));
     }
 
+    /**
+     * 收藏页面
+     * @return string|\yii\web\Response
+     */
     public function actionCollections()
     {
-        if ($id = Yii::$app->request->get('id')) {
-            $user = Yii::$app->getSession()->get('user');
-            $collections_array = Collections::findAllVideoIdInCollectionsByUserId($user->uid);
-            if ($user && $id == $user->uid) {
-                //同以下没有id传参
-                return $this->render('collections',[
-                    'collections_array' => $collections_array,
-                ]);
-            }
-            $other_user = Users::findRelationById($id);
-            return $this->render('collections', [
-                'other_user' => $other_user,
-                'collections_array' => $collections_array,
-            ]);
-        }
-        //如果没有id传参且用户已经登录
-        if ($user = Yii::$app->getSession()->get('user')) {
+        $id = Yii::$app->request->get('id');
+        $user = Yii::$app->getSession()->get('user');
+        //访问自己
+        if (($user && $id == $user->uid) || ($user && $id == null)) {
             $collections_array = Collections::findAllVideoIdInCollectionsByUserId($user->uid);
             return $this->render('collections',[
                 'collections_array' => $collections_array,
             ]);
         }
+        //访问他人
+        if($id){
+            $relations_array = array();
+            $collections_array = array();
+            if($user){
+                $relations_array = Relations::findAllBackIdInRelationsByFrontId($user->uid);
+                $collections_array = Collections::findAllVideoIdInCollectionsByUserId($user->uid);
+            }
+            $other_user = Users::findOne($id);
+            return $this->render('collections', [
+                'other_user' => $other_user,
+                'relations_array' => $relations_array,
+                'collections_array' => $collections_array,
+            ]);
+        }
+        //未登录且试图访问自己
         return $this->redirect(Url::to(['/site/login']));
     }
 
-    public function actionUpdateinfo()
+    /**
+     * 关注页面
+     * @return string|\yii\web\Response
+     */
+    public function actionRelationsFront(){
+        $id = Yii::$app->request->get('id');
+        $user = Yii::$app->getSession()->get('user');
+        //访问自己
+        if (($user && $id == $user->uid) || ($user && $id == null)) {
+            $relations_array = Relations::findAllBackIdInRelationsByFrontId($user->uid);
+            return $this->render('relationsFront', [
+                'relations_array' => $relations_array,
+            ]);
+        }
+        //访问他人
+        if($id){
+            $relations_array = array();
+            if($user){
+                $relations_array = Relations::findAllBackIdInRelationsByFrontId($user->uid);
+            }
+            $other_user = Users::findOne($id);
+            return $this->render('relationsFront', [
+                'other_user' => $other_user,
+                'relations_array' => $relations_array,
+            ]);
+        }
+        //未登录且试图访问自己
+        return $this->redirect(Url::to(['/site/login']));
+    }
+
+    /**
+     * 粉丝页面
+     * @return string|\yii\web\Response
+     */
+    public function actionRelationsBack(){
+        $id = Yii::$app->request->get('id');
+        $user = Yii::$app->getSession()->get('user');
+        //访问自己
+        if (($user && $id == $user->uid) || ($user && $id == null)) {
+            $relations_array = Relations::findAllBackIdInRelationsByFrontId($user->uid);
+            return $this->render('relationsBack', [
+                'relations_array' => $relations_array,
+            ]);
+        }
+        //访问他人
+        if($id){
+            $relations_array = array();
+            if($user){
+                $relations_array = Relations::findAllBackIdInRelationsByFrontId($user->uid);
+            }
+            $other_user = Users::findOne($id);
+            return $this->render('relationsBack', [
+                'other_user' => $other_user,
+                'relations_array' => $relations_array,
+            ]);
+        }
+        //未登录且试图访问自己
+        return $this->redirect(Url::to(['/site/login']));
+    }
+
+    /**
+     * 修改信息页面
+     * @return string|\yii\web\Response
+     */
+    public function actionUpdateInfo()
     {
         if ($user = Yii::$app->getSession()->get('user')) {
-            $games = Games::find()->all();
             if ($user->load(Yii::$app->request->post())) {
                 //update_date用于区分用户是否修改密码，这里就不更新修改日期了
                 //$model->update_date = date('Y-m-d H:i:s');
@@ -140,32 +199,35 @@ class DefaultController extends Controller
                 Yii::$app->session->setFlash('success_go_url', Url::to(['/user/default/index']));
                 return $this->refresh();
             } else {
-                return $this->render('updateinfo', [
+                return $this->render('updateInfo', [
                     'model' => $user,
-                    'games' => $games,
                 ]);
             }
         }
         return $this->redirect(Url::to(['/site/login']));
     }
 
-    public function actionUpdatehead()
+    public function actionUpdateHead()
     {
         if ($user = Yii::$app->getSession()->get('user')) {
             if ($user_head = Yii::$app->request->get('head')) {
+                $dir = $_SERVER['DOCUMENT_ROOT'] . '\heads';
+                if(!strstr($user->head,'head') && file_exists($dir.'/'.$user->head)){
+                    rename($dir.'/'.$user->head, $dir.'/delete_'.$user->head);
+                }
                 $user->head = $user_head;
                 $user->update();
                 return $this->redirect(Url::to(['/user/default/index']));
             }
-            return $this->render('updatehead');
+            return $this->render('updateHead');
         }
         return $this->redirect(Url::to(['/site/login']));
     }
 
-    public function actionUpdatepaw()
+    public function actionUpdatePaw()
     {
         if ($user = Yii::$app->getSession()->get('user')) {
-            $model = new UpdatePawForm();
+            $model = new updatePawForm();
             if ($model->load(Yii::$app->request->post()) && $model->validate()) {
                 $user->password = Users::password_encrypt($model->password);
                 $user->update_date = date('Y-m-d H:i:s');
@@ -174,7 +236,7 @@ class DefaultController extends Controller
                 Yii::$app->session->setFlash('success_go_url', Url::to(['/user/default/index']));
                 return $this->refresh();
             } else {
-                return $this->render('updatepaw', [
+                return $this->render('updatePaw', [
                     'model' => $model,
                 ]);
             }
@@ -182,7 +244,7 @@ class DefaultController extends Controller
         return $this->redirect(Url::to(['/site/login']));
     }
 
-    public function actionSendcomment()
+    public function actionSendComment()
     {
         if ($user = Yii::$app->getSession()->get('user')) {
             $video_id = Yii::$app->request->post('video_id');
@@ -201,7 +263,7 @@ class DefaultController extends Controller
         return $this->redirect(Url::to(['/site/login']));
     }
 
-    public function actionShowcomments()
+    public function actionShowComments()
     {
         $video_id = Yii::$app->request->post('video_id');
         $comments = Comments::findCommentsByVideoId($video_id);
@@ -233,7 +295,7 @@ class DefaultController extends Controller
             }
             return '每半小时只能赞1次';
         }
-        return $this->redirect(Url::to(['/site/login']));
+        return 'no_login';
     }
 
     public function actionCollect(){
@@ -261,7 +323,7 @@ class DefaultController extends Controller
                 return 'ok';
             }
         }
-        return $this->redirect(Url::to(['/site/login']));
+        return 'no_login';
     }
 
     public function actionDeleteVideo(){
@@ -286,9 +348,45 @@ class DefaultController extends Controller
         return $this->redirect(Url::to(['/site/login']));
     }
 
-    public function actionRename(){
-       print_r(Yii::$app->getSession()) ;
-       //print_r(Yii::$app->getSession()->get('user')->videos) ;
+    public function actionFollow(){
+        if ($user = Yii::$app->getSession()->get('user')) {
+            $user_id = Yii::$app->request->post('user_id');
+            if($relation = Relations::isExist($user->uid, $user_id)){
+                if($relation->relation_state == Relations::RELATION_STABLE){//下面做取消关注
+                    $relation->relation_state = Relations::RELATION_DISABLE;
+                    $message = 'ok_delete';
+                }else if($relation->relation_state == Relations::RELATION_DISABLE){//下面做关注
+                    $relation->relation_state = Relations::RELATION_STABLE;
+                    $message = 'ok';
+                }else{//不存在的状态
+                    return '非法状态,请联系管理员';
+                }
+                if(!$relation->update()){
+                    return '关注出错，请稍后再试';
+                }
+                $email = $user->email;
+                Yii::$app->getSession()->remove('user');
+                Yii::$app->getSession()->set('user',Users::findByEmail($email));
+                Yii::$app->getSession()->remove('users_hot');
+                Yii::$app->getSession()->set('users_hot',Users::findHotUsers());
+                return $message;
+            }else{
+                $relation = new Relations();
+                $relation->relation_state = Relations::RELATION_STABLE;
+                $relation->front_id = $user->uid;
+                $relation->back_id = $user_id;
+                if(!$relation->save()){
+                    return '关注出错，请稍后再试';
+                }
+                $email = $user->email;
+                Yii::$app->getSession()->remove('user');
+                Yii::$app->getSession()->set('user',Users::findByEmail($email));
+                Yii::$app->getSession()->remove('users_hot');
+                Yii::$app->getSession()->set('users_hot',Users::findHotUsers());
+                return 'ok';
+            }
+        }
+        return 'no_login';
     }
 
 }

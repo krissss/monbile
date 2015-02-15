@@ -3,9 +3,11 @@
  * 个人主页 or XX的主页
  */
 /* @var $this \yii\web\View */
-/* @var $collections_array :: render or array()(用户未登录) */
+/* @var $collections_array :: render */
+/* @var $relations_array :: render */
 /* 若是查看自己的主页，需以下变量 */
 /* @var $user :: session */
+/* @var $games :: session */
 /* @var $video_send :: render */
 /* @var $games :: render */
 /* @var $is_other_user :: false; */
@@ -22,10 +24,7 @@ $videos = Url::to('/videos/');
 
 $session = Yii::$app->getSession();
 $user = $session->get('user');
-
-if(!isset($collections_array)){
-    $collections_array = array();
-}
+$games = $session->get('games');
 
 $is_other_user = false;
 $is_other_user_video = false;
@@ -39,7 +38,7 @@ $this->title = $user->nickname.'的主页';
 ?>
 <input class="success_message" type="hidden" value="<?= $session->hasFlash('success_message') ? $session->getFlash('success_message') : '' ?>">
 <input class="warning_message" type="hidden" value="<?= !$is_other_user && $user->create_date == $user->update_date ? '您的密码未修改#存在不安全因素，也可能给您下次登录带来麻烦，请尽快修改。' : '' ?>">
-<input class="warning_go_url" type="hidden" value="<?= Url::to(['/user/default/updatepaw']) ?>">
+<input class="warning_go_url" type="hidden" value="<?= Url::to(['/user/default/update-paw']) ?>">
 <?php require(__DIR__ . '/../../../../views/site/fragment/comments_modal.php'); ?>
 
 <div class="user-default-index">

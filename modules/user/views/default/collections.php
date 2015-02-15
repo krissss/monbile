@@ -3,7 +3,7 @@
  * 个人收藏 or XX的视频
  */
 /* @var $this \yii\web\View */
-/* @var $collections_array :: render or array()(用户未登录) */
+/* @var $collections_array :: render */
 /* @var $is_other_user_video :: true */
 /* 若是查看自己的收藏，需以下变量 */
 /* @var $user :: session */
@@ -12,17 +12,13 @@
 /* @var $user :: render($other_user) */
 /* @var $is_other_user :: true; */
 
-use yii\helpers\Url;
 
+use \yii\helpers\Url;
 $heads = Url::to('/heads/');
 $videos = Url::to('/videos/');
 
 $session = Yii::$app->getSession();
 $user = $session->get('user');
-
-if(!isset($collections_array)){
-    $collections_array = array();
-}
 
 $is_other_user = false;
 $is_other_user_video = true;

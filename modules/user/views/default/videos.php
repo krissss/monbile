@@ -3,6 +3,7 @@
  * 个人视频 or XX的视频
  */
 /* @var $this \yii\web\View */
+/* @var $relations_array :: render */
 /* 若是查看自己的视频，需以下变量 */
 /* @var $user :: session */
 /* @var $is_other_user :: false; */
@@ -12,8 +13,8 @@
 
 use yii\helpers\Url;
 
-$videos = Url::to('/videos/');
 $heads = Url::to('/heads/');
+$videos = Url::to('/videos/');
 
 $session = Yii::$app->getSession();
 $user = $session->get('user');

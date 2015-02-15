@@ -9,6 +9,8 @@ use app\assets\AppAsset;
 
 AppAsset::register($this);
 $imgs = Url::to('/imgs/');
+$heads = Url::to('/heads/');
+$videos = Url::to('/videos/');
 
 $user = Yii::$app->getSession()->get('user');
 ?>
@@ -60,14 +62,16 @@ $user = Yii::$app->getSession()->get('user');
                                     <li><a href="<?=Url::to(['/user/default/index'])?>">我的主页</a></li>
                                     <li><a href="<?=Url::to(['/user/default/videos'])?>">我的视频</a></li>
                                     <li><a href="<?=Url::to(['/user/default/collections'])?>">我的收藏</a></li>
+                                    <li><a href="<?=Url::to(['/user/default/relations-front'])?>">我的关注</a></li>
+                                    <li><a href="<?=Url::to(['/user/default/relations-back'])?>">我的粉丝</a></li>
                                 </ul>
                             </li>
                             <li class="dropdown">
                                 <a href="javascript:void(0);" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false"><span class="glyphicon glyphicon-cog" aria-hidden="true"></span>个人设置<span class="caret"></span></a>
                                 <ul class="dropdown-menu" role="menu">
-                                    <li><a href="<?=Url::to(['/user/default/updatepaw'])?>">修改密码</a></li>
-                                    <li><a href="<?=Url::to(['/user/default/updatehead'])?>">修改头像</a></li>
-                                    <li><a href="<?=Url::to(['/user/default/updateinfo'])?>">修改信息</a></li>
+                                    <li><a href="<?=Url::to(['/user/default/update-paw'])?>">修改密码</a></li>
+                                    <li><a href="<?=Url::to(['/user/default/update-head'])?>">修改头像</a></li>
+                                    <li><a href="<?=Url::to(['/user/default/update-info'])?>">修改信息</a></li>
                                 </ul>
                             </li>
                             <li><a href="<?=Url::to(['/site/logout'])?>"><span class="glyphicon glyphicon-log-out" aria-hidden="true"></span>退出</a></li>

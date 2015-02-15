@@ -133,7 +133,7 @@ $(document).ready(function () {
      * 添加视频
      */
     $('#upload_file').parent().removeClass('col-xs-12').addClass('uploader white').end()
-        .after('<input type="text" class="filename" readonly/><input type="button" name="file" class="uploader_button" value="选择视频"/>')
+        .after('<input type="text" class="filename" readonly/><input type="button" name="file" class="uploader_button" value="选择视频"/>');
     $("input[type=file]").change(function () {
         $(this).parents(".uploader").find(".filename").val($(this).val());
         $(this).parents(".uploader").removeClass("white").addClass("blue").find(".uploader_button").val("已选择");
@@ -209,7 +209,7 @@ $(document).ready(function () {
                                 //表示图片上传成功。
                                 case 0:
                                     //成功修改跳转到其他页面
-                                    window.location.href="index.php?r=user/default/updatehead&head="+msg.content.avatarUrls.join(',');
+                                    window.location.href="index.php?r=user/default/update-head&head="+msg.content.avatarUrls.join(',');
                                     break;
                                 case 1:
                                     alert('头像上传失败，原因：' + msg.content.msg);//will output:头像上传失败，原因：上传的原图文件大小超出限值了！
@@ -268,7 +268,7 @@ $(document).ready(function () {
         $(".comment_content").val('');
         $.ajax({
             type: "post",
-            url: "index.php?r=user/default/showcomments",
+            url: "index.php?r=user/default/show-comments",
             data: {video_id:video_id},
             dataType: "json",
             success: function(data){
@@ -338,7 +338,7 @@ $(document).ready(function () {
             $('.comments_list').empty().html(html);
             $.ajax({
                 type: "post",
-                url: "index.php?r=user/default/sendcomment",
+                url: "index.php?r=user/default/send-comment",
                 data: {comment_content: comment_content, video_id: comment_video_id},
                 dataType: "text",
                 success: function ($date) {
@@ -394,6 +394,19 @@ $(document).ready(function () {
                             title:'谢谢您的赞',
                             type:'success'
                         });
+                    }else if($date == 'no_login'){
+                        swal({
+                            title: "您还没有登录",
+                            text: "登录后才能进行相应操作，需要现在登录吗？",
+                            type: "warning",
+                            showCancelButton: true,
+                            confirmButtonColor: "#DD6B55",
+                            cancelButtonText: "取消",
+                            confirmButtonText: "去登录",
+                            closeOnConfirm: false
+                        }, function(){
+                            window.location.href='index.php?r=site/login';
+                        });
                     }else{
                         swal({
                             title:$date,
@@ -443,6 +456,19 @@ $(document).ready(function () {
                         swal({
                             title:'取消收藏成功',
                             type:'success'
+                        });
+                    }else if($date == 'no_login'){
+                        swal({
+                            title: "您还没有登录",
+                            text: "登录后才能进行相应操作，需要现在登录吗？",
+                            type: "warning",
+                            showCancelButton: true,
+                            confirmButtonColor: "#DD6B55",
+                            cancelButtonText: "取消",
+                            confirmButtonText: "去登录",
+                            closeOnConfirm: false
+                        }, function(){
+                            window.location.href='index.php?r=site/login';
                         });
                     }else{
                         swal({
@@ -517,4 +543,77 @@ $(document).ready(function () {
             });
         }
     });
+
+    /**
+     * ajax增删关注
+     */
+    $('.add_follow').click(function(){
+        var $this = $(this);
+        var user_id = $this.attr('data-user-id');
+        var fans = $('.fans_'+user_id);
+        if (user_id) {
+            swal({
+                title: '<div class="load"><div class="loader">Loading...</div></div>',
+                html: true
+            });
+            var follow_html = '<small><span class="label label-primary"><span class="glyphicon glyphicon-plus" aria-hidden="true"></span>关注</span></small>';
+            var followed_html = '<small><span class="label label-warning"><span class="glyphicon glyphicon-ok" aria-hidden="true"></span>已关注</span></small>';
+            $.ajax({
+                type: "post",
+                url: "index.php?r=user/default/follow",
+                data: {user_id: user_id},
+                dataType: "text",
+                success: function ($date) {
+                    if($date == 'ok'){
+                        $this.html(followed_html);
+                        fans.text(Number(fans.text())+1);
+                        swal({
+                            title:'关注成功',
+                            type:'success'
+                        });
+                    }else if($date == 'ok_delete'){
+                        $this.html(follow_html);
+                        fans.text(Number(fans.text())-1);
+                        swal({
+                            title:'取消关注成功',
+                            type:'success'
+                        });
+                    }else if($date == 'no_login'){
+                        swal({
+                            title: "您还没有登录",
+                            text: "登录后才能进行相应操作，需要现在登录吗？",
+                            type: "warning",
+                            showCancelButton: true,
+                            confirmButtonColor: "#DD6B55",
+                            cancelButtonText: "取消",
+                            confirmButtonText: "去登录",
+                            closeOnConfirm: false
+                        }, function(){
+                            window.location.href='index.php?r=site/login';
+                        });
+                    }else{
+                        swal({
+                            title:$date,
+                            type:'error'
+                        });
+                    }
+                },
+                complete : function(XMLHttpRequest,status){
+                    if(status != 'success'){
+                        swal({
+                            title:'出现问题，请稍后再试',
+                            type:'error'
+                        });
+                    }
+                }
+            });
+        }else{
+            swal({
+                title:'不能添加自己为关注',
+                type:'error'
+            });
+        }
+    });
+
+
 });

@@ -5,13 +5,15 @@
 /* @var $this \yii\web\View */
 /* @var $videos_one_hour :: render */
 /* @var $videos_one_day :: render */
-/* @var $tags_hot :: render */
+/* @var $tags_hot :: session */
+/* @var $users_hot :: session */
 /* @var $is_other_user :: false; */
 /* @var $is_other_user_video :: true; */
-/* @var $collections_array :: render or array()(用户未登录) */
+/* @var $collections_array :: render */
+/* @var $relations_array :: render */
 /* 若用户已经登录，还需以下变量 */
 /* @var $video_send :: render */
-/* @var $games :: render */
+/* @var $games :: session */
 /* @var $user :: session */
 
 use yii\helpers\Url;
@@ -23,6 +25,10 @@ $videos = Url::to('/videos/');
 
 $session = Yii::$app->getSession();
 $user = $session->get('user');
+$games = $session->get('games');
+$tags_hot = $session->get('tags_hot');
+$users_hot = $session->get('users_hot');
+
 $is_other_user = false;
 $is_other_user_video = true;
 if(!isset($collections_array)){
@@ -85,55 +91,8 @@ if(!isset($collections_array)){
             <?php if ($user): ?>
                 <?php require(__DIR__ . '/fragment/user_info.php'); ?>
             <?php endif; ?>
-            <?php require(__DIR__ . '/fragment/tag_cloud.php'); ?>
-            <div class="hot-user">
-                <div class="panel panel-default">
-                    <div class="panel-body">
-                        <h2 class="text-center text-danger">热门人物</h2>
-
-                        <div class="col-xs-6 media text-center">
-                            <div class="media-middle">
-                                <a href="#"><img src="<?= Url::to($heads . 'head (5).jpg') ?>" alt=""
-                                                 class="img-circle img-responsiv img-thumbnail"></a>
-                            </div>
-                            <div class="media-body text-center">
-                                <a href="#" class="btn btn-warning" role="button">+关注<span
-                                        class="badge">12562</span></a>
-                            </div>
-                        </div>
-                        <div class="col-xs-6 media text-center">
-                            <div class="media-middle">
-                                <a href="#"><img src="<?= Url::to($heads . 'head (2).jpg') ?>" alt=""
-                                                 class="img-circle img-responsiv img-thumbnail"></a>
-                            </div>
-                            <div class="media-body text-center">
-                                <a href="#" class="btn btn-primary" role="button">已关注<span
-                                        class="badge">12562</span></a>
-                            </div>
-                        </div>
-                        <div class="col-xs-6 media text-center">
-                            <div class="media-middle">
-                                <a href="#"><img src="<?= Url::to($heads . 'head (5).jpg') ?>" alt=""
-                                                 class="img-circle img-responsiv img-thumbnail"></a>
-                            </div>
-                            <div class="media-body text-center">
-                                <a href="#" class="btn btn-warning" role="button">+关注<span
-                                        class="badge">12562</span></a>
-                            </div>
-                        </div>
-                        <div class="col-xs-6 media text-center">
-                            <div class="media-middle">
-                                <a href="#"><img src="<?= Url::to($heads . 'head (2).jpg') ?>" alt=""
-                                                 class="img-circle img-responsiv img-thumbnail"></a>
-                            </div>
-                            <div class="media-body text-center">
-                                <a href="#" class="btn btn-primary" role="button">已关注<span
-                                        class="badge">12562</span></a>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
+            <?php require(__DIR__ . '/fragment/hot_tag.php'); ?>
+            <?php require(__DIR__ . '/fragment/hot_user.php'); ?>
         </div>
     </div>
 </div>
