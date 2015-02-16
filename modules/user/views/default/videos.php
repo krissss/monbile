@@ -36,18 +36,22 @@ $this->title = $user->nickname.'的视频';
                 <?php else: ?>
                     <?php foreach ($user->videos as $video_info): ?>
                         <div class="col-xs-12 col-md-6">
-                            <div class="thumbnail">
-                                <video data-src="<?= Url::to($videos . $video_info->video_path) ?>" controls="controls" class="col-xs-12 lazyload">
-                                    <p>您的浏览器不支持html5，请更换浏览器</p>
-                                </video>
-                                <div class="caption">
-                                    <h5 class="col-xs-12">
-                                        <small><?= $video_info->video_date; ?></small>
-                                    </h5>
+                            <div class="panel panel-default">
+                                <div class="panel-body">
+                                    <!--<video data-src="<?/*= Url::to($videos . $video_info->video_path) */?>" controls="controls" class="col-xs-12 lazyload">
+                                        <p>您的浏览器不支持html5，请更换浏览器</p>
+                                    </video>-->
+                                    <object width="100%" height="200">
+                                        <param name="movie" value="flvplayer.swf">
+                                        <param name="quality" value="high">
+                                        <param name="allowFullScreen" value="true">
+                                        <param name="FlashVars" value="vcastr_file=<?= Url::to($videos . $video_info->video_path) ?>&LogoText=www.monbile.cn&BufferTime=3&IsAutoPlay=0">
+                                        <embed src="flvplayer.swf" allowfullscreen="true" flashvars="vcastr_file=<?= Url::to($videos . $video_info->video_path) ?>&LogoText=www.monbile.cn&BufferTime=3&IsAutoPlay=0" quality="high" width="100%" height="200"></embed>
+                                    </object>
+                                    <h5><small><?= $video_info->video_date; ?></small></h5>
                                     <div class="has_tag">
                                         <?php foreach ($video_info->tagRelations as $tagRelation_info): ?>
-                                            <span
-                                                class="tag tag-color-<?= rand(0, 6) ?>"><?= $tagRelation_info->tag->tag_name ?></span>
+                                            <span class="tag tag-color-<?= rand(0, 6) ?>"><?= $tagRelation_info->tag->tag_name ?></span>
                                         <?php endforeach; ?>
                                     </div>
                                 </div>

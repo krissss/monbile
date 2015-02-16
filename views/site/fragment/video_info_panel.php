@@ -34,9 +34,16 @@ use \app\functions\Functions;
                 </div>
                 <div class="media">
                     <div class="media-middle">
-                        <video data-src="<?= Url::to($videos . $video_info->video_path) ?>" controls="controls" class="col-xs-12 lazyload">
+                        <!--<video data-src="<?/*= Url::to($videos . $video_info->video_path) */?>" controls="controls" class="col-xs-12 lazyload">
                             <p>您的浏览器不支持html5，请更换浏览器</p>
-                        </video>
+                        </video>-->
+                        <object width="100%" height="400">
+                            <param name="movie" value="flvplayer.swf">
+                            <param name="quality" value="high">
+                            <param name="allowFullScreen" value="true">
+                            <param name="FlashVars" value="vcastr_file=<?= Url::to($videos . $video_info->video_path) ?>&LogoText=www.monbile.cn&BufferTime=3&IsAutoPlay=0">
+                            <embed src="flvplayer.swf" allowfullscreen="true" flashvars="vcastr_file=<?= Url::to($videos . $video_info->video_path) ?>&LogoText=www.monbile.cn&BufferTime=3&IsAutoPlay=0" quality="high" width="100%" height="400"></embed>
+                        </object>
                     </div>
                 </div>
                 <div class="row">

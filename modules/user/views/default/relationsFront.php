@@ -17,6 +17,7 @@ $heads = Url::to('/heads/');
 
 $session = Yii::$app->getSession();
 $user = $session->get('user');
+$session_user = $user;
 
 $is_other_user = false;
 if(isset($other_user)&&$other_user){
@@ -46,12 +47,14 @@ $this->title = $user->nickname.'的关注';
                                         <a href="<?= Url::to(['/user/default/index', 'id' => $relationFront->back->uid]) ?>">
                                             <h4 class="media-heading"><?= $relationFront->back->nickname ?></h4>
                                         </a>
-                                        <h5><a href="javascript:void(0);" class="add_follow" data-user-id="<?=$relationFront->back->uid?>">
-                                            <?php if(in_array($relationFront->back->uid,$relations_array,true)):?>
+                                        <h5><a href="javascript:void(0);" class="add_follow" data-user-id="<?=$session_user&&$relationFront->back->uid == $session_user->uid?'':$relationFront->back->uid?>">
+                                            <?php if($session_user&&$relationFront->back->uid == $session_user->uid):?>
+                                                <small><span class="label label-danger"><span class="glyphicon glyphicon-heart" aria-hidden="true"></span>这是我</span></small>
+                                            <?php elseif(in_array($relationFront->back->uid,$relations_array,true)):?>
                                                 <small><span class="label label-warning"><span class="glyphicon glyphicon-ok" aria-hidden="true"></span>已关注</span></small>
-                                            <? else: ?>
+                                            <?php else: ?>
                                                 <small><span class="label label-primary"><span class="glyphicon glyphicon-plus" aria-hidden="true"></span>关注</span></small>
-                                            <? endif; ?>
+                                            <?php endif; ?>
                                         </a></h5>
                                         <div class="col-xs-6"><a href="<?= Url::to(['/user/default/videos','id'=>$relationFront->back->uid]) ?>">视频<span class="badge"><?=count($relationFront->back->videos)?></span></a></div>
                                         <div class="col-xs-6"><a href="<?= Url::to(['/user/default/collections','id'=>$relationFront->back->uid]) ?>">收藏<span class="badge"><?=count($relationFront->back->collections)?></span></a></div>

@@ -103,16 +103,6 @@ class Users extends \yii\db\ActiveRecord
     }
 
     /**
-     * 获取粉丝数量，用于统计用户粉丝多的状况
-     * @return \yii\db\ActiveQuery
-     */
-    public function getHotBacks(){
-        return $this->hasMany(Relations::className(), ['back_id' => 'uid'])
-            ->select('count(back_id)')
-            ->where(['relation_state' => Relations::RELATION_STABLE]);
-    }
-
-    /**
      * 一对多关联，一个user有多个collections
      * @return \yii\db\ActiveQuery
      * 倒叙输出
@@ -170,13 +160,12 @@ class Users extends \yii\db\ActiveRecord
 
     /**
      * 查询拥有粉丝较多的用户
-     * @param $number
      * @return array|\yii\db\ActiveRecord[]
      */
-    public static function findHotUsers()
+    public static function findHotUsers()//TODO
     {
         return Users::find()
-            ->joinWith(['hotBacks'])
+            ->joinWith(['relationsBack'])
             ->all();
     }
 }

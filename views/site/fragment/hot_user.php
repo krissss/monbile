@@ -35,9 +35,9 @@ $session_user = Yii::$app->getSession()->get('user');
                                         <small><span class="label label-danger"><span class="glyphicon glyphicon-heart" aria-hidden="true"></span>这是我</span></small>
                                     <?php elseif(in_array($user_hot->uid,$relations_array,true)):?>
                                         <small><span class="label label-warning"><span class="glyphicon glyphicon-ok" aria-hidden="true"></span>已关注</span></small>
-                                    <? else: ?>
+                                    <?php else: ?>
                                         <small><span class="label label-primary"><span class="glyphicon glyphicon-plus" aria-hidden="true"></span>关注</span></small>
-                                    <? endif; ?>
+                                    <?php endif; ?>
                                 </a>
                             </h5>
                             <div class="col-xs-6"><a href="<?= Url::to(['/user/default/relations-back','id'=>$user_hot->uid]) ?>">粉丝<span class="badge fans_<?=$user_hot->uid?>"><?=count($user_hot->relationsBack)?></span></a></div>

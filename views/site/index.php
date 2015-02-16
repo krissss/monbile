@@ -96,5 +96,3 @@ if(!isset($collections_array)){
         </div>
     </div>
 </div>
-
-

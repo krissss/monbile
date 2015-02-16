@@ -136,9 +136,8 @@ class SiteController extends Controller
 
     public function actionAbout()
     {
-        $videos = Videos::find()->joinWith('user')->all();
         return $this->render('about',[
-            'videos' => $videos,
+            'videos' => Users::findHotUsers(),
         ]);
     }
 

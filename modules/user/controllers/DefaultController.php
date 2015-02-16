@@ -16,6 +16,10 @@ use yii\web\UploadedFile;
 
 class DefaultController extends Controller
 {
+    /**
+     * 用户主页
+     * @return string|\yii\web\Response
+     */
     public function actionIndex()
     {
         $id = Yii::$app->request->get('id');
@@ -207,6 +211,10 @@ class DefaultController extends Controller
         return $this->redirect(Url::to(['/site/login']));
     }
 
+    /**
+     * 修改头像页面
+     * @return string|\yii\web\Response
+     */
     public function actionUpdateHead()
     {
         if ($user = Yii::$app->getSession()->get('user')) {
@@ -224,6 +232,10 @@ class DefaultController extends Controller
         return $this->redirect(Url::to(['/site/login']));
     }
 
+    /**
+     * 修改密码页面
+     * @return string|\yii\web\Response
+     */
     public function actionUpdatePaw()
     {
         if ($user = Yii::$app->getSession()->get('user')) {
@@ -244,6 +256,10 @@ class DefaultController extends Controller
         return $this->redirect(Url::to(['/site/login']));
     }
 
+    /**
+     * ajax请求发送评论
+     * @return string
+     */
     public function actionSendComment()
     {
         if ($user = Yii::$app->getSession()->get('user')) {
@@ -263,6 +279,10 @@ class DefaultController extends Controller
         return $this->redirect(Url::to(['/site/login']));
     }
 
+    /**
+     * ajax请求查询评论
+     * @return string
+     */
     public function actionShowComments()
     {
         $video_id = Yii::$app->request->post('video_id');
@@ -281,6 +301,10 @@ class DefaultController extends Controller
         return json_encode($arrs);
     }
 
+    /**
+     * ajax请求点赞
+     * @return string
+     */
     public function actionPraise()
     {
         if ($user = Yii::$app->getSession()->get('user')) {
@@ -298,6 +322,11 @@ class DefaultController extends Controller
         return 'no_login';
     }
 
+    /**
+     * ajax请求收藏和取消收藏
+     * @return string
+     * @throws \Exception
+     */
     public function actionCollect(){
         if ($user = Yii::$app->getSession()->get('user')) {
             $video_id = Yii::$app->request->post('video_id');
@@ -326,6 +355,11 @@ class DefaultController extends Controller
         return 'no_login';
     }
 
+    /**
+     * ajax请求删除视频
+     * @return string|\yii\web\Response
+     * @throws \Exception
+     */
     public function actionDeleteVideo(){
         if ($user = Yii::$app->getSession()->get('user')) {
             $video_id = Yii::$app->request->post('video_id');
@@ -348,6 +382,11 @@ class DefaultController extends Controller
         return $this->redirect(Url::to(['/site/login']));
     }
 
+    /**
+     * ajax请求关注和取消关注
+     * @return string
+     * @throws \Exception
+     */
     public function actionFollow(){
         if ($user = Yii::$app->getSession()->get('user')) {
             $user_id = Yii::$app->request->post('user_id');
