@@ -53,6 +53,14 @@ class TagRelation extends \yii\db\ActiveRecord
     }
 
     /**
+     * 一对一的关联，一个tagRelation有一个user_id
+     * @return \yii\db\ActiveQuery
+     */
+    public function getUser(){
+        return $this->hasOne(Users::className(),['uid' =>'user_id']);
+    }
+
+    /**
      * 一对一的关联，一个tagRelation有一个tag
      * @return \yii\db\ActiveQuery
      */

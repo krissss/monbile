@@ -7,8 +7,6 @@
 /* @var $session_user :: session */
 
 use \yii\helpers\Url;
-
-$session_user = Yii::$app->getSession()->get('user');
 ?>
 
 <div class="modal fade" id="commentsModal" tabindex="-1" role="dialog" aria-labelledby="commentsModalLabel" aria-hidden="true" aria-describedby="弹出的评论框">

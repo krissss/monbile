@@ -5,6 +5,7 @@
 /* @var $this \yii\web\View */
 /* @var $collections_array :: render */
 /* @var $relations_array :: render */
+/* @var $session_user :: session */
 /* 若是查看自己的主页，需以下变量 */
 /* @var $user :: session */
 /* @var $games :: session */
@@ -24,6 +25,7 @@ $videos = Url::to('/videos/');
 
 $session = Yii::$app->getSession();
 $user = $session->get('user');
+$session_user = $user;
 $games = $session->get('games');
 
 $is_other_user = false;
@@ -36,7 +38,9 @@ if(isset($other_user) && $other_user){
 
 $this->title = $user->nickname.'的主页';
 ?>
-<input class="success_message" type="hidden" value="<?= $session->hasFlash('success_message') ? $session->getFlash('success_message') : '' ?>">
+<input class="success_message" type="hidden"
+       value="<?= $session->hasFlash('success_message') ? $session->getFlash('success_message') : '' ?>"
+       xmlns="http://www.w3.org/1999/html">
 <input class="warning_message" type="hidden" value="<?= !$is_other_user && $user->create_date == $user->update_date ? '您的密码未修改#存在不安全因素，也可能给您下次登录带来麻烦，请尽快修改。' : '' ?>">
 <input class="warning_go_url" type="hidden" value="<?= Url::to(['/user/default/update-paw']) ?>">
 <?php require(__DIR__ . '/../../../../views/site/fragment/comments_modal.php'); ?>
@@ -53,9 +57,10 @@ $this->title = $user->nickname.'的主页';
             <?php if (!$is_other_user): ?>
                 <?php require(__DIR__ . '/../../../../views/site/fragment/video_send.php'); ?>
             <?php endif; ?>
+            <?php require(__DIR__ . '/../../../../views/site/fragment/video_search.php'); ?>
             <div class="btn-group">
-                <button type="button" class="btn btn-default btn-sm">全部</button>
-                <button class="btn btn-default btn-sm dropdown-toggle" type="button" data-toggle="dropdown" aria-expanded="false">
+                <button type="button" class="btn btn-default">全部</button>
+                <button class="btn btn-default dropdown-toggle" type="button" data-toggle="dropdown" aria-expanded="false">
                     <span class="caret"></span>
                     <span class="sr-only">Toggle Dropdown</span>
                 </button>
@@ -68,9 +73,9 @@ $this->title = $user->nickname.'的主页';
                 </ul>
             </div>
             <?php if (!$is_other_user): ?>
-                <a href="#send_video" data-toggle="collapse" aria-expanded="false" aria-controls="send_video" role="tab"
-                   class="btn btn-default btn-sm pull-right">我要发视频</a>
+                <a href="#send_video" data-toggle="collapse" aria-expanded="false" aria-controls="send_video" role="tab" class="btn btn-default pull-right">我要“发”视频</a>
             <?php endif; ?>
+            <a href="#search_video" data-toggle="collapse" aria-expanded="false" aria-controls="search_video" role="tab" class="btn btn-default pull-right">我要“搜”视频</a>
             <?php if (count($user->videos) < 1): ?>
                 <div class="alert alert-info" role="alert">还没有发布任何视频</div>
             <?php else: ?>

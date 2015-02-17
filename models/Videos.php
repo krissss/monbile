@@ -2,6 +2,7 @@
 
 namespace app\models;
 
+use app\models\forms\SearchForm;
 use Yii;
 
 /**
@@ -142,5 +143,41 @@ class Videos extends \yii\db\ActiveRecord
             return true;
         }
         return false;
+    }
+
+    /**
+     * 根据标签名和用户名搜索，用户用户自己提交搜索表单
+     * @param $tag_name
+     * @param int $user_id
+     * @return array|\yii\db\ActiveRecord[]
+     */
+    public static function findVideosByTag($tag_name, $user_id=SearchForm::ALL){
+        $tag = Tags::find()
+            ->where(['tag_name' => $tag_name])
+            ->one();
+        if(!$tag){
+            return array();
+        }
+        if($user_id==SearchForm::ALL){
+            $tag_relation = TagRelation::find()
+                ->where(['tag_id'=>$tag->tid])
+                ->all();
+        }else{
+            $tag_relation = TagRelation::find()
+                ->where(['tag_id'=>$tag->tid, 'user_id'=>$user_id])
+                ->all();
+        }
+        return $tag_relation;
+    }
+
+    /**
+     * 根据标签查找$tag_relation，用于点击标签云
+     * @param $tag_id
+     * @return array|\yii\db\ActiveRecord[]
+     */
+    public static function findVideosByTagId($tag_id){
+        return TagRelation::find()
+            ->where(['tag_id' => $tag_id])
+            ->all();
     }
 }

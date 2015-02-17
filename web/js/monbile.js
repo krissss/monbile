@@ -8,6 +8,7 @@ $(document).ready(function () {
      * 使用jquery.tagcanvas.js
      */
     if (!$('#myCanvas').tagcanvas({
+            freezeActive: true,
             textFont: 'Impact,Arial Black,sans-serif',
             textColour: '#00f',
             textHeight: 16,
@@ -17,9 +18,9 @@ $(document).ready(function () {
             outlineColour: '#acf',
             outlineThickness: 2,
             initial: [0.1, 0.05],
-            maxSpeed: 0.1,
-            decel: 0.99,
-            depth: 0.8,
+            maxSpeed: 0.05,
+            decel: 0.9999,
+            depth: 0.9,
             fadeIn: 1000
         })) {
         // TagCanvas failed to load

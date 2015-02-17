@@ -14,17 +14,11 @@ use Yii;
  */
 class Tags extends \yii\db\ActiveRecord
 {
-    /**
-     * @inheritdoc
-     */
     public static function tableName()
     {
         return '{{%tags}}';
     }
 
-    /**
-     * @inheritdoc
-     */
     public function rules()
     {
         return [
@@ -35,9 +29,6 @@ class Tags extends \yii\db\ActiveRecord
         ];
     }
 
-    /**
-     * @inheritdoc
-     */
     public function attributeLabels()
     {
         return [
@@ -56,6 +47,11 @@ class Tags extends \yii\db\ActiveRecord
         return $this->hasMany(TagRelation::className(), ['tag_id' => 'tid']);
     }
 
+    /**
+     * 查找最热的标签
+     * @param int $num
+     * @return array|\yii\db\ActiveRecord[]
+     */
     public static function findHotTags($num = 20){
         return Tags::find()
             ->orderBy(['tag_count' => SORT_DESC])

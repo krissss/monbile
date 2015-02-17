@@ -26,11 +26,12 @@ $session = Yii::$app->getSession();
                 'fieldConfig' => [
                     'template' => "{label}\n<div class=\"col-xs-12 col-md-3\">{input}</div>\n<div class=\"col-xs-12 col-md-4\">{error}</div>",
                     'labelOptions' => ['class' => 'col-xs-12 col-md-5 control-label'],
+                    'inline' => true,
                 ],
             ]); ?>
             <?= $form->field($model, 'nickname')->textInput(['maxlength' => 20]) ?>
             <?= $form->field($model, 'telphone')->input('tel') ?>
-            <?= $form->field($model, 'sex')->inline()->radioList(['1'=>'男','0'=>'女']) ?>
+            <?= $form->field($model, 'sex')->radioList(['1'=>'男','0'=>'女']) ?>
             <?= $form->field($model, 'birthday')->input('date') ?>
             <?= $form->field($model, 'currentplace')->textInput() ?>
             <?= $form->field($model, 'love_game_id')->dropDownList(['1'=>'英雄联盟','2'=>'DOTA','3'=>'剑灵'],['prompt'=>'请选择']) ?>

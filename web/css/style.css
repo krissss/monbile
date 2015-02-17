@@ -50,7 +50,7 @@ a:active {
 }
 
 .div_inline {
-    display: inline-block;
+    display: inline;
 }
 
 .error_hide{
@@ -85,6 +85,11 @@ a:active {
 
 .glyphicon-inverse:hover{
     color: #000;
+}
+
+/* search-form 下面的form-group样式修正*/
+#search-form .form-group{
+    margin-bottom: 0;
 }
 
 /* video_send textarea 文本域样式 */

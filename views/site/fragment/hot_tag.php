@@ -5,6 +5,8 @@
  * 在包含页面需定义以下变量
  */
 /* @var $tags_hot :: render */
+
+use \yii\helpers\Url;
 ?>
 
 <div class="hot-tag">
@@ -15,7 +17,7 @@
                 <p>你的浏览器不支持html5，请更换浏览器</p>
                 <ul>
                     <?php foreach ($tags_hot as $tag_info): ?>
-                        <li><a href="javascript:void(0);"><?=$tag_info->tag_name;?></a></li>
+                        <li><a href="<?=Url::to(['/site/search','id'=>$tag_info->tid])?>" title="点我可以搜索哦"><?=$tag_info->tag_name;?></a></li>
                     <?php endforeach; ?>
             </canvas>
         </div>

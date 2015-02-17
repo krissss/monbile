@@ -15,6 +15,7 @@
 /* @var $video_send :: render */
 /* @var $games :: session */
 /* @var $user :: session */
+/* @var $session_user :: session */
 
 use yii\helpers\Url;
 
@@ -25,6 +26,7 @@ $videos = Url::to('/videos/');
 
 $session = Yii::$app->getSession();
 $user = $session->get('user');
+$session_user = $user;
 $games = $session->get('games');
 $tags_hot = $session->get('tags_hot');
 $users_hot = $session->get('users_hot');
@@ -47,6 +49,7 @@ if(!isset($collections_array)){
             <?php if ($user): ?>
                 <?php require(__DIR__ . '/fragment/video_send.php'); ?>
             <?php endif; ?>
+            <?php require(__DIR__ . '/fragment/video_search.php'); ?>
             <div role="tabpanel">
                 <ul class="nav nav-pills" role="tablist">
                     <?php //因视频少，先改为一天内和七天内   原本是‘1小时内’和 ‘24小时内’ ?>
@@ -55,8 +58,9 @@ if(!isset($collections_array)){
                     <li role="presentation"><a href="#one_week" aria-controls="one_week" role="tab" data-toggle="tab">周榜</a></li>
                     <li role="presentation"><a href="#one_month" aria-controls="one_month" role="tab" data-toggle="tab">月榜</a></li>
                     <?php if ($user): ?>
-                        <li role="presentation" class="pull-right"><a href="#send_video" data-toggle="collapse" aria-expanded="false" aria-controls="send_video" role="tab">我要发视频</a></li>
+                        <li role="presentation" class="pull-right"><a href="#send_video" data-toggle="collapse" aria-expanded="false" aria-controls="send_video" role="tab">我要“发”视频</a></li>
                     <?php endif; ?>
+                    <li role="presentation" class="pull-right"><a href="#search_video" data-toggle="collapse" aria-expanded="false" aria-controls="search_video" role="tab">我要“搜”视频</a></li>
                 </ul>
                 <div class="tab-content">
                     <div role="tabpanel" class="tab-pane fade in active" id="one_hour">

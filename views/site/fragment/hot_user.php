@@ -6,10 +6,9 @@
  */
 /* @var $users_hot :: session */
 /* @var $relations_array :: render */
+/* @var $session_user :: session */
 
 use yii\helpers\Url;
-
-$session_user = Yii::$app->getSession()->get('user');
 ?>
 
 <div class="hot-tag">

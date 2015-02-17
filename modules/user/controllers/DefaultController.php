@@ -4,6 +4,7 @@ namespace app\modules\user\controllers;
 
 use app\models\Collections;
 use app\models\Comments;
+use app\models\forms\SearchForm;
 use app\models\forms\VideoSendForm;
 use app\models\Relations;
 use app\models\Users;
@@ -27,6 +28,7 @@ class DefaultController extends Controller
         //访问自己
         if (($user && $id == $user->uid) || ($user && $id == null)) {
             $video_send = new VideoSendForm();
+            $searchForm = new SearchForm();
             $collections_array = Collections::findAllVideoIdInCollectionsByUserId($user->uid);
             if ($video_send->load(Yii::$app->request->post()) && $video_send->validate(['user_id', 'video_title', 'tags', 'game_id'])) {
                 $video_send->video_path = UploadedFile::getInstance($video_send, 'video_path');
@@ -42,8 +44,14 @@ class DefaultController extends Controller
                     return $this->refresh();
                 }
             }
+            if ($searchForm->load(Yii::$app->request->post())) {
+                return $this->render("//site/search",[
+                    'videos_info' => Videos::findVideosByTag($searchForm->search_content,$searchForm->search_type)
+                ]);
+            }
             return $this->render('index', [
                 'video_send' => $video_send,
+                'searchForm' => $searchForm,
                 'collections_array' => $collections_array,
             ]);
         }
@@ -56,8 +64,15 @@ class DefaultController extends Controller
                 $collections_array = Collections::findAllVideoIdInCollectionsByUserId($user->uid);
             }
             $other_user = Users::findOne($id);
+            $searchForm = new SearchForm();
+            if ($searchForm->load(Yii::$app->request->post())) {
+                return $this->render("//site/search",[
+                    'videos_info' => Videos::findVideosByTag($searchForm->search_content,$searchForm->search_type)
+                ]);
+            }
             return $this->render('index', [
                 'other_user' => $other_user,
+                'searchForm' => $searchForm,
                 'relations_array' => $relations_array,
                 'collections_array' => $collections_array,
             ]);

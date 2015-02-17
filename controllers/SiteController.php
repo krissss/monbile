@@ -4,6 +4,7 @@ namespace app\controllers;
 
 use app\models\Collections;
 use app\models\forms\RegisterForm;
+use app\models\forms\SearchForm;
 use app\models\forms\VideoSendForm;
 use app\models\Games;
 use app\models\Relations;
@@ -54,8 +55,19 @@ class SiteController extends Controller
         ];
     }
 
+    /**
+     * 网站首页
+     * @return string|\yii\web\Response
+     */
     public function actionIndex()
     {
+        $searchForm = new SearchForm();
+        //用户搜索
+        if ($searchForm->load(Yii::$app->request->post())) {
+            return $this->render("//site/search",[
+                'videos_info' => Videos::findVideosByTag($searchForm->search_content,$searchForm->search_type)
+            ]);
+        }
         $videos_one_hour = Videos::findOneHourVideos();
         $videos_on_day = Videos::findOneDayVideos();
         $relations_array = array();
@@ -65,10 +77,12 @@ class SiteController extends Controller
         if(!Yii::$app->getSession()->has('users_hot')){
             Yii::$app->getSession()->set('users_hot',Users::findHotUsers());
         }
+        //用户已登录
         if ($user = Yii::$app->getSession()->get('user')) {
             $video_send = new VideoSendForm();
             $collections_array = Collections::findAllVideoIdInCollectionsByUserId($user->uid);
             $relations_array = Relations::findAllBackIdInRelationsByFrontId($user->uid);
+            //用户发视频
             if ($video_send->load(Yii::$app->request->post()) && $video_send->validate(['user_id', 'video_title', 'tags', 'game_id'])) {
                 $video_send->video_path = UploadedFile::getInstance($video_send, 'video_path');
                 if ($video_send->validate(['video_path']) && $video_send->video_path) {
@@ -86,6 +100,7 @@ class SiteController extends Controller
             return $this->render('index', [
                 'videos_one_hour' => $videos_one_hour,
                 'videos_one_day' => $videos_on_day,
+                'searchForm' => $searchForm,
                 'video_send' => $video_send,
                 'collections_array' => $collections_array,
                 'relations_array' => $relations_array,
@@ -94,10 +109,15 @@ class SiteController extends Controller
         return $this->render('index', [
             'videos_one_hour' => $videos_one_hour,
             'videos_one_day' => $videos_on_day,
+            'searchForm' => $searchForm,
             'relations_array' => $relations_array,
         ]);
     }
 
+    /**
+     * 登录
+     * @return string|\yii\web\Response
+     */
     public function actionLogin()
     {
         $model = new LoginForm();
@@ -113,6 +133,10 @@ class SiteController extends Controller
         }
     }
 
+    /**
+     * 注销登录
+     * @return \yii\web\Response
+     */
     public function actionLogout()
     {
         Yii::$app->getSession()->removeAll();
@@ -137,10 +161,14 @@ class SiteController extends Controller
     public function actionAbout()
     {
         return $this->render('about',[
-            'videos' => Users::findHotUsers(),
+            'videos' => Videos::findVideosByTag('三杀')
         ]);
     }
 
+    /**
+     * 注册
+     * @return string|\yii\web\Response
+     */
     public function actionRegister()
     {
         $model = new RegisterForm();
@@ -157,6 +185,21 @@ class SiteController extends Controller
         return $this->render('register', [
             'model' => $model,
         ]);
+    }
+
+    /**
+     * 点击标签进行搜索
+     * @return string|\yii\web\Response
+     */
+    public function actionSearch()
+    {
+        if ($id = Yii::$app->request->get('id')) {
+            return $this->render('search',[
+                'videos_info' => Videos::findVideosByTagId($id)
+            ]);
+        }else{
+            return $this->goHome();
+        }
     }
 
 
