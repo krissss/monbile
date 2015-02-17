@@ -159,13 +159,23 @@ class Users extends \yii\db\ActiveRecord
     }
 
     /**
-     * 查询拥有粉丝较多的用户
+     * 查询拥有粉丝较多的用户,按从多到少排序返回数组，最后可以使用user[0]['user']获取到user对象
      * @return array|\yii\db\ActiveRecord[]
      */
-    public static function findHotUsers()//TODO
+    public static function findHotUsers()
     {
-        return Users::find()
+        $users = Users::find()
             ->joinWith(['relationsBack'])
             ->all();
+        $arrays = array();
+        foreach($users as $user){
+            $array = ([
+                'relationsBack' => count($user->relationsBack),
+                'user' => $user,
+            ]);
+            array_push($arrays,$array);
+        }
+        rsort($arrays);
+        return $arrays;
     }
 }

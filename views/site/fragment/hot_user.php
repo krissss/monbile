@@ -16,8 +16,9 @@ $session_user = Yii::$app->getSession()->get('user');
     <div class="panel panel-default">
         <div class="panel-body">
             <h2 class="text-center text-danger">风云人物</h2>
-            <?php for ($i=0 ; $i<10 && $i<count($users_hot); $i++): ?>
-            <?php $user_hot = $users_hot[$i]; ?>
+            <?php $fans_number = 0;//作用：用于判断当下一个用户的粉丝数和上一个一样，但已经超过10位，此时还是会将该用户列出来?>
+            <?php for ($i=0 ; $i<count($users_hot) && ($i<10 || $fans_number==$users_hot[$i]['relationsBack']); $i++): ?>
+            <?php $user_hot = $users_hot[$i]['user']; ?>
                 <div class="media panel">
                     <div class="panel-body">
                         <div class="media-left">
@@ -40,7 +41,7 @@ $session_user = Yii::$app->getSession()->get('user');
                                     <?php endif; ?>
                                 </a>
                             </h5>
-                            <div class="col-xs-6"><a href="<?= Url::to(['/user/default/relations-back','id'=>$user_hot->uid]) ?>">粉丝<span class="badge fans_<?=$user_hot->uid?>"><?=count($user_hot->relationsBack)?></span></a></div>
+                            <div class="col-xs-6"><a href="<?= Url::to(['/user/default/relations-back','id'=>$user_hot->uid]) ?>">粉丝<span class="badge fans_<?=$user_hot->uid?>"><?=$fans_number=count($user_hot->relationsBack)?></span></a></div>
                             <div class="col-xs-6"><a href="<?= Url::to(['/user/default/videos','id'=>$user_hot->uid]) ?>">视频<span class="badge"><?=count($user_hot->videos)?></span></a></div>
                         </div>
                     </div>
