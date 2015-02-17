@@ -41,6 +41,7 @@ if(!isset($collections_array)){
                 <div class="alert alert-info" role="alert">搜索结果：</div>
                 <?php foreach ($videos_info as $tag_relation): ?>
                     <?php $video_info = $tag_relation->video?>
+                    <?php if(!isset($video_info->user)){ continue; }?>
                     <?php require(__DIR__ . '/fragment/video_info_panel.php'); ?>
                 <?php endforeach; ?>
             <? endif; ?>
