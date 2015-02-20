@@ -183,7 +183,13 @@ class SiteController extends Controller
     public function actionSearch()
     {
         if ($id = Yii::$app->request->get('id')) {
+            $collections_array = array();
+            //如果用户已登录
+            if ($user = Yii::$app->getSession()->get('user')) {
+                $collections_array = Collections::findAllVideoIdInCollectionsByUserId($user->uid);
+            }
             return $this->render('search',[
+                'collections_array' => $collections_array,
                 'videos_info' => Videos::findVideosByTagId($id)
             ]);
         }else{
