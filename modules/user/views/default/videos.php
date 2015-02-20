@@ -6,10 +6,10 @@
 /* @var $relations_array :: render */
 /* 若是查看自己的视频，需以下变量 */
 /* @var $user :: session */
-/* @var $is_other_user :: false; */
+/* @var $is_other_user :: false :: 相对user_info.php那块而言 */
 /* 若是查看他人视频，需以下变量 */
 /* @var $user :: render($other_user) */
-/* @var $is_other_user :: true; */
+/* @var $is_other_user :: true :: 相对user_info.php那块而言 */
 
 use yii\helpers\Url;
 

@@ -6,18 +6,18 @@
 /* @var $relations_array :: render */
 /* 若是查看自己的粉丝，需以下变量 */
 /* @var $user :: session */
-/* @var $is_other_user :: false; */
+/* @var $is_other_user :: false :: 相对user_info.php那块而言 */
 /* 若是查看他人粉丝，需以下变量 */
 /* @var $user :: render($other_user) */
-/* @var $is_other_user :: true; */
+/* @var $is_other_user :: true :: 相对user_info.php那块而言 */
 
 use yii\helpers\Url;
 
 $heads = Url::to('/heads/');
 
 $session = Yii::$app->getSession();
-$user = $session->get('user');
-$session_user = $user;
+$session_user = $session->get('user');
+$user = $session_user;
 
 $is_other_user = false;
 if(isset($other_user)&&$other_user){

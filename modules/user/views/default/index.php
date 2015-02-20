@@ -8,15 +8,14 @@
 /* @var $session_user :: session */
 /* 若是查看自己的主页，需以下变量 */
 /* @var $user :: session */
-/* @var $games :: session */
 /* @var $video_send :: render */
-/* @var $games :: render */
-/* @var $is_other_user :: false; */
-/* @var $is_other_user_video :: false */
+/* @var $games :: session */
+/* @var $is_other_user :: false :: 相对user_info.php那块而言 */
+/* @var $is_other_user_video :: false :: 相对video_info_panel.php那块而言,视频可以删除 */
 /* 若是查看他人主页，需以下变量 */
 /* @var $user :: render($other_user) */
-/* @var $is_other_user :: true; */
-/* @var $is_other_user_video :: false */
+/* @var $is_other_user :: true :: 相对user_info.php那块而言 */
+/* @var $is_other_user_video :: true :: 相对video_info_panel.php那块而言,视频不可以删除 */
 
 use yii\helpers\Url;
 
@@ -24,8 +23,8 @@ $heads = Url::to('/heads/');
 $videos = Url::to('/videos/');
 
 $session = Yii::$app->getSession();
-$user = $session->get('user');
-$session_user = $user;
+$session_user = $session->get('user');
+$user = $session_user;
 $games = $session->get('games');
 
 $is_other_user = false;
@@ -38,9 +37,7 @@ if(isset($other_user) && $other_user){
 
 $this->title = $user->nickname.'的主页';
 ?>
-<input class="success_message" type="hidden"
-       value="<?= $session->hasFlash('success_message') ? $session->getFlash('success_message') : '' ?>"
-       xmlns="http://www.w3.org/1999/html">
+<input class="success_message" type="hidden" value="<?= $session->hasFlash('success_message') ? $session->getFlash('success_message') : '' ?>">
 <input class="warning_message" type="hidden" value="<?= !$is_other_user && $user->create_date == $user->update_date ? '您的密码未修改#存在不安全因素，也可能给您下次登录带来麻烦，请尽快修改。' : '' ?>">
 <input class="warning_go_url" type="hidden" value="<?= Url::to(['/user/default/update-paw']) ?>">
 <?php require(__DIR__ . '/../../../../views/site/fragment/comments_modal.php'); ?>

@@ -27,9 +27,8 @@ class DefaultController extends Controller
         $user = Yii::$app->getSession()->get('user');
         //访问自己
         if (($user && $id == $user->uid) || ($user && $id == null)) {
+            //用户发视频
             $video_send = new VideoSendForm();
-            $searchForm = new SearchForm();
-            $collections_array = Collections::findAllVideoIdInCollectionsByUserId($user->uid);
             if ($video_send->load(Yii::$app->request->post()) && $video_send->validate(['user_id', 'video_title', 'tags', 'game_id'])) {
                 $video_send->video_path = UploadedFile::getInstance($video_send, 'video_path');
                 if ($video_send->validate(['video_path']) && $video_send->video_path) {
@@ -44,35 +43,50 @@ class DefaultController extends Controller
                     return $this->refresh();
                 }
             }
+            //用户已登录搜索
+            $searchForm = new SearchForm();
             if ($searchForm->load(Yii::$app->request->post())) {
                 return $this->render("//site/search",[
+                    'collections_array' => Collections::findAllVideoIdInCollectionsByUserId($user->uid),
                     'videos_info' => Videos::findVideosByTag($searchForm->search_content,$searchForm->search_type)
                 ]);
             }
+            //自己首页展示
             return $this->render('index', [
                 'video_send' => $video_send,
                 'searchForm' => $searchForm,
-                'collections_array' => $collections_array,
+                'collections_array' => Collections::findAllVideoIdInCollectionsByUserId($user->uid),
             ]);
         }
         //访问他人
         if($id){
-            $relations_array = array();
             $collections_array = array();
+            $relations_array = array();
+            //如果用户已登录
             if($user){
-                $relations_array = Relations::findAllBackIdInRelationsByFrontId($user->uid);
                 $collections_array = Collections::findAllVideoIdInCollectionsByUserId($user->uid);
+                //用户已登录搜索
+                $searchForm = new SearchForm();
+                if ($searchForm->load(Yii::$app->request->post())) {
+                    return $this->render("//site/search",[
+                        'collections_array' => $collections_array,
+                        'videos_info' => Videos::findVideosByTag($searchForm->search_content,$searchForm->search_type)
+                    ]);
+                }
+                $relations_array = Relations::findAllBackIdInRelationsByFrontId($user->uid);
             }
-            $other_user = Users::findOne($id);
+            //用户未登录
+            //用户未登录搜索
             $searchForm = new SearchForm();
             if ($searchForm->load(Yii::$app->request->post())) {
                 return $this->render("//site/search",[
                     'videos_info' => Videos::findVideosByTag($searchForm->search_content,$searchForm->search_type)
                 ]);
             }
+            //无论用户登录与否，其他人首页展示
             return $this->render('index', [
-                'other_user' => $other_user,
                 'searchForm' => $searchForm,
+                'other_user' => Users::findOne($id),
                 'relations_array' => $relations_array,
                 'collections_array' => $collections_array,
             ]);
@@ -96,6 +110,7 @@ class DefaultController extends Controller
         //访问他人
         if($id){
             $relations_array = array();
+            //如果用户已登录
             if($user){
                 $relations_array = Relations::findAllBackIdInRelationsByFrontId($user->uid);
             }
@@ -128,6 +143,7 @@ class DefaultController extends Controller
         if($id){
             $relations_array = array();
             $collections_array = array();
+            //如果用户已登录
             if($user){
                 $relations_array = Relations::findAllBackIdInRelationsByFrontId($user->uid);
                 $collections_array = Collections::findAllVideoIdInCollectionsByUserId($user->uid);
@@ -160,6 +176,7 @@ class DefaultController extends Controller
         //访问他人
         if($id){
             $relations_array = array();
+            //如果用户已登录
             if($user){
                 $relations_array = Relations::findAllBackIdInRelationsByFrontId($user->uid);
             }
@@ -190,6 +207,7 @@ class DefaultController extends Controller
         //访问他人
         if($id){
             $relations_array = array();
+            //如果用户已登录
             if($user){
                 $relations_array = Relations::findAllBackIdInRelationsByFrontId($user->uid);
             }

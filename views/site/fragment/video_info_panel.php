@@ -24,7 +24,9 @@ use \app\functions\Functions;
             <div class="media-body">
                 <h4 class="media-heading">
                     <?= $video_info->user->nickname ?>
-                    <?php if(!$is_other_user_video):?><span class="glyphicon glyphicon-remove cursor_pointer pull-right delete_video" aria-hidden="true" title="删除" data-video-id="<?= $video_info->vid ?>"></span><?php endif; ?>
+                    <?php if(!$is_other_user_video):?>
+                        <span class="glyphicon glyphicon-remove cursor_pointer pull-right delete_video" aria-hidden="true" title="删除" data-video-id="<?= $video_info->vid ?>"></span>
+                    <?php endif; ?>
                 </h4>
                 <p class="has_face"><?= $video_info->video_title ?></p>
                 <div class="has_tag">

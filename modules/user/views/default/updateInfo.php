@@ -34,7 +34,9 @@ $session = Yii::$app->getSession();
             <?= $form->field($model, 'sex')->radioList(['1'=>'男','0'=>'女']) ?>
             <?= $form->field($model, 'birthday')->input('date') ?>
             <?= $form->field($model, 'currentplace')->textInput() ?>
+            <?/**类型暂时只用英雄联盟,需要选择类型打开以下注释
             <?= $form->field($model, 'love_game_id')->dropDownList(['1'=>'英雄联盟','2'=>'DOTA','3'=>'剑灵'],['prompt'=>'请选择']) ?>
+             */?>
             <div class="form-group">
                 <div class="col-md-offset-5 col-md-7">
                     <?= Html::submitButton('更新', ['class' => 'btn btn-primary', 'name' => 'update-info-button']) ?>

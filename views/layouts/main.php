@@ -43,6 +43,7 @@ $user = Yii::$app->getSession()->get('user');
                 <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
                     <ul class="nav navbar-nav navbar-right">
                         <li><a href="<?=Url::to(['/site/index'])?>"><span class="glyphicon glyphicon-home" aria-hidden="true"></span>首页</a></li>
+                        <?/**类型暂时只用英雄联盟,需要选择类型打开以下注释
                         <li class="dropdown">
                             <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false"><span class="glyphicon glyphicon-facetime-video" aria-hidden="true"></span>游戏分类<span class="caret"></span></a>
                             <ul class="dropdown-menu" role="menu">
@@ -51,6 +52,7 @@ $user = Yii::$app->getSession()->get('user');
                                 <li><a href="#">炉石传说</a></li>
                             </ul>
                         </li>
+                         */?>
                         <li><a href="<?=Url::to(['/site/about'])?>"><span class="glyphicon glyphicon-alert" aria-hidden="true"></span>测试代码</a></li>
                         <?php if(!$user):?>
                         <li><a href="<?=Url::to(['/site/register'])?>"><span class="glyphicon glyphicon-registration-mark" aria-hidden="true"></span>注册</a></li>

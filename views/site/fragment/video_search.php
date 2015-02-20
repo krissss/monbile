@@ -60,7 +60,7 @@ use yii\bootstrap\ActiveForm;
             </span>
             <?= $form->field($searchForm, 'search_content')->textInput(['class'=>'form-control','placeholder'=>'输入标签']) ?>
             <span class="input-group-btn">
-                <?= Html::submitButton('Search!', ['class' => 'btn btn-default', 'name' => 'search-button']) ?>
+                <?= Html::submitButton('<span class="glyphicon glyphicon-search" aria-hidden="true"></span>', ['class' => 'btn btn-default', 'name' => 'search-button']) ?>
             </span>
         </div>
         <?php ActiveForm::end(); ?>

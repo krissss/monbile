@@ -4,13 +4,14 @@
  */
 /* @var $this \yii\web\View */
 /* @var $collections_array :: render */
-/* @var $is_other_user_video :: true */
+/* @var $is_other_user_video :: true :: 相对video_info_panel.php那块而言,视频不可以删除 */
 /* 若是查看自己的收藏，需以下变量 */
 /* @var $user :: session */
-/* @var $is_other_user :: false; */
+/* @var $session_user :: session */
+/* @var $is_other_user :: false :: 相对user_info.php那块而言 */
 /* 若是查看他人的收藏，需以下变量 */
 /* @var $user :: render($other_user) */
-/* @var $is_other_user :: true; */
+/* @var $is_other_user :: true :: 相对user_info.php那块而言 */
 
 
 use \yii\helpers\Url;
@@ -18,7 +19,8 @@ $heads = Url::to('/heads/');
 $videos = Url::to('/videos/');
 
 $session = Yii::$app->getSession();
-$user = $session->get('user');
+$session_user = $session->get('user');
+$user = $session_user;
 
 $is_other_user = false;
 $is_other_user_video = true;

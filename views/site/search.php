@@ -4,9 +4,10 @@
  */
 /* @var $this \yii\web\View */
 /* @var $tags_hot :: session */
-/* @var $is_other_user :: false; */
-/* @var $is_other_user_video :: true; */
+/* @var $is_other_user :: false :: 相对user_info.php那块而言 */
+/* @var $is_other_user_video :: true :: 相对video_info_panel.php那块而言 */
 /* @var $videos_info :: render */
+/* @var $collections_array :: render */
 /* 若用户已经登录，还需以下变量 */
 /* @var $user :: session */
 /* @var $session_user :: session */
@@ -25,9 +26,6 @@ $tags_hot = $session->get('tags_hot');
 
 $is_other_user = false;
 $is_other_user_video = true;
-if(!isset($collections_array)){
-    $collections_array = array();
-}
 ?>
 <input class="success_message" type="hidden" value="<?= $session->hasFlash('success_message') ? $session->getFlash('success_message') : '' ?>">
 <?php require(__DIR__ . '/fragment/comments_modal.php'); ?>

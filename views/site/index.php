@@ -7,8 +7,8 @@
 /* @var $videos_one_day :: render */
 /* @var $tags_hot :: session */
 /* @var $users_hot :: session */
-/* @var $is_other_user :: false; */
-/* @var $is_other_user_video :: true; */
+/* @var $is_other_user :: false :: 相对user_info.php那块而言 */
+/* @var $is_other_user_video :: true :: 相对video_info_panel.php那块而言,视频不可以删除 */
 /* @var $collections_array :: render */
 /* @var $relations_array :: render */
 /* 若用户已经登录，还需以下变量 */
@@ -25,17 +25,14 @@ $heads = Url::to('/heads/');
 $videos = Url::to('/videos/');
 
 $session = Yii::$app->getSession();
-$user = $session->get('user');
-$session_user = $user;
+$session_user = $session->get('user');
+$user = $session_user;
 $games = $session->get('games');
 $tags_hot = $session->get('tags_hot');
 $users_hot = $session->get('users_hot');
 
 $is_other_user = false;
 $is_other_user_video = true;
-if(!isset($collections_array)){
-    $collections_array = array();
-}
 ?>
 <input class="success_message" type="hidden" value="<?= $session->hasFlash('success_message') ? $session->getFlash('success_message') : '' ?>">
 <?php require(__DIR__ . '/fragment/comments_modal.php'); ?>
@@ -46,7 +43,7 @@ if(!isset($collections_array)){
             <button type="button" class="close" data-dismiss="alert"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
         </div>
         <div class="col-xs-12 col-md-8">
-            <?php if ($user): ?>
+            <?php if ($session_user): ?>
                 <?php require(__DIR__ . '/fragment/video_send.php'); ?>
             <?php endif; ?>
             <?php require(__DIR__ . '/fragment/video_search.php'); ?>
@@ -57,7 +54,7 @@ if(!isset($collections_array)){
                     <li role="presentation"><a href="#one_day" aria-controls="one_day" role="tab" data-toggle="tab">七天内</a></li>
                     <li role="presentation"><a href="#one_week" aria-controls="one_week" role="tab" data-toggle="tab">周榜</a></li>
                     <li role="presentation"><a href="#one_month" aria-controls="one_month" role="tab" data-toggle="tab">月榜</a></li>
-                    <?php if ($user): ?>
+                    <?php if ($session_user): ?>
                         <li role="presentation" class="pull-right"><a href="#send_video" data-toggle="collapse" aria-expanded="false" aria-controls="send_video" role="tab">我要“发”视频</a></li>
                     <?php endif; ?>
                     <li role="presentation" class="pull-right"><a href="#search_video" data-toggle="collapse" aria-expanded="false" aria-controls="search_video" role="tab">我要“搜”视频</a></li>

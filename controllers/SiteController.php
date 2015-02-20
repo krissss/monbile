@@ -61,28 +61,18 @@ class SiteController extends Controller
      */
     public function actionIndex()
     {
-        $searchForm = new SearchForm();
-        //用户搜索
-        if ($searchForm->load(Yii::$app->request->post())) {
-            return $this->render("//site/search",[
-                'videos_info' => Videos::findVideosByTag($searchForm->search_content,$searchForm->search_type)
-            ]);
-        }
-        $videos_one_hour = Videos::findOneHourVideos();
-        $videos_on_day = Videos::findOneDayVideos();
-        $relations_array = array();
+        //获取热门标签并将其放入session
         if(!Yii::$app->getSession()->has('tags_hot')){
             Yii::$app->getSession()->set('tags_hot',Tags::findHotTags());
         }
+        //获取热门人物并将其放入session
         if(!Yii::$app->getSession()->has('users_hot')){
             Yii::$app->getSession()->set('users_hot',Users::findHotUsers());
         }
         //用户已登录
         if ($user = Yii::$app->getSession()->get('user')) {
-            $video_send = new VideoSendForm();
-            $collections_array = Collections::findAllVideoIdInCollectionsByUserId($user->uid);
-            $relations_array = Relations::findAllBackIdInRelationsByFrontId($user->uid);
             //用户发视频
+            $video_send = new VideoSendForm();
             if ($video_send->load(Yii::$app->request->post()) && $video_send->validate(['user_id', 'video_title', 'tags', 'game_id'])) {
                 $video_send->video_path = UploadedFile::getInstance($video_send, 'video_path');
                 if ($video_send->validate(['video_path']) && $video_send->video_path) {
@@ -97,20 +87,39 @@ class SiteController extends Controller
                     return $this->refresh();
                 }
             }
+            //用户已登录搜索
+            $searchForm = new SearchForm();
+            if ($searchForm->load(Yii::$app->request->post())) {
+                return $this->render("//site/search",[
+                    'collections_array' => Collections::findAllVideoIdInCollectionsByUserId($user->uid),
+                    'videos_info' => Videos::findVideosByTag($searchForm->search_content,$searchForm->search_type)
+                ]);
+            }
+            //首页展示
             return $this->render('index', [
-                'videos_one_hour' => $videos_one_hour,
-                'videos_one_day' => $videos_on_day,
                 'searchForm' => $searchForm,
                 'video_send' => $video_send,
-                'collections_array' => $collections_array,
-                'relations_array' => $relations_array,
+                'videos_one_hour' => Videos::findOneHourVideos(),
+                'videos_one_day' => Videos::findOneDayVideos(),
+                'collections_array' => Collections::findAllVideoIdInCollectionsByUserId($user->uid),
+                'relations_array' => Relations::findAllBackIdInRelationsByFrontId($user->uid),
             ]);
         }
+        //用户未登录
+        //用户未登录搜索
+        $searchForm = new SearchForm();
+        if ($searchForm->load(Yii::$app->request->post())) {
+            return $this->render("//site/search",[
+                'videos_info' => Videos::findVideosByTag($searchForm->search_content,$searchForm->search_type)
+            ]);
+        }
+        //首页展示
         return $this->render('index', [
-            'videos_one_hour' => $videos_one_hour,
-            'videos_one_day' => $videos_on_day,
             'searchForm' => $searchForm,
-            'relations_array' => $relations_array,
+            'videos_one_hour' => Videos::findOneHourVideos(),
+            'videos_one_day' => Videos::findOneDayVideos(),
+            'relations_array' => array(),
+            'collections_array' => array(),
         ]);
     }
 
@@ -142,27 +151,6 @@ class SiteController extends Controller
         Yii::$app->getSession()->removeAll();
         Yii::$app->getSession()->destroy();
         return $this->goHome();
-    }
-
-    public function actionContact()
-    {
-        $model = new ContactForm();
-        if ($model->load(Yii::$app->request->post()) && $model->contact(Yii::$app->params['adminEmail'])) {
-            Yii::$app->session->setFlash('contactFormSubmitted');
-
-            return $this->refresh();
-        } else {
-            return $this->render('contact', [
-                'model' => $model,
-            ]);
-        }
-    }
-
-    public function actionAbout()
-    {
-        return $this->render('about',[
-            'videos' => Videos::findVideosByTag('三杀')
-        ]);
     }
 
     /**
@@ -202,5 +190,24 @@ class SiteController extends Controller
         }
     }
 
+    public function actionContact()
+    {
+        $model = new ContactForm();
+        if ($model->load(Yii::$app->request->post()) && $model->contact(Yii::$app->params['adminEmail'])) {
+            Yii::$app->session->setFlash('contactFormSubmitted');
 
+            return $this->refresh();
+        } else {
+            return $this->render('contact', [
+                'model' => $model,
+            ]);
+        }
+    }
+
+    public function actionAbout()
+    {
+        return $this->render('about',[
+            'videos' => Videos::findVideosByTag('三杀')
+        ]);
+    }
 }

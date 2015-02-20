@@ -1,10 +1,10 @@
 <?php
 /**
  * 热门标签
- * site/index
+ * site/index   site/search
  * 在包含页面需定义以下变量
  */
-/* @var $tags_hot :: render */
+/* @var $tags_hot :: session */
 
 use \yii\helpers\Url;
 ?>
