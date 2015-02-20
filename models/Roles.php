@@ -13,9 +13,10 @@ use Yii;
  */
 class Roles extends \yii\db\ActiveRecord
 {
-    /**
-     * @inheritdoc
-     */
+    const ROLE_USER_DISABLE = 0;
+    const ROLE_USER_GENERAL = 1;
+    const ROLE_USER_SUPER_ADMIN = 10;
+
     public static function tableName()
     {
         return '{{%roles}}';

@@ -2,6 +2,7 @@
 
 namespace app\models\forms;
 
+use app\models\Roles;
 use app\models\Users;
 use Yii;
 use yii\base\Model;
@@ -36,7 +37,7 @@ class LoginForm extends Model
         $user = $this->getUser();
         if(!$user){
             $this->addError($attribute, '该用户不存在');
-        }elseif($user->role_id == Users::ROLE_USER_DISABLE){
+        }elseif(Users::isUserDisable($user)){
             $this->addError($attribute, '该用户已被禁止登录');
         }
     }

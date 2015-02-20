@@ -2,6 +2,7 @@
 
 namespace app\models\forms;
 
+use app\models\Roles;
 use app\models\Users;
 use Faker\Provider\DateTime;
 use Yii;
@@ -55,7 +56,7 @@ class RegisterForm extends Model
         $user->nickname = $this->nickname;
         $user->password = Users::password_encrypt($this->password);
         $user->head = Users::createRandHead();
-        $user->role_id = Users::ROLE_USER_GENERAL;
+        $user->role_id = Roles::ROLE_USER_GENERAL;
         $user->create_date = date('Y-m-d H:i:s');
         $user->update_date = date('Y-m-d H:i:s');
         if($user->save()){

@@ -616,5 +616,55 @@ $(document).ready(function () {
         }
     });
 
+    /**
+     * ajax审核视频
+     */
+    $('.pass_video').click(function(){
+        var $this = $(this);
+        var top_id = $this.attr('data-top-id');
+        if (top_id) {
+            swal({
+                title: '<div class="load"><div class="loader">Loading...</div></div>',
+                html: true
+            });
+            var passed_html = '通过';
+            var pass_html = '未通过';
+            $.ajax({
+                type: "post",
+                url: "index.php?r=superAdmin/default/pass-video",
+                data: {top_id: top_id},
+                dataType: "text",
+                success: function ($date) {
+                    if($date == 'ok_passed'){
+                        $this.removeClass('btn-danger').addClass('btn-primary').html(passed_html);
+                        swal({
+                            title:'该视频获得展示的权限',
+                            type:'success'
+                        });
+                    }else if($date == 'ok_pass'){
+                        $this.removeClass('btn-primary').addClass('btn-danger').html(pass_html);
+                        swal({
+                            title:'取消该视频的展示权限成功',
+                            type:'success'
+                        });
+                    }else{
+                        swal({
+                            title:$date,
+                            type:'error'
+                        });
+                    }
+                },
+                complete : function(XMLHttpRequest,status){
+                    if(status != 'success'){
+                        swal({
+                            title:'出现问题，请稍后再试',
+                            type:'error'
+                        });
+                    }
+                }
+            });
+        }
+    });
+
 
 });

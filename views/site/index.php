@@ -7,6 +7,9 @@
 /* @var $videos_one_day :: render */
 /* @var $tags_hot :: session */
 /* @var $users_hot :: session */
+/* @var $one_week_top :: render */
+/* @var $one_month_top :: render */
+/* @var $one_year_top :: render */
 /* @var $is_other_user :: false :: 相对user_info.php那块而言 */
 /* @var $is_other_user_video :: true :: 相对video_info_panel.php那块而言,视频不可以删除 */
 /* @var $collections_array :: render */
@@ -54,6 +57,7 @@ $is_other_user_video = true;
                     <li role="presentation"><a href="#one_day" aria-controls="one_day" role="tab" data-toggle="tab">七天内</a></li>
                     <li role="presentation"><a href="#one_week" aria-controls="one_week" role="tab" data-toggle="tab">周榜</a></li>
                     <li role="presentation"><a href="#one_month" aria-controls="one_month" role="tab" data-toggle="tab">月榜</a></li>
+                    <li role="presentation"><a href="#one_year" aria-controls="one_year" role="tab" data-toggle="tab">年榜</a></li>
                     <?php if ($session_user): ?>
                         <li role="presentation" class="pull-right"><a href="#send_video" data-toggle="collapse" aria-expanded="false" aria-controls="send_video" role="tab">我要“发”视频</a></li>
                     <?php endif; ?>
@@ -62,7 +66,7 @@ $is_other_user_video = true;
                 <div class="tab-content">
                     <div role="tabpanel" class="tab-pane fade in active" id="one_hour">
                         <?php if (count($videos_one_hour) < 1): ?>
-                            <div class="alert alert-info" role="alert">该时段没有动态</div>
+                            <div class="alert alert-warning" role="alert">该时段没有动态</div>
                         <?php else: ?>
                             <?php foreach ($videos_one_hour as $video_info): ?>
                                 <?php require(__DIR__ . '/fragment/video_info_panel.php'); ?>
@@ -72,7 +76,7 @@ $is_other_user_video = true;
                     </div>
                     <div role="tabpanel" class="tab-pane fade" id="one_day">
                         <?php if (count($videos_one_day) < 1): ?>
-                            <div class="alert alert-info" role="alert">该时段没有动态</div>
+                            <div class="alert alert-warning" role="alert">该时段没有动态</div>
                         <?php else: ?>
                             <?php foreach ($videos_one_day as $video_info): ?>
                                 <?php require(__DIR__ . '/fragment/video_info_panel.php'); ?>
@@ -80,10 +84,46 @@ $is_other_user_video = true;
                         <? endif; ?>
                     </div>
                     <div role="tabpanel" class="tab-pane fade" id="one_week">
-
+                        <?php if (count($one_week_top) < 1): ?>
+                            <div class="alert alert-warning" role="alert">榜单尚未公布,敬请期待</div>
+                        <?php else: ?>
+                            <div class="alert alert-info" role="alert">
+                                <span><?=date("Y-m-d",strtotime($one_week_top[0]->top_date))?>日期</span>
+                                <span class="pull-right"><a href="">查看更多榜单</a></span>
+                            </div>
+                            <?php foreach ($one_week_top as $key=>$top_info): ?>
+                                <?php $video_info = $top_info->video; ?>
+                                <?php require(__DIR__ . '/fragment/video_info_panel.php'); ?>
+                            <?php endforeach; ?>
+                        <? endif; ?>
                     </div>
                     <div role="tabpanel" class="tab-pane fade" id="one_month">
-
+                        <?php if (count($one_month_top) < 1): ?>
+                            <div class="alert alert-warning" role="alert">榜单尚未公布,敬请期待</div>
+                        <?php else: ?>
+                            <div class="alert alert-info" role="alert">
+                                <span><?=date("Y-m",strtotime($one_month_top[0]->top_date))?>月期</span>
+                                <span class="pull-right"><a href="">查看更多榜单</a></span>
+                            </div>
+                            <?php foreach ($one_month_top as $key=>$top_info): ?>
+                                <?php $video_info = $top_info->video; ?>
+                                <?php require(__DIR__ . '/fragment/video_info_panel.php'); ?>
+                            <?php endforeach; ?>
+                        <? endif; ?>
+                    </div>
+                    <div role="tabpanel" class="tab-pane fade" id="one_year">
+                        <?php if (count($one_year_top) < 1): ?>
+                            <div class="alert alert-warning" role="alert">榜单尚未公布,敬请期待</div>
+                        <?php else: ?>
+                            <div class="alert alert-info" role="alert">
+                                <span><?=date("Y",strtotime($one_year_top[0]->top_date))?>年期</span>
+                                <span class="pull-right"><a href="">查看更多榜单</a></span>
+                            </div>
+                            <?php foreach ($one_year_top as $key=>$top_info): ?>
+                                <?php $video_info = $top_info->video; ?>
+                                <?php require(__DIR__ . '/fragment/video_info_panel.php'); ?>
+                            <?php endforeach; ?>
+                        <? endif; ?>
                     </div>
                 </div>
             </div>

@@ -25,10 +25,6 @@ use Yii;
  */
 class Users extends \yii\db\ActiveRecord
 {
-    const ROLE_USER_DISABLE = 0;
-    const ROLE_USER_GENERAL = 1;
-    const ROLE_USER_SUPER_ADMIN = 10;
-
     public static function tableName()
     {
         return '{{%users}}';
@@ -111,6 +107,30 @@ class Users extends \yii\db\ActiveRecord
     {
         return $this->hasMany(Collections::className(), ['user_id' => 'uid'])
             ->orderBy(['collection_date'=>SORT_DESC]);
+    }
+
+    /**
+     * 判断用户是否被禁止登录
+     * @param $user
+     * @return bool
+     */
+    public static function isUserDisable($user){
+        if($user->role_id == Roles::ROLE_USER_DISABLE){
+            return true;
+        }
+        return false;
+    }
+
+    /**
+     * 判断用户是否是超级管理员
+     * @param $user
+     * @return bool
+     */
+    public static function isUserSuperAdmin($user){
+        if($user->role_id == Roles::ROLE_USER_SUPER_ADMIN){
+            return true;
+        }
+        return false;
     }
 
     /**

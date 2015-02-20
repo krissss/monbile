@@ -55,6 +55,9 @@ $config = [
         'user' => [
             'class' => 'app\modules\user\User',
         ],
+        'superAdmin' => [
+            'class' => 'app\modules\superAdmin\SuperAdmin',
+        ],
     ],
 ];
 

@@ -3,6 +3,7 @@ use yii\helpers\Html;
 use yii\helpers\Url;
 use yii\widgets\Breadcrumbs;
 use app\assets\AppAsset;
+use \app\models\Users;
 
 /* @var $this \yii\web\View */
 /* @var $content string */
@@ -76,6 +77,14 @@ $user = Yii::$app->getSession()->get('user');
                                     <li><a href="<?=Url::to(['/user/default/update-info'])?>">修改信息</a></li>
                                 </ul>
                             </li>
+                            <?php if(Users::isUserSuperAdmin($user)):?>
+                                <li class="dropdown">
+                                    <a href="javascript:void(0);" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false"><span class="glyphicon glyphicon-asterisk" aria-hidden="true"></span>超级管理员操作<span class="caret"></span></a>
+                                    <ul class="dropdown-menu" role="menu">
+                                        <li><a href="<?=Url::to(['/superAdmin/default/index'])?>">主页</a></li>
+                                    </ul>
+                                </li>
+                            <?php endif; ?>
                             <li><a href="<?=Url::to(['/site/logout'])?>"><span class="glyphicon glyphicon-log-out" aria-hidden="true"></span>退出</a></li>
                         <?php endif;?>
                     </ul>

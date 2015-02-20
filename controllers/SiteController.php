@@ -9,6 +9,7 @@ use app\models\forms\VideoSendForm;
 use app\models\Games;
 use app\models\Relations;
 use app\models\Tags;
+use app\models\Tops;
 use app\models\Users;
 use app\models\Videos;
 use Yii;
@@ -101,6 +102,9 @@ class SiteController extends Controller
                 'video_send' => $video_send,
                 'videos_one_hour' => Videos::findOneHourVideos(),
                 'videos_one_day' => Videos::findOneDayVideos(),
+                'one_week_top' => Tops::findTopVideosForUser(date("Y-m-d",strtotime("-1 week Monday")),Tops::TOP_TYPE_WEEK),
+                'one_month_top' => Tops::findTopVideosForUser(date("Y-m-01"),Tops::TOP_TYPE_MONTH),
+                'one_year_top' => Tops::findTopVideosForUser(date("Y-01-01"),Tops::TOP_TYPE_YEAR),
                 'collections_array' => Collections::findAllVideoIdInCollectionsByUserId($user->uid),
                 'relations_array' => Relations::findAllBackIdInRelationsByFrontId($user->uid),
             ]);
@@ -119,6 +123,9 @@ class SiteController extends Controller
             'searchForm' => $searchForm,
             'videos_one_hour' => Videos::findOneHourVideos(),
             'videos_one_day' => Videos::findOneDayVideos(),
+            'one_week_top' => Tops::findTopVideosForUser(date("Y-m-d",strtotime("-1 week Monday")),Tops::TOP_TYPE_WEEK),
+            'one_month_top' => Tops::findTopVideosForUser(date("Y-m-01"),Tops::TOP_TYPE_MONTH),
+            'one_year_top' => Tops::findTopVideosForUser(date("Y-01-01"),Tops::TOP_TYPE_YEAR),
             'relations_array' => array(),
             'collections_array' => array(),
         ]);
@@ -133,8 +140,9 @@ class SiteController extends Controller
         $model = new LoginForm();
         $model->load(Yii::$app->request->post());
         if ($model->load(Yii::$app->request->post()) && $user = $model->login()) {
-            Yii::$app->getSession()->set('user', $user);
-            Yii::$app->getSession()->set('games', Games::find()->all());
+            $session = Yii::$app->getSession();
+            $session->set('user', $user);
+            $session->set('games', Games::find()->all());
             return $this->redirect(['/user/default/index']);
         } else {
             return $this->render('login', [

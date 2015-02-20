@@ -48,7 +48,7 @@ class Videos extends \yii\db\ActiveRecord
             'video_title' => Yii::t('app', 'Video Title'),
             'video_date' => Yii::t('app', 'Video Date'),
             'video_path' => Yii::t('app', 'Video Path'),
-            'comment_count' => Yii::t('app', 'Forward Count'),
+            'comment_count' => Yii::t('app', 'Comment Count'),
             'praise_count' => Yii::t('app', 'Praise Count'),
             'video_state' => Yii::t('app', 'Video State'),
         ];
@@ -90,7 +90,6 @@ class Videos extends \yii\db\ActiveRecord
         //$one_hour_front = date('Y-m-d H:i:s',strtotime('-1 hour'));
         $one_hour_front = date('Y-m-d H:i:s',strtotime('-1 day'));
         return Videos::find()
-            ->joinWith(['user','tagRelations.tag'])
             ->where(['video_state' => Videos::VIDEO_ACTIVE])
             ->andWhere(['between','video_date', $one_hour_front , date('Y-m-d H:i:s')])
             ->orderBy(['video_date' => SORT_DESC])
@@ -108,7 +107,6 @@ class Videos extends \yii\db\ActiveRecord
         $one_day_front = date('Y-m-d H:i:s',strtotime('-7 day'));
         $one_hour_front = date('Y-m-d H:i:s',strtotime('-1 day'));
         return Videos::find()
-            ->joinWith('user')
             ->where(['video_state' => Videos::VIDEO_ACTIVE])
             ->andWhere(['between','video_date', $one_day_front , $one_hour_front])
             ->orderBy(['video_date' => SORT_DESC])
@@ -180,4 +178,5 @@ class Videos extends \yii\db\ActiveRecord
             ->where(['tag_id' => $tag_id])
             ->all();
     }
+
 }

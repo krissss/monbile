@@ -5,6 +5,8 @@
  * 在包含页面需定义以下变量
  */
 /* @var $video_info :: foreach */
+/* @var $top_info :: foreach :: 来自榜单*/
+/* @var $key :: foreach :: 来自榜单*/
 /* @var $collections_array :: render */
 /* @var $is_other_user_video :: false or true(其他用户的video) */
 /* #commentsModal在comments_modal.php文件中，使用时需被包含一起使用 */
@@ -17,18 +19,27 @@ use \app\functions\Functions;
     <div class="panel-body">
         <div class="media">
             <div class="media-left">
+                <?php if(isset($top_info) && $top_info && $key==0):?>
+                    <img src="<?= Url::to($heads . 'top-one.png') ?>" class="position_absolute_40">
+                <?php endif; ?>
                 <a href="<?= Url::to(['/user/default/index', 'id' => $video_info->user->uid]) ?>">
                     <img src="<?= Url::to($heads . $video_info->user->head) ?>" alt="<?= $video_info->user->nickname ?>" title="<?= $video_info->user->nickname ?>" class="img-circle img-responsiv img_height_80">
                 </a>
+                <?php if(isset($top_info) && $top_info):?>
+                    <h4 class="text-center"><span class="label label-warning"><?= $top_info->top_praise ?>  <span class="glyphicon glyphicon-thumbs-up" aria-hidden="true"></span></span></h4>
+                <?php endif; ?>
             </div>
             <div class="media-body">
                 <h4 class="media-heading">
-                    <?= $video_info->user->nickname ?>
+                    <span class="text-info"><strong><?= $video_info->user->nickname ?></strong></span>
                     <?php if(!$is_other_user_video):?>
                         <span class="glyphicon glyphicon-remove cursor_pointer pull-right delete_video" aria-hidden="true" title="删除" data-video-id="<?= $video_info->vid ?>"></span>
                     <?php endif; ?>
+                    <?php if(isset($top_info) && $top_info):?>
+                        <span class="text-danger pull-right"><strong>第<?= $key+1 ?>名</strong></span>
+                    <?php endif; ?>
                 </h4>
-                <p class="has_face"><?= $video_info->video_title ?></p>
+                <p class="has_face text-muted"><?= $video_info->video_title ?></p>
                 <div class="has_tag">
                     <?php foreach ($video_info->tagRelations as $tagRelation_info): ?>
                         <span class="tag tag-color-<?= rand(0, 6) ?>"><?= $tagRelation_info->tag->tag_name ?></span>
