@@ -110,6 +110,7 @@ class SiteController extends Controller
         $searchForm = new SearchForm();
         if ($searchForm->load(Yii::$app->request->post())) {
             return $this->render("//site/search",[
+                'collections_array' => array(),
                 'videos_info' => Videos::findVideosByTag($searchForm->search_content,$searchForm->search_type)
             ]);
         }
