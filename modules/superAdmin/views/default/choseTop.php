@@ -16,10 +16,11 @@ $this->title = '筛选top10';
     <div class="row">
         <div class="col-xs-12 col-md-12">
             <div class="alert alert-info" role="alert">
-                管理员可以点击右侧按钮取消视频展示的权限（如果视频存在不合法的情况）
+                管理员可以点击右侧按钮取消视频展示的权限（如果视频存在不合法的情况）,当确保有前10名可以展示时后面的视频可以不用审核，直接点击完成审核。
             </div>
         </div>
         <div class="col-xs-12 col-md-12">
+            <button class="btn btn-primary pull-right end_video_pass" data-top-type="<?=$videos_info[0]->top_type;?>" data-top-date="<?=$videos_info[0]->top_date;?>">完成审核</button>
             <table class="table table-bordered table-hover">
                 <thead>
                     <tr>
@@ -69,7 +70,6 @@ $this->title = '筛选top10';
                 <?php endforeach; ?>
                 </tbody>
             </table>
-            <a href="<?=Url::to(['/superAdmin/default/index'])?>" class="btn btn-primary pull-right">完成审核</a>
         </div>
     </div>
 </div>

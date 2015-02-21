@@ -617,7 +617,7 @@ $(document).ready(function () {
     });
 
     /**
-     * ajax审核视频
+     * ajax审核单个视频
      */
     $('.pass_video').click(function(){
         var $this = $(this);
@@ -646,6 +646,49 @@ $(document).ready(function () {
                         swal({
                             title:'取消该视频的展示权限成功',
                             type:'success'
+                        });
+                    }else{
+                        swal({
+                            title:$date,
+                            type:'error'
+                        });
+                    }
+                },
+                complete : function(XMLHttpRequest,status){
+                    if(status != 'success'){
+                        swal({
+                            title:'出现问题，请稍后再试',
+                            type:'error'
+                        });
+                    }
+                }
+            });
+        }
+    });
+    /**
+     * ajax审核视频完成
+     */
+    $('.end_video_pass').click(function(){
+        var $this = $(this);
+        var top_type = $this.attr('data-top-type');
+        var top_date = $this.attr('data-top-date');
+        if (top_type && top_date) {
+            swal({
+                title: '<div class="load"><div class="loader">Loading...</div></div>',
+                html: true
+            });
+            $.ajax({
+                type: "post",
+                url: "index.php?r=superAdmin/default/end-pass-video",
+                data: {top_type: top_type,top_date:top_date},
+                dataType: "text",
+                success: function ($date) {
+                    if($date == 'ok_passed'){
+                        swal({
+                            title:top_date+'期视频审核完成',
+                            type:'success'
+                        }, function(){
+                            window.location.href='index.php?r=superAdmin/default/index';
                         });
                     }else{
                         swal({

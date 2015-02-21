@@ -49,4 +49,21 @@ class DefaultController extends Controller
         }
         return $this->goHome();
     }
+
+    public function actionEndPassVideo(){
+        $user = Yii::$app->getSession()->get('user');
+        if($user && Users::isUserSuperAdmin($user)){
+            $top_type = Yii::$app->request->post('top_type');
+            $top_date = Yii::$app->request->post('top_date');
+            $top = Tops::find()->where(['top_type'=>$top_type,'top_date'=>$top_date, 'top_praise'=>-1])->one();
+            if($top->top_state != Tops::TOP_STATE_PASSED){
+                $top->top_state = Tops::TOP_STATE_PASSED;
+                if(!$top->update()){
+                    return '保存榜单状态时出错，请联系超管';
+                };
+            }
+            return 'ok_passed';
+        }
+        return $this->goHome();
+    }
 }

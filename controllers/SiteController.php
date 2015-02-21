@@ -222,7 +222,8 @@ class SiteController extends Controller
     public function actionAbout()
     {
         return $this->render('about',[
-            'videos' => Videos::findVideosByTag('三杀')
+            'tops_date_type' => Tops::findAllTopTypeDateForAdmin(),
+            'tops_array' => Tops::findAllTopNotPassedForAdmin()
         ]);
     }
 }
