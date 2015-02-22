@@ -4,7 +4,6 @@ namespace app\models\forms;
 
 use app\models\Roles;
 use app\models\Users;
-use Faker\Provider\DateTime;
 use Yii;
 use yii\base\Model;
 
@@ -13,6 +12,7 @@ class RegisterForm extends Model
     public $nickname;
     public $email;
     public $password;
+    public $verifyCode;
 
     public function rules()
     {
@@ -21,7 +21,8 @@ class RegisterForm extends Model
             [['email', 'nickname'], 'filter', 'filter' => 'trim'],
             [['nickname'], 'string','min'=>2, 'max' => 20],
             ['email', 'email'],
-            [['email', 'nickname'], 'unique', 'targetClass'=>'app\models\Users',  'message' => '{attribute}"{value}"已被占用。']
+            [['email', 'nickname'], 'unique', 'targetClass'=>'app\models\Users',  'message' => '{attribute}"{value}"已被占用。'],
+            ['verifyCode', 'captcha'],
         ];
     }
 
@@ -30,6 +31,7 @@ class RegisterForm extends Model
         return [
             'email' => Yii::t('app', 'Email'),
             'nickname' => Yii::t('app', 'Nickname'),
+            'verifyCode' => Yii::t('app', 'VerifyCode'),
         ];
     }
 

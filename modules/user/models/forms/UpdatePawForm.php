@@ -15,7 +15,7 @@ class UpdatePawForm extends Model
         return [
             [['password', 'password_2'], 'required'],
             [['password', 'password_2'], 'string', 'min'=>5],
-            ['password_2', 'validatePassword_2'],
+            ['password_2', 'compare','compareAttribute'=>'password','message'=>'两次密码输入不一致'],
         ];
     }
 
@@ -25,12 +25,6 @@ class UpdatePawForm extends Model
             'password_2' => Yii::t('app', 'Password_2'),
             'password' => Yii::t('app', 'Password'),
         ];
-    }
-
-    public function validatePassword_2($attribute){
-        if(!($this->password_2 === $this->password)){
-            $this->addError($attribute, '两次密码输入不一致');
-        }
     }
 
 }

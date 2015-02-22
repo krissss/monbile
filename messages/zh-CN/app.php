@@ -9,6 +9,7 @@ return [
     'monbile' => '萌邦',
     'Login' => '登录',
     'Signup' => '注册',
+    'VerifyCode' => '验证码',
 
     /* site/login  site/register */
     'Email' => '邮箱',

@@ -2,6 +2,7 @@
 use yii\helpers\Html;
 use yii\helpers\Url;
 use yii\bootstrap\ActiveForm;
+use yii\captcha\Captcha;
 
 /* @var $this \yii\web\View */
 /* @var $model object */
@@ -26,6 +27,9 @@ $imgs = Url::to('/imgs/');
             ]); ?>
             <?= $form->field($model, 'nickname') ?>
             <?= $form->field($model, 'email') ?>
+            <?= $form->field($model, 'verifyCode')->widget(Captcha::className(), [
+                'template' => '<div class="row"><div class="col-md-6">{image}</div><div class="col-md-6">{input}</div></div>',
+            ]) ?>
             <div class="form-group">
                 <div class="col-md-offset-5 col-md-7">
                     <?= Html::submitButton('注册', ['class' => 'btn btn-primary', 'name' => 'register-button']) ?>
