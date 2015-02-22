@@ -4,6 +4,20 @@
 
 $(document).ready(function () {
     /**
+     * 返回顶部
+     */
+    $(window).scroll(function() {
+        if($(window).scrollTop() >= 100){
+            $('.actGoTop').fadeIn(300);
+        }else{
+            $('.actGoTop').fadeOut(300);
+        }
+    });
+    $('.actGoTop').click(function(){
+        $('html,body').animate({scrollTop: '0px'}, 800);
+    });
+
+    /**
      * 标签云
      * 使用jquery.tagcanvas.js
      */

@@ -89,7 +89,7 @@ $is_other_user_video = true;
                         <?php else: ?>
                             <div class="alert alert-info" role="alert">
                                 <span><?=date("Y-m-d",strtotime($one_week_top[0]->top_date))?>日期</span>
-                                <span class="pull-right"><a href="">查看更多榜单</a></span>
+                                <span class="pull-right"><a href="<?=Url::to(['/site/top-list'])?>">查看更多榜单</a></span>
                             </div>
                             <?php foreach ($one_week_top as $key=>$top_info): ?>
                                 <?php $video_info = $top_info->video; ?>
@@ -103,7 +103,7 @@ $is_other_user_video = true;
                         <?php else: ?>
                             <div class="alert alert-info" role="alert">
                                 <span><?=date("Y-m",strtotime($one_month_top[0]->top_date))?>月期</span>
-                                <span class="pull-right"><a href="">查看更多榜单</a></span>
+                                <span class="pull-right"><a href="<?=Url::to(['/site/top-list'])?>">查看更多榜单</a></span>
                             </div>
                             <?php foreach ($one_month_top as $key=>$top_info): ?>
                                 <?php $video_info = $top_info->video; ?>
@@ -117,7 +117,7 @@ $is_other_user_video = true;
                         <?php else: ?>
                             <div class="alert alert-info" role="alert">
                                 <span><?=date("Y",strtotime($one_year_top[0]->top_date))?>年期</span>
-                                <span class="pull-right"><a href="">查看更多榜单</a></span>
+                                <span class="pull-right"><a href="<?=Url::to(['/site/top-list'])?>">查看更多榜单</a></span>
                             </div>
                             <?php foreach ($one_year_top as $key=>$top_info): ?>
                                 <?php $video_info = $top_info->video; ?>

@@ -13,7 +13,10 @@ class DefaultController extends Controller
     {
         $user = Yii::$app->getSession()->get('user');
         if($user && Users::isUserSuperAdmin($user)){
-            return $this->render('index');
+            return $this->render('index',[
+                'tops_date_type' => Tops::findAllTopTypeDateForAdmin(),
+                'tops_array' => Tops::findAllTopNotPassedForAdmin()
+            ]);
         }
         return $this->goHome();
     }
@@ -21,8 +24,11 @@ class DefaultController extends Controller
     public function actionChoseTop(){
         $user = Yii::$app->getSession()->get('user');
         if($user && Users::isUserSuperAdmin($user)){
+            $top_type = Yii::$app->request->get('type');
+            $top_date = Yii::$app->request->get('date');
+            $tops_info = Tops::findTopVideosForAdmin($top_date,$top_type);
             return $this->render('choseTop',[
-                'videos_info' => Tops::findTopVideosForAdmin(date("Y-m-d",strtotime("-1 week Monday")),Tops::TOP_TYPE_WEEK),
+                'tops_info' => $tops_info,
             ]);
         }
         return $this->goHome();

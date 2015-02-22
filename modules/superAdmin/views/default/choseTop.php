@@ -1,18 +1,19 @@
 <?php
 /**
- * 筛选top10
+ * 筛选榜单
  */
 /* @var $this \yii\web\View */
-/* @var $videos_info :: render */
+/* @var $tops_info :: render */
 
 use yii\helpers\Url;
 
 $heads = Url::to('/heads/');
 $videos = Url::to('/videos/');
 
-$this->title = '筛选top10';
+$this->title = '筛选榜单';
 ?>
 <div class="user-default-videos">
+    <?php if(count($tops_info)>0):?>
     <div class="row">
         <div class="col-xs-12 col-md-12">
             <div class="alert alert-info" role="alert">
@@ -20,7 +21,7 @@ $this->title = '筛选top10';
             </div>
         </div>
         <div class="col-xs-12 col-md-12">
-            <button class="btn btn-primary pull-right end_video_pass" data-top-type="<?=$videos_info[0]->top_type;?>" data-top-date="<?=$videos_info[0]->top_date;?>">完成审核</button>
+            <button class="btn btn-primary pull-right end_video_pass" data-top-type="<?=$tops_info[0]->top_type;?>" data-top-date="<?=$tops_info[0]->top_date;?>">完成审核</button>
             <table class="table table-bordered table-hover">
                 <thead>
                     <tr>
@@ -37,7 +38,7 @@ $this->title = '筛选top10';
                 </thead>
                 <tbody>
                 <?php $number = 1;?>
-                <?php foreach ($videos_info as $top_info): ?>
+                <?php foreach ($tops_info as $top_info): ?>
                     <?php $video_info = $top_info->video;?>
                     <tr>
                         <td><?=$number++;?></td>
@@ -72,4 +73,7 @@ $this->title = '筛选top10';
             </table>
         </div>
     </div>
+    <?php else: ?>
+        <div class="alert alert-danger" role="alert">没有相关信息，<strong><a href="<?=Url::to(['/superAdmin/default/index'])?>">点我返回</a></strong></div>
+    <?php endif; ?>
 </div>

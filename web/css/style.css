@@ -401,3 +401,20 @@ a:active {
         box-shadow: 0 -3em 0 0 #9966FF, 2em -2em 0 -0.5em #9966FF, 3em 0 0 -0.5em #9966FF, 2em 2em 0 -0.5em #9966FF, 0 3em 0 -0.5em #9966FF, -2em 2em 0 0 #9966FF, -3em 0 0 0 #9966FF, -2em -2em 0 0.2em #9966FF;
     }
 }
+
+/* 返回顶部样式 */
+.actGoTop{
+    position:fixed;
+    bottom:40px;
+    right:30px;
+    display:none;
+}
+.actGoTop a{
+    width:50px;
+    height:50px;
+    display:inline-block;
+    background:url(../imgs/goBackTop.png) 0 0 no-repeat;
+}
+.actGoTop a:hover{
+    background:url(../imgs/goBackTop.png) 0 -50px no-repeat;
+}

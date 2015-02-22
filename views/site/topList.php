@@ -1,12 +1,12 @@
 <?php
 /**
- * 管理员审核列表页面
+ * 榜单列表页面
  */
 /* @var $this yii\web\View */
 /* @var $tops_date_type :: render */
 /* @var $tops_array :: render */
 
-$this->title = '审核';
+$this->title = '榜单';
 
 use \app\models\Tops;
 use \yii\helpers\Url;
@@ -34,12 +34,12 @@ use \yii\helpers\Url;
                 <div class="row text-center">
             <?php endif; ?>
             <div class="col-xs-3">
-                <a href="<?=Url::to(['/superAdmin/default/chose-top','type'=>$tops_date_type[$i]->top_type,'date'=>$tops_date_type[$i]->top_date])?>" class="alert-link">
+                <a href="<?=Url::to(['/site/top-videos','type'=>$tops_date_type[$i]->top_type,'date'=>$tops_date_type[$i]->top_date])?>" class="alert-link">
                     <?= $tops_date_type[$i]->top_date; ?>
                     <?php if(in_array($tops_date_type[$i]->top_date.$tops_date_type[$i]->top_type,$tops_array,true)): ?>
-                    (<span class="text-danger">未审核</span>)
+                    (<span class="text-danger">未公布</span>)
                     <?php else: ?>
-                    (<span class="text-success">已审核</span>)
+                    (<span class="text-success">已公布</span>)
                     <?php endif; ?>
                 </a>
             </div>

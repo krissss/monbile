@@ -81,7 +81,7 @@ $user = Yii::$app->getSession()->get('user');
                                 <li class="dropdown">
                                     <a href="javascript:void(0);" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false"><span class="glyphicon glyphicon-asterisk" aria-hidden="true"></span>超级管理员操作<span class="caret"></span></a>
                                     <ul class="dropdown-menu" role="menu">
-                                        <li><a href="<?=Url::to(['/superAdmin/default/index'])?>">主页</a></li>
+                                        <li><a href="<?=Url::to(['/superAdmin/default/index'])?>">审核榜单</a></li>
                                     </ul>
                                 </li>
                             <?php endif; ?>
@@ -102,10 +102,12 @@ $user = Yii::$app->getSession()->get('user');
 
     <footer class="footer">
         <div class="container">
-            <p class="pull-left">&copy; My Company <?= date('Y') ?></p>
+            <p class="pull-left">&copy; 萌邦 Monbile <?= date('Y') ?></p>
             <p class="pull-right"><?= Yii::powered() ?></p>
         </div>
     </footer>
+
+    <div class="actGoTop hidden-xs"><a href="javascript:void(0);" title="返回顶部"></a></div>
 
 <?php $this->endBody() ?>
 </body>

@@ -205,6 +205,28 @@ class SiteController extends Controller
         }
     }
 
+    public function actionTopList(){
+        return $this->render('topList',[
+            'tops_date_type' => Tops::findAllTopTypeDateForAdmin(),
+            'tops_array' => Tops::findAllTopNotPassedForAdmin()
+        ]);
+    }
+
+    public function actionTopVideos(){
+        $top_type = Yii::$app->request->get('type');
+        $top_date = Yii::$app->request->get('date');
+        $tops_info = Tops::findTopVideosForAdmin($top_date,$top_type);
+        $collections_array = array();
+        //如果用户已登录
+        if ($user = Yii::$app->getSession()->get('user')) {
+            $collections_array = Collections::findAllVideoIdInCollectionsByUserId($user->uid);
+        }
+        return $this->render('topVideos',[
+            'tops_info' => $tops_info,
+            'collections_array' => $collections_array,
+        ]);
+    }
+
     public function actionContact()
     {
         $model = new ContactForm();
