@@ -4,7 +4,7 @@ namespace app\models\forms;
 
 use yii\base\Model;
 
-class SearchForm extends Model
+class TagSearchForm extends Model
 {
     const ALL = 0;
 

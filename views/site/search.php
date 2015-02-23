@@ -13,6 +13,7 @@
 /* @var $session_user :: session */
 
 use yii\helpers\Url;
+use yii\widgets\LinkPager;
 
 $this->title = '搜索结果';
 
@@ -34,14 +35,21 @@ $is_other_user_video = true;
     <div class="row">
         <div class="col-xs-12 col-md-8">
             <?php if (count($videos_info) < 1): ?>
-                <div class="alert alert-info" role="alert">无该标签的信息</div>
+                <div class="alert alert-info" role="alert">无搜索结果</div>
             <?php else: ?>
                 <div class="alert alert-info" role="alert">搜索结果：</div>
-                <?php foreach ($videos_info as $tag_relation): ?>
-                    <?php $video_info = $tag_relation->video?>
-                    <?php if(!isset($video_info->user)){ continue; }?>
-                    <?php require(__DIR__ . '/fragment/video_info_panel.php'); ?>
-                <?php endforeach; ?>
+                <?php if(isset($videos_info[0]->vid)): //时间搜索的结果?>
+                    <?php foreach (array_reverse($videos_info) as $video_info): ?>
+                        <?php if(!isset($video_info->user)){ continue; }?>
+                        <?php require(__DIR__ . '/fragment/video_info_panel.php'); ?>
+                    <?php endforeach; ?>
+                <?php else: //标签搜索的结果?>
+                    <?php foreach (array_reverse($videos_info) as $tag_relation): ?>
+                        <?php $video_info = $tag_relation->video?>
+                        <?php if(!isset($video_info->user)){ continue; }?>
+                        <?php require(__DIR__ . '/fragment/video_info_panel.php'); ?>
+                    <?php endforeach; ?>
+                <?php endif; ?>
             <? endif; ?>
         </div>
         <div class="col-xs-12 col-md-4 hidden-sm hidden-xs">

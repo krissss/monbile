@@ -3,8 +3,9 @@
 namespace app\controllers;
 
 use app\models\Collections;
+use app\models\forms\DateSearchForm;
 use app\models\forms\RegisterForm;
-use app\models\forms\SearchForm;
+use app\models\forms\TagSearchForm;
 use app\models\forms\VideoSendForm;
 use app\models\Games;
 use app\models\Relations;
@@ -65,17 +66,26 @@ class SiteController extends Controller
                     return $this->refresh();
                 }
             }
-            //用户已登录搜索
-            $searchForm = new SearchForm();
-            if ($searchForm->load(Yii::$app->request->post())) {
+            //用户已登录标签搜索
+            $tagSearchForm = new TagSearchForm();
+            if ($tagSearchForm->load(Yii::$app->request->post())) {
                 return $this->render("//site/search",[
                     'collections_array' => Collections::findAllVideoIdInCollectionsByUserId($user->uid),
-                    'videos_info' => Videos::findVideosByTag($searchForm->search_content,$searchForm->search_type)
+                    'videos_info' => Videos::findVideosByTag($tagSearchForm->search_content,$tagSearchForm->search_type)
+                ]);
+            }
+            //用户已登录时间搜索
+            $dateSearchForm = new DateSearchForm();
+            if ($dateSearchForm->load(Yii::$app->request->post())) {
+                return $this->render("//site/search",[
+                    'collections_array' => Collections::findAllVideoIdInCollectionsByUserId($user->uid),
+                    'videos_info' => Videos::findVideosByDate($dateSearchForm->date_start,$dateSearchForm->date_end,$dateSearchForm->search_type)
                 ]);
             }
             //首页展示
             return $this->render('index', [
-                'searchForm' => $searchForm,
+                'tagSearchForm' => $tagSearchForm,
+                'dateSearchForm' => $dateSearchForm,
                 'video_send' => $video_send,
                 'videos_one_hour' => Videos::findOneHourVideos(),
                 'videos_one_day' => Videos::findOneDayVideos(),
@@ -87,17 +97,26 @@ class SiteController extends Controller
             ]);
         }
         //用户未登录
-        //用户未登录搜索
-        $searchForm = new SearchForm();
-        if ($searchForm->load(Yii::$app->request->post())) {
+        //用户未登录标签搜索
+        $tagSearchForm = new TagSearchForm();
+        if ($tagSearchForm->load(Yii::$app->request->post())) {
             return $this->render("//site/search",[
                 'collections_array' => array(),
-                'videos_info' => Videos::findVideosByTag($searchForm->search_content,$searchForm->search_type)
+                'videos_info' => Videos::findVideosByTag($tagSearchForm->search_content,$tagSearchForm->search_type)
+            ]);
+        }
+        //用户未登录时间搜索
+        $dateSearchForm = new DateSearchForm();
+        if ($dateSearchForm->load(Yii::$app->request->post())) {
+            return $this->render("//site/search",[
+                'collections_array' => array(),
+                'videos_info' => Videos::findVideosByDate($dateSearchForm->date_start,$dateSearchForm->date_end,$dateSearchForm->search_type)
             ]);
         }
         //首页展示
         return $this->render('index', [
-            'searchForm' => $searchForm,
+            'tagSearchForm' => $tagSearchForm,
+            'dateSearchForm' => $dateSearchForm,
             'videos_one_hour' => Videos::findOneHourVideos(),
             'videos_one_day' => Videos::findOneDayVideos(),
             'one_week_top' => Tops::findTopVideosForUser(date("Y-m-d",strtotime("-1 week Monday")),Tops::TOP_TYPE_WEEK),

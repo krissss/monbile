@@ -2,7 +2,9 @@
 
 namespace app\models;
 
+use app\models\forms\DateSearchForm;
 use app\models\forms\SearchForm;
+use app\models\forms\TagSearchForm;
 use Yii;
 
 /**
@@ -144,28 +146,61 @@ class Videos extends \yii\db\ActiveRecord
     }
 
     /**
-     * 根据标签名和用户名搜索，用户用户自己提交搜索表单
+     * 根据标签名和用户名搜索，用户自己提交搜索表单
      * @param $tag_name
      * @param int $user_id
      * @return array|\yii\db\ActiveRecord[]
      */
-    public static function findVideosByTag($tag_name, $user_id=SearchForm::ALL){
-        $tag = Tags::find()
-            ->where(['tag_name' => $tag_name])
-            ->one();
-        if(!$tag){
+    public static function findVideosByTag($tag_name, $user_id=TagSearchForm::ALL){
+        $tags = Tags::find()
+            ->where(['or like','tag_name', $tag_name])
+            ->all();
+        if(!$tags){
             return array();
         }
-        if($user_id==SearchForm::ALL){
+        $tags_array = array();
+        foreach($tags as $tag){
+            array_push($tags_array,$tag->tid);
+        }
+        if($user_id==TagSearchForm::ALL){
             $tag_relation = TagRelation::find()
-                ->where(['tag_id'=>$tag->tid])
+                ->where(['in','tag_id',$tags_array])
                 ->all();
         }else{
             $tag_relation = TagRelation::find()
-                ->where(['tag_id'=>$tag->tid, 'user_id'=>$user_id])
+                ->where(['user_id'=>$user_id])
+                ->andWhere(['in','tag_id',$tags_array])
                 ->all();
         }
         return $tag_relation;
+    }
+
+    /**
+     * 根据时间和用户名搜索，用户自己提交搜索表单
+     * @param $video_date_start
+     * @param $video_date_end
+     * @param int $user_id
+     * @return array|\yii\db\ActiveRecord[]
+     */
+    public static function findVideosByDate($video_date_start, $video_date_end, $user_id=DateSearchForm::ALL){
+        if($video_date_start && $video_date_end){
+            $video_date_start = date('Y-m-d 00:00:00',strtotime($video_date_start));
+            $video_date_end = date('Y-m-d 23:59:59',strtotime($video_date_end));
+            if($user_id==DateSearchForm::ALL){
+                $videos = Videos::find()
+                    ->where(['between','video_date', $video_date_start, $video_date_end])
+                    ->all();
+            }else{
+                $videos = Videos::find()
+                    ->where(['user_id'=>$user_id])
+                    ->andWhere(['between','video_date', $video_date_start, $video_date_end])
+                    ->all();
+            }
+            return $videos;
+        }else{
+            return array();
+        }
+
     }
 
     /**

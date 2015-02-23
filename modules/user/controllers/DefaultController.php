@@ -4,7 +4,8 @@ namespace app\modules\user\controllers;
 
 use app\models\Collections;
 use app\models\Comments;
-use app\models\forms\SearchForm;
+use app\models\forms\DateSearchForm;
+use app\models\forms\TagSearchForm;
 use app\models\forms\VideoSendForm;
 use app\models\Relations;
 use app\models\Users;
@@ -43,18 +44,27 @@ class DefaultController extends Controller
                     return $this->refresh();
                 }
             }
-            //用户已登录搜索
-            $searchForm = new SearchForm();
-            if ($searchForm->load(Yii::$app->request->post())) {
+            //用户已登录标签搜索
+            $tagSearchForm = new TagSearchForm();
+            if ($tagSearchForm->load(Yii::$app->request->post())) {
                 return $this->render("//site/search",[
                     'collections_array' => Collections::findAllVideoIdInCollectionsByUserId($user->uid),
-                    'videos_info' => Videos::findVideosByTag($searchForm->search_content,$searchForm->search_type)
+                    'videos_info' => Videos::findVideosByTag($tagSearchForm->search_content,$tagSearchForm->search_type)
+                ]);
+            }
+            //用户已登录时间搜索
+            $dateSearchForm = new DateSearchForm();
+            if ($dateSearchForm->load(Yii::$app->request->post())) {
+                return $this->render("//site/search",[
+                    'collections_array' => Collections::findAllVideoIdInCollectionsByUserId($user->uid),
+                    'videos_info' => Videos::findVideosByDate($dateSearchForm->date_start,$dateSearchForm->date_end,$dateSearchForm->search_type)
                 ]);
             }
             //自己首页展示
             return $this->render('index', [
                 'video_send' => $video_send,
-                'searchForm' => $searchForm,
+                'tagSearchForm' => $tagSearchForm,
+                'dateSearchForm' => $dateSearchForm,
                 'collections_array' => Collections::findAllVideoIdInCollectionsByUserId($user->uid),
             ]);
         }
@@ -65,28 +75,45 @@ class DefaultController extends Controller
             //如果用户已登录
             if($user){
                 $collections_array = Collections::findAllVideoIdInCollectionsByUserId($user->uid);
-                //用户已登录搜索
-                $searchForm = new SearchForm();
-                if ($searchForm->load(Yii::$app->request->post())) {
+                //用户已登录标签搜索
+                $tagSearchForm = new TagSearchForm();
+                if ($tagSearchForm->load(Yii::$app->request->post())) {
                     return $this->render("//site/search",[
                         'collections_array' => $collections_array,
-                        'videos_info' => Videos::findVideosByTag($searchForm->search_content,$searchForm->search_type)
+                        'videos_info' => Videos::findVideosByTag($tagSearchForm->search_content,$tagSearchForm->search_type)
+                    ]);
+                }
+                //用户已登录时间搜索
+                $dateSearchForm = new DateSearchForm();
+                if ($dateSearchForm->load(Yii::$app->request->post())) {
+                    return $this->render("//site/search",[
+                        'collections_array' => $collections_array,
+                        'videos_info' => Videos::findVideosByDate($dateSearchForm->date_start,$dateSearchForm->date_end,$dateSearchForm->search_type)
                     ]);
                 }
                 $relations_array = Relations::findAllBackIdInRelationsByFrontId($user->uid);
             }
             //用户未登录
             //用户未登录搜索
-            $searchForm = new SearchForm();
-            if ($searchForm->load(Yii::$app->request->post())) {
+            $tagSearchForm = new TagSearchForm();
+            if ($tagSearchForm->load(Yii::$app->request->post())) {
                 return $this->render("//site/search",[
                     'collections_array' => array(),
-                    'videos_info' => Videos::findVideosByTag($searchForm->search_content,$searchForm->search_type)
+                    'videos_info' => Videos::findVideosByTag($tagSearchForm->search_content,$tagSearchForm->search_type)
+                ]);
+            }
+            //用户未登录时间搜索
+            $dateSearchForm = new DateSearchForm();
+            if ($dateSearchForm->load(Yii::$app->request->post())) {
+                return $this->render("//site/search",[
+                    'collections_array' => array(),
+                    'videos_info' => Videos::findVideosByDate($dateSearchForm->date_start,$dateSearchForm->date_end,$dateSearchForm->search_type)
                 ]);
             }
             //无论用户登录与否，其他人首页展示
             return $this->render('index', [
-                'searchForm' => $searchForm,
+                'tagSearchForm' => $tagSearchForm,
+                'dateSearchForm' => $dateSearchForm,
                 'other_user' => Users::findOne($id),
                 'relations_array' => $relations_array,
                 'collections_array' => $collections_array,
