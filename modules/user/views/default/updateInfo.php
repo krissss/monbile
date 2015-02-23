@@ -2,6 +2,7 @@
 use yii\helpers\Html;
 use yii\helpers\Url;
 use yii\bootstrap\ActiveForm;
+use app\models\Users;
 
 /* @var $this \yii\web\View */
 
@@ -30,8 +31,9 @@ $session = Yii::$app->getSession();
                 ],
             ]); ?>
             <?= $form->field($model, 'nickname')->textInput(['maxlength' => 20]) ?>
+            <?= $form->field($model, 'introduce')->textInput(['maxlength' => 50]) ?>
             <?= $form->field($model, 'telphone')->input('tel') ?>
-            <?= $form->field($model, 'sex')->radioList(['1'=>'男','0'=>'女']) ?>
+            <?= $form->field($model, 'sex')->radioList([Users::USER_SEX_MALE=>'男',Users::USER_SEX_FEMALE=>'女']) ?>
             <?= $form->field($model, 'birthday')->input('date') ?>
             <?= $form->field($model, 'currentplace')->textInput() ?>
             <?/**类型暂时只用英雄联盟,需要选择类型打开以下注释

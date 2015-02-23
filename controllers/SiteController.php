@@ -20,29 +20,6 @@ use yii\web\UploadedFile;
 
 class SiteController extends Controller
 {
-    /*    public function behaviors()
-        {
-            return [
-            'access' => [
-                'class' => AccessControl::className(),
-                'only' => ['logout'],
-                'rules' => [
-                    [
-                        'actions' => ['logout'],
-                        'allow' => true,
-                        'roles' => ['@'],
-                    ],
-                ],
-            ],
-            'verbs' => [
-                'class' => VerbFilter::className(),
-                'actions' => [
-                    'logout' => ['post'],
-                ],
-            ],
-        ];
-        }*/
-
     public function actions()
     {
         return [
@@ -171,6 +148,7 @@ class SiteController extends Controller
         $model = new RegisterForm();
         if ($model->load(Yii::$app->request->post()) && $model->sendPassword()) {
             if ($user = $model->register()) {
+                Yii::$app->session->setFlash('success_message','发送邮件成功！');
                 return $this->redirect(Yii::$app->getRequest()->getBaseUrl() . 'index.php?r=site/login');
             } else {
                 return $this->render('error', [
@@ -205,6 +183,10 @@ class SiteController extends Controller
         }
     }
 
+    /**
+     * 榜单列表
+     * @return string
+     */
     public function actionTopList(){
         return $this->render('topList',[
             'tops_date_type' => Tops::findAllTopTypeDateForAdmin(),
@@ -212,6 +194,10 @@ class SiteController extends Controller
         ]);
     }
 
+    /**
+     * 单个榜单视频展示
+     * @return string
+     */
     public function actionTopVideos(){
         $top_type = Yii::$app->request->get('type');
         $top_date = Yii::$app->request->get('date');
@@ -224,28 +210,6 @@ class SiteController extends Controller
         return $this->render('topVideos',[
             'tops_info' => $tops_info,
             'collections_array' => $collections_array,
-        ]);
-    }
-
-    public function actionContact()
-    {
-        $model = new ContactForm();
-        if ($model->load(Yii::$app->request->post()) && $model->contact(Yii::$app->params['adminEmail'])) {
-            Yii::$app->session->setFlash('contactFormSubmitted');
-
-            return $this->refresh();
-        } else {
-            return $this->render('contact', [
-                'model' => $model,
-            ]);
-        }
-    }
-
-    public function actionAbout()
-    {
-        return $this->render('about',[
-            'tops_date_type' => Tops::findAllTopTypeDateForAdmin(),
-            'tops_array' => Tops::findAllTopNotPassedForAdmin()
         ]);
     }
 }

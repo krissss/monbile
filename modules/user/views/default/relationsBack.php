@@ -27,7 +27,7 @@ if(isset($other_user)&&$other_user){
 
 $this->title = $user->nickname.'的粉丝';
 ?>
-<div class="user-default-videos">
+<div class="user-default-relations-back">
     <div class="row">
         <div class="col-xs-12 col-md-8">
             <div class="row">
@@ -35,32 +35,9 @@ $this->title = $user->nickname.'的粉丝';
                     <div class="alert alert-info col-xs-12" role="alert">还没有任何粉丝</div>
                 <?php else: ?>
                     <?php foreach ($user->relationsBack as $relationBack): ?>
+                        <?php $user_relation = $relationBack->front?>
                         <div class="col-xs-12 col-md-6">
-                            <div class="media panel">
-                                <div class="panel-body">
-                                    <div class="media-left">
-                                        <a href="<?= Url::to(['/user/default/index', 'id' => $relationBack->front->uid]) ?>">
-                                            <img src="<?= Url::to($heads . $relationBack->front->head) ?>" alt="<?= $relationBack->front->nickname ?>" title="<?= $relationBack->front->nickname ?>" class="img-circle img-responsiv img_height_80">
-                                        </a>
-                                    </div>
-                                    <div class="media-body">
-                                        <a href="<?= Url::to(['/user/default/index', 'id' => $relationBack->front->uid]) ?>">
-                                            <h4 class="media-heading"><?= $relationBack->front->nickname ?></h4>
-                                        </a>
-                                        <h5><a href="javascript:void(0);" class="add_follow" data-user-id="<?=$session_user&&$relationBack->front->uid == $session_user->uid?'':$relationBack->front->uid?>">
-                                                <?php if($session_user&&$relationBack->front->uid == $session_user->uid):?>
-                                                    <small><span class="label label-danger"><span class="glyphicon glyphicon-heart" aria-hidden="true"></span>这是我</span></small>
-                                                <?php elseif(in_array($relationBack->front->uid,$relations_array,true)):?>
-                                                    <small><span class="label label-warning"><span class="glyphicon glyphicon-ok" aria-hidden="true"></span>已关注</span></small>
-                                                <?php else: ?>
-                                                    <small><span class="label label-primary"><span class="glyphicon glyphicon-plus" aria-hidden="true"></span>关注</span></small>
-                                                <?php endif; ?>
-                                            </a></h5>
-                                        <div class="col-xs-6"><a href="<?= Url::to(['/user/default/videos','id'=>$relationBack->front->uid]) ?>">视频<span class="badge"><?=count($relationBack->front->videos)?></span></a></div>
-                                        <div class="col-xs-6"><a href="<?= Url::to(['/user/default/collections','id'=>$relationBack->front->uid]) ?>">收藏<span class="badge"><?=count($relationBack->front->collections)?></span></a></div>
-                                    </div>
-                                </div>
-                            </div>
+                            <?php require(__DIR__ . '/../../../../views/site/fragment/user_relation_info.php'); ?>
                         </div>
                     <?php endforeach; ?>
                 <?php endif; ?>

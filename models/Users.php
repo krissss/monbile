@@ -16,6 +16,7 @@ use Yii;
  * @property integer $role_id
  * @property string $create_date
  * @property string $update_date
+ * @property string $introduce
  * @property integer $telphone
  * @property integer $sex
  * @property string $birthday
@@ -25,6 +26,9 @@ use Yii;
  */
 class Users extends \yii\db\ActiveRecord
 {
+    const USER_SEX_MALE = 1;
+    const USER_SEX_FEMALE = 2;
+
     public static function tableName()
     {
         return '{{%users}}';
@@ -39,7 +43,7 @@ class Users extends \yii\db\ActiveRecord
             ['telphone', 'match', 'pattern' => '^1(3[0-9]|5[0-35-9]|8[025-9])\\d{8}$^'],
             [['create_date', 'update_date', 'birthday'], 'safe'],
             [['nickname'], 'string', 'min' => 2, 'max' => 20],
-            ['currentplace','string']
+            [['currentplace','introduce'],'string']
         ];
     }
 
@@ -55,6 +59,7 @@ class Users extends \yii\db\ActiveRecord
             'role_id' => Yii::t('app', 'Role ID'),
             'create_date' => Yii::t('app', 'Create Date'),
             'update_date' => Yii::t('app', 'Update Date'),
+            'introduce' => Yii::t('app', 'Introduce'),
             'telphone' => Yii::t('app', 'Telphone'),
             'sex' => Yii::t('app', 'Sex'),
             'birthday' => Yii::t('app', 'Birthday'),

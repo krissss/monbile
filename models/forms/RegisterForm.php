@@ -42,7 +42,7 @@ class RegisterForm extends Model
             $mail = Yii::$app->mailer->compose();
             $mail->setTo($this->email);
             $mail->setSubject('monbile用户注册');
-            $mail->setHtmlBody('亲爱的"' . $this->nickname . '",您可以使用该邮箱号和密码：' . $this ->password . '进行登录22');
+            $mail->setHtmlBody('亲爱的"' . $this->nickname . '",您现在可以使用该邮箱号和密码:' . $this ->password . '进行登录');
             if ($mail->send()) {
                 return true;
             } else {

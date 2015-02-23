@@ -54,7 +54,6 @@ $user = Yii::$app->getSession()->get('user');
                             </ul>
                         </li>
                          */?>
-                        <li><a href="<?=Url::to(['/site/about'])?>"><span class="glyphicon glyphicon-alert" aria-hidden="true"></span>测试代码</a></li>
                         <?php if(!$user):?>
                         <li><a href="<?=Url::to(['/site/register'])?>"><span class="glyphicon glyphicon-registration-mark" aria-hidden="true"></span>注册</a></li>
                         <li><a href="<?=Url::to(['/site/login'])?>"><span class="glyphicon glyphicon-log-in" aria-hidden="true"></span>登录</a></li>

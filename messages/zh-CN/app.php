@@ -17,6 +17,7 @@ return [
     'Password' => '密码',
     'Password_2' => '确认密码',
     'Head' => '头像',
+    'Introduce' => '简介',
     'Telphone' => '手机号',
     'Sex' => '性别',
     'Birthday' => '生日',

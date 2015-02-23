@@ -8,8 +8,12 @@ use yii\bootstrap\ActiveForm;
 
 $this->title = '登录';
 
+$session = Yii::$app->getSession();
+
 $imgs = Url::to('/imgs/');
 ?>
+<input class="success_message" type="hidden" value="<?= $session->hasFlash('success_message') ? $session->getFlash('success_message') : '' ?>">
+
 <div class="site-login">
     <div class="text-center">
         <img src="<?= Url::to($imgs . 'logo-img-height-200.png') ?>" alt="" class="img-circle img-responsiv">

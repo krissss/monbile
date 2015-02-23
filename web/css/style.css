@@ -93,6 +93,10 @@ a:active {
     color: #000;
 }
 
+.label{
+    vertical-align: 4px;
+}
+
 /* search-form 下面的form-group样式修正*/
 #search-form .form-group{
     margin-bottom: 0;
@@ -417,4 +421,32 @@ a:active {
 }
 .actGoTop a:hover{
     background:url(../imgs/goBackTop.png) 0 -50px no-repeat;
+}
+
+/* 男女标识符 */
+.self_icon{
+    display: inline-block;
+    background-image: url("../imgs/icon.png");
+    background-repeat: no-repeat;
+    vertical-align: -2px;
+}
+.icon_male{
+    width: 12px;
+    height: 12px;
+    background-position:0 0;
+}
+.icon_female{
+    width: 12px;
+    height: 12px;
+    background-position:0 -25px;
+}
+.icon_male_circle{
+    width: 16px;
+    height: 16px;
+    background-position:-12px 0;
+}
+.icon_female_circle{
+    width: 16px;
+    height: 16px;
+    background-position:-37px 0;
 }
