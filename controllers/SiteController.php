@@ -231,4 +231,30 @@ class SiteController extends Controller
             'collections_array' => $collections_array,
         ]);
     }
+
+    /**
+     * 获取更多视频
+     * @return string
+     */
+    public function actionGetMore(){
+        $type = Yii::$app->request->get('type');
+        $offset = Yii::$app->request->get('offset');
+        $videos_info = null;
+        if($type == 'one_hour'){
+            $videos_info = Videos::findOneHourVideos($offset);
+        }elseif($type == 'one_day'){
+            $videos_info = Videos::findOneDayVideos($offset);
+        }
+        //如果用户已登录
+        $collections_array = array();
+        if ($user = Yii::$app->getSession()->get('user')) {
+            $collections_array = Collections::findAllVideoIdInCollectionsByUserId($user->uid);
+        }
+        return $this->renderPartial('moreVideos', [
+            'offset' => $offset,
+            'type' => $type,
+            'collections_array' => $collections_array,
+            'videos_info' => $videos_info,
+        ]);
+    }
 }

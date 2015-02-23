@@ -84,9 +84,11 @@ class Videos extends \yii\db\ActiveRecord
 
     /**
      * 获取一小时前的视频
+     * @param int $offset
+     * @param int $limit
      * @return array|\yii\db\ActiveRecord[]
      */
-    public static function findOneHourVideos()
+    public static function findOneHourVideos($offset = 0, $limit = 10)
     {
         //因视频少，先改为一天内和七天内，下同
         //$one_hour_front = date('Y-m-d H:i:s',strtotime('-1 hour'));
@@ -95,14 +97,18 @@ class Videos extends \yii\db\ActiveRecord
             ->where(['video_state' => Videos::VIDEO_ACTIVE])
             ->andWhere(['between','video_date', $one_hour_front , date('Y-m-d H:i:s')])
             ->orderBy(['video_date' => SORT_DESC])
+            ->offset($offset)
+            ->limit($limit)
             ->all();
     }
 
     /**
      * 获取一天前的视频，排除一小时前
+     * @param int $offset
+     * @param int $limit
      * @return array|\yii\db\ActiveRecord[]
      */
-    public static function findOneDayVideos()
+    public static function findOneDayVideos($offset = 0, $limit = 10)
     {
         //$one_day_front = date('Y-m-d H:i:s',strtotime('-1 day'));
         //$one_hour_front = date('Y-m-d H:i:s',strtotime('-1 hour'));
@@ -112,6 +118,8 @@ class Videos extends \yii\db\ActiveRecord
             ->where(['video_state' => Videos::VIDEO_ACTIVE])
             ->andWhere(['between','video_date', $one_day_front , $one_hour_front])
             ->orderBy(['video_date' => SORT_DESC])
+            ->offset($offset)
+            ->limit($limit)
             ->all();
     }
 

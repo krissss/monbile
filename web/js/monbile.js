@@ -329,215 +329,98 @@ $(document).ready(function () {
     }
 
     /**
+     * 将所有有关于video_info的操作绑定到document上，并且可以动态绑定操作
+     */
+    $(document)
+    /**
      * ajax获取评论
      */
-    $('.show_comments').click(function(){
-        var obj =  $('.comment_video_id');
-        obj .val($(this).parent().attr('data-video-id'));
-        var video_id = obj.val();
-        var html = '<div class="load"><div class="loader">Loading...</div></div>';
-        $('.comments_list').empty().html(html);
-        getAndSetComments(video_id);
-    });
-
+        .on('click','.show_comments',function(){
+            var obj =  $('.comment_video_id');
+            obj .val($(this).parent().attr('data-video-id'));
+            var video_id = obj.val();
+            var html = '<div class="load"><div class="loader">Loading...</div></div>';
+            $('.comments_list').empty().html(html);
+            getAndSetComments(video_id);
+        })
     /**
      * ajax提交评论
      */
-    $('.comment_send').click(function() {
-        var comment_content = $(".comment_content").val();
-        var comment_video_id = $(".comment_video_id").val();
-        if (!comment_content || !comment_video_id) {
-            swal('评论内容未填写');
-        } else {
-            var html = '<div class="load"><div class="loader">Loading...</div></div>';
-            $('.comments_list').empty().html(html);
-            $.ajax({
-                type: "post",
-                url: "index.php?r=user/default/send-comment",
-                data: {comment_content: comment_content, video_id: comment_video_id},
-                dataType: "text",
-                success: function ($date) {
-                    if($date == 'error'){
-                        alert('字数超出范围');
+        .on('click','.comment_send',function() {
+            var comment_content = $(".comment_content").val();
+            var comment_video_id = $(".comment_video_id").val();
+            if (!comment_content || !comment_video_id) {
+                swal('评论内容未填写');
+            } else {
+                var html = '<div class="load"><div class="loader">Loading...</div></div>';
+                $('.comments_list').empty().html(html);
+                $.ajax({
+                    type: "post",
+                    url: "index.php?r=user/default/send-comment",
+                    data: {comment_content: comment_content, video_id: comment_video_id},
+                    dataType: "text",
+                    success: function ($date) {
+                        if($date == 'error'){
+                            alert('字数超出范围');
+                        }
+                        var video_id = $('.comment_video_id').val();
+                        getAndSetComments(video_id);
+                    },
+                    complete : function(XMLHttpRequest,status){
+                        if(status != 'success'){
+                            swal({
+                                title:'出现问题，请稍后再试',
+                                type:'error'
+                            });
+                        }
                     }
-                    var video_id = $('.comment_video_id').val();
-                    getAndSetComments(video_id);
-                },
-                complete : function(XMLHttpRequest,status){
-                    if(status != 'success'){
-                        swal({
-                            title:'出现问题，请稍后再试',
-                            type:'error'
-                        });
-                    }
-                }
-            });
-        }
-    });
-
-
+                });
+            }
+        })
     /**
      * ajax评论刷新
      */
-    $('.comments_refresh').click(function(){
-        var video_id = $('.comment_video_id').val();
-        var html = '<div class="load"><div class="loader">Loading...</div></div>';
-        $('.comments_list').empty().html(html);
-        getAndSetComments(video_id);
-    });
-
+        .on('click','.comments_refresh',function(){
+            var video_id = $('.comment_video_id').val();
+            var html = '<div class="load"><div class="loader">Loading...</div></div>';
+            $('.comments_list').empty().html(html);
+            getAndSetComments(video_id);
+        })
     /**
      * ajax赞
      */
-    $('.give_praise').click(function() {
-        var video_id = $(this).parent().attr('data-video-id');
-        if (video_id) {
-            swal({
-                title: '<div class="load"><div class="loader">Loading...</div></div>',
-                html: true
-            });
-            var praise_count = $(this).find('.praise_count');
-            $.ajax({
-                type: "post",
-                url: "index.php?r=user/default/praise",
-                data: {video_id: video_id},
-                dataType: "text",
-                success: function ($date) {
-                    if($date == 'ok'){
-                        praise_count.text(Number(praise_count.text())+1);
-                        swal({
-                            title:'谢谢您的赞',
-                            type:'success'
-                        });
-                    }else if($date == 'no_login'){
-                        swal({
-                            title: "您还没有登录",
-                            text: "登录后才能进行相应操作，需要现在登录吗？",
-                            type: "warning",
-                            showCancelButton: true,
-                            confirmButtonColor: "#DD6B55",
-                            cancelButtonText: "取消",
-                            confirmButtonText: "去登录",
-                            closeOnConfirm: false
-                        }, function(){
-                            window.location.href='index.php?r=site/login';
-                        });
-                    }else{
-                        swal({
-                            title:$date,
-                            type:'error'
-                        });
-                    }
-                },
-                complete : function(XMLHttpRequest,status){
-                    if(status != 'success'){
-                        swal({
-                            title:'出现问题，请稍后再试',
-                            type:'error'
-                        });
-                    }
-                }
-            });
-        }
-    });
-
-    /**
-     * ajax收藏
-     */
-    $('.add_collection').click(function() {
-        var video_id = $(this).parent().attr('data-video-id');
-        if (video_id) {
-            swal({
-                title: '<div class="load"><div class="loader">Loading...</div></div>',
-                html: true
-            });
-            var collect_html = '<span class="glyphicon glyphicon-star" aria-hidden="true"></span>收藏';
-            var collected_html = '<span class="glyphicon glyphicon-star glyphicon-inverse" aria-hidden="true"></span>已收藏';
-            var collect_success = $(this);
-            $.ajax({
-                type: "post",
-                url: "index.php?r=user/default/collect",
-                data: {video_id: video_id},
-                dataType: "text",
-                success: function ($date) {
-                    if($date == 'ok'){
-                        collect_success.html(collected_html);
-                        swal({
-                            title:'收藏成功',
-                            type:'success'
-                        });
-                    }else if($date == 'ok_delete'){
-                        collect_success.html(collect_html);
-                        swal({
-                            title:'取消收藏成功',
-                            type:'success'
-                        });
-                    }else if($date == 'no_login'){
-                        swal({
-                            title: "您还没有登录",
-                            text: "登录后才能进行相应操作，需要现在登录吗？",
-                            type: "warning",
-                            showCancelButton: true,
-                            confirmButtonColor: "#DD6B55",
-                            cancelButtonText: "取消",
-                            confirmButtonText: "去登录",
-                            closeOnConfirm: false
-                        }, function(){
-                            window.location.href='index.php?r=site/login';
-                        });
-                    }else{
-                        swal({
-                            title:$date,
-                            type:'error'
-                        });
-                    }
-                },
-                complete : function(XMLHttpRequest,status){
-                    if(status != 'success'){
-                        swal({
-                            title:'出现问题，请稍后再试',
-                            type:'error'
-                        });
-                    }
-                }
-            });
-        }
-    });
-
-    /**
-     * ajax删除视频
-     */
-    $('.delete_video').click(function(){
-        var $this = $(this);
-        var video_id = $this.attr('data-video-id');
-        if (video_id) {
-            swal({
-                title: "确定删除此条视频吗？",
-                text: "删除后将无法恢复此视频",
-                type: "warning",
-                showCancelButton: true,
-                confirmButtonColor: "#DD6B55",
-                cancelButtonText: "取消",
-                confirmButtonText: "确定删除",
-                closeOnConfirm: false
-            }, function(){
+        .on('click','.give_praise',function() {
+            var video_id = $(this).parent().attr('data-video-id');
+            if (video_id) {
                 swal({
                     title: '<div class="load"><div class="loader">Loading...</div></div>',
                     html: true
                 });
+                var praise_count = $(this).find('.praise_count');
                 $.ajax({
                     type: "post",
-                    url: "index.php?r=user/default/delete-video",
+                    url: "index.php?r=user/default/praise",
                     data: {video_id: video_id},
                     dataType: "text",
                     success: function ($date) {
                         if($date == 'ok'){
+                            praise_count.text(Number(praise_count.text())+1);
                             swal({
-                                title:'删除成功',
+                                title:'谢谢您的赞',
                                 type:'success'
                             });
-                            $this.closest('.panel').fadeOut("slow", function (){
-                                $(this).remove();
+                        }else if($date == 'no_login'){
+                            swal({
+                                title: "您还没有登录",
+                                text: "登录后才能进行相应操作，需要现在登录吗？",
+                                type: "warning",
+                                showCancelButton: true,
+                                confirmButtonColor: "#DD6B55",
+                                cancelButtonText: "取消",
+                                confirmButtonText: "去登录",
+                                closeOnConfirm: false
+                            }, function(){
+                                window.location.href='index.php?r=site/login';
                             });
                         }else{
                             swal({
@@ -555,85 +438,215 @@ $(document).ready(function () {
                         }
                     }
                 });
-            });
-        }
-    });
-
+            }
+        })
+    /**
+     * ajax收藏
+     */
+        .on('click','.add_collection',function() {
+            var video_id = $(this).parent().attr('data-video-id');
+            if (video_id) {
+                swal({
+                    title: '<div class="load"><div class="loader">Loading...</div></div>',
+                    html: true
+                });
+                var collect_html = '<span class="glyphicon glyphicon-star" aria-hidden="true"></span>收藏';
+                var collected_html = '<span class="glyphicon glyphicon-star glyphicon-inverse" aria-hidden="true"></span>已收藏';
+                var collect_success = $(this);
+                $.ajax({
+                    type: "post",
+                    url: "index.php?r=user/default/collect",
+                    data: {video_id: video_id},
+                    dataType: "text",
+                    success: function ($date) {
+                        if($date == 'ok'){
+                            collect_success.html(collected_html);
+                            swal({
+                                title:'收藏成功',
+                                type:'success'
+                            });
+                        }else if($date == 'ok_delete'){
+                            collect_success.html(collect_html);
+                            swal({
+                                title:'取消收藏成功',
+                                type:'success'
+                            });
+                        }else if($date == 'no_login'){
+                            swal({
+                                title: "您还没有登录",
+                                text: "登录后才能进行相应操作，需要现在登录吗？",
+                                type: "warning",
+                                showCancelButton: true,
+                                confirmButtonColor: "#DD6B55",
+                                cancelButtonText: "取消",
+                                confirmButtonText: "去登录",
+                                closeOnConfirm: false
+                            }, function(){
+                                window.location.href='index.php?r=site/login';
+                            });
+                        }else{
+                            swal({
+                                title:$date,
+                                type:'error'
+                            });
+                        }
+                    },
+                    complete : function(XMLHttpRequest,status){
+                        if(status != 'success'){
+                            swal({
+                                title:'出现问题，请稍后再试',
+                                type:'error'
+                            });
+                        }
+                    }
+                });
+            }
+        })
+    /**
+     * ajax删除视频
+     */
+        .on('click','.delete_video',function(){
+            var $this = $(this);
+            var video_id = $this.attr('data-video-id');
+            if (video_id) {
+                swal({
+                    title: "确定删除此条视频吗？",
+                    text: "删除后将无法恢复此视频",
+                    type: "warning",
+                    showCancelButton: true,
+                    confirmButtonColor: "#DD6B55",
+                    cancelButtonText: "取消",
+                    confirmButtonText: "确定删除",
+                    closeOnConfirm: false
+                }, function(){
+                    swal({
+                        title: '<div class="load"><div class="loader">Loading...</div></div>',
+                        html: true
+                    });
+                    $.ajax({
+                        type: "post",
+                        url: "index.php?r=user/default/delete-video",
+                        data: {video_id: video_id},
+                        dataType: "text",
+                        success: function ($date) {
+                            if($date == 'ok'){
+                                swal({
+                                    title:'删除成功',
+                                    type:'success'
+                                });
+                                $this.closest('.panel').fadeOut("slow", function (){
+                                    $(this).remove();
+                                });
+                            }else{
+                                swal({
+                                    title:$date,
+                                    type:'error'
+                                });
+                            }
+                        },
+                        complete : function(XMLHttpRequest,status){
+                            if(status != 'success'){
+                                swal({
+                                    title:'出现问题，请稍后再试',
+                                    type:'error'
+                                });
+                            }
+                        }
+                    });
+                });
+            }
+        })
     /**
      * ajax增删关注
      */
-    $('.add_follow').click(function(){
-        var $this = $(this);
-        var user_id = $this.attr('data-user-id');
-        var fans = $('.fans_'+user_id);
-        if (user_id) {
+        .on('click','.add_follow',function(){
+            var $this = $(this);
+            var user_id = $this.attr('data-user-id');
+            var fans = $('.fans_'+user_id);
+            if (user_id) {
+                swal({
+                    title: '<div class="load"><div class="loader">Loading...</div></div>',
+                    html: true
+                });
+                var follow_html = '<small><span class="label label-primary"><span class="glyphicon glyphicon-plus" aria-hidden="true"></span>关注</span></small>';
+                var followed_html = '<small><span class="label label-warning"><span class="glyphicon glyphicon-ok" aria-hidden="true"></span>已关注</span></small>';
+                $.ajax({
+                    type: "post",
+                    url: "index.php?r=user/default/follow",
+                    data: {user_id: user_id},
+                    dataType: "text",
+                    success: function ($date) {
+                        if($date == 'ok'){
+                            $this.html(followed_html);
+                            fans.text(Number(fans.text())+1);
+                            swal({
+                                title:'关注成功',
+                                type:'success'
+                            });
+                        }else if($date == 'ok_delete'){
+                            $this.html(follow_html);
+                            fans.text(Number(fans.text())-1);
+                            swal({
+                                title:'取消关注成功',
+                                type:'success'
+                            });
+                        }else if($date == 'no_login'){
+                            swal({
+                                title: "您还没有登录",
+                                text: "登录后才能进行相应操作，需要现在登录吗？",
+                                type: "warning",
+                                showCancelButton: true,
+                                confirmButtonColor: "#DD6B55",
+                                cancelButtonText: "取消",
+                                confirmButtonText: "去登录",
+                                closeOnConfirm: false
+                            }, function(){
+                                window.location.href='index.php?r=site/login';
+                            });
+                        }else{
+                            swal({
+                                title:$date,
+                                type:'error'
+                            });
+                        }
+                    },
+                    complete : function(XMLHttpRequest,status){
+                        if(status != 'success'){
+                            swal({
+                                title:'出现问题，请稍后再试',
+                                type:'error'
+                            });
+                        }
+                    }
+                });
+            }else{
+                swal({
+                    title:'不能添加自己为关注',
+                    type:'error'
+                });
+            }
+        })
+    /**
+     * 动态加载更多视频信息
+     */
+        .on("click",'.get_more', function () {
             swal({
                 title: '<div class="load"><div class="loader">Loading...</div></div>',
                 html: true
             });
-            var follow_html = '<small><span class="label label-primary"><span class="glyphicon glyphicon-plus" aria-hidden="true"></span>关注</span></small>';
-            var followed_html = '<small><span class="label label-warning"><span class="glyphicon glyphicon-ok" aria-hidden="true"></span>已关注</span></small>';
-            $.ajax({
-                type: "post",
-                url: "index.php?r=user/default/follow",
-                data: {user_id: user_id},
-                dataType: "text",
-                success: function ($date) {
-                    if($date == 'ok'){
-                        $this.html(followed_html);
-                        fans.text(Number(fans.text())+1);
-                        swal({
-                            title:'关注成功',
-                            type:'success'
-                        });
-                    }else if($date == 'ok_delete'){
-                        $this.html(follow_html);
-                        fans.text(Number(fans.text())-1);
-                        swal({
-                            title:'取消关注成功',
-                            type:'success'
-                        });
-                    }else if($date == 'no_login'){
-                        swal({
-                            title: "您还没有登录",
-                            text: "登录后才能进行相应操作，需要现在登录吗？",
-                            type: "warning",
-                            showCancelButton: true,
-                            confirmButtonColor: "#DD6B55",
-                            cancelButtonText: "取消",
-                            confirmButtonText: "去登录",
-                            closeOnConfirm: false
-                        }, function(){
-                            window.location.href='index.php?r=site/login';
-                        });
-                    }else{
-                        swal({
-                            title:$date,
-                            type:'error'
-                        });
-                    }
-                },
-                complete : function(XMLHttpRequest,status){
-                    if(status != 'success'){
-                        swal({
-                            title:'出现问题，请稍后再试',
-                            type:'error'
-                        });
-                    }
+            var type = $(this).attr('data-type');
+            var offset = parseInt($(this).attr('data-count-num'));
+            $(this).parent('div').load('index.php?r=site/get-more&type='+type+'&offset='+offset,
+                function() {
+                    swal.close();
                 }
-            });
-        }else{
-            swal({
-                title:'不能添加自己为关注',
-                type:'error'
-            });
-        }
-    });
+            );
+        });
 
     /**
      * ajax审核单个视频
      */
-    $('.pass_video').click(function(){
+    $('.pass_video').on('click',function(){
         var $this = $(this);
         var top_id = $this.attr('data-top-id');
         if (top_id) {
@@ -679,10 +692,11 @@ $(document).ready(function () {
             });
         }
     });
+
     /**
      * ajax审核视频完成
      */
-    $('.end_video_pass').click(function(){
+    $('.end_video_pass').on('click',function(){
         var $this = $(this);
         var top_type = $this.attr('data-top-type');
         var top_date = $this.attr('data-top-date');
@@ -722,6 +736,5 @@ $(document).ready(function () {
             });
         }
     });
-
 
 });

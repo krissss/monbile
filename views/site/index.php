@@ -71,7 +71,7 @@ $is_other_user_video = true;
                             <?php foreach ($videos_one_hour as $video_info): ?>
                                 <?php require(__DIR__ . '/fragment/video_info_panel.php'); ?>
                             <?php endforeach; ?>
-                            <!--<button class="btn btn-primary btn-group-justified" value="加载更多">加载更多</button>-->
+                            <div><button class="btn btn-primary btn-group-justified get_more" value="加载更多" data-type="one_hour" data-count-num="<?=count($videos_one_hour)?>">加载更多</button></div>
                         <? endif; ?>
                     </div>
                     <div role="tabpanel" class="tab-pane fade" id="one_day">
@@ -81,6 +81,7 @@ $is_other_user_video = true;
                             <?php foreach ($videos_one_day as $video_info): ?>
                                 <?php require(__DIR__ . '/fragment/video_info_panel.php'); ?>
                             <?php endforeach; ?>
+                            <div><button class="btn btn-primary btn-group-justified get_more" value="加载更多" data-type="one_day" data-count-num="<?=count($videos_one_day)?>">加载更多</button></div>
                         <? endif; ?>
                     </div>
                     <div role="tabpanel" class="tab-pane fade" id="one_week">
