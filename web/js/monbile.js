@@ -640,7 +640,8 @@ $(document).ready(function () {
             var date_end = $(this).attr('data-date-end');
             var search_type = parseInt($(this).attr('data-search-type'));
             var search_content = $(this).attr('data-search-content');
-            $(this).parent('div').load('index.php?r=site/get-more&type='+type+'&offset='+offset+'&date_start='+date_start+'&date_end='+date_end+'&search_type='+search_type+'&search_content='+search_content,
+            var tag_id = parseInt($(this).attr('data-tag-id'));
+            $(this).parent('div').load('index.php?r=site/get-more&type='+type+'&offset='+offset+'&date_start='+date_start+'&date_end='+date_end+'&search_type='+search_type+'&search_content='+search_content+'&tag_id='+tag_id,
                 function() {
                     swal.close();
                 }

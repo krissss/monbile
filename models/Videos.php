@@ -157,6 +157,8 @@ class Videos extends \yii\db\ActiveRecord
      * 根据标签名和用户名搜索，用户自己提交搜索表单
      * @param $tag_name
      * @param int $user_id
+     * @param int $offset
+     * @param int $limit
      * @return array|\yii\db\ActiveRecord[]
      */
     public static function findVideosByTag($tag_name, $user_id=TagSearchForm::ALL, $offset=0, $limit=10){
@@ -194,6 +196,8 @@ class Videos extends \yii\db\ActiveRecord
      * @param $video_date_start
      * @param $video_date_end
      * @param int $user_id
+     * @param int $offset
+     * @param int $limit
      * @return array|\yii\db\ActiveRecord[]
      */
     public static function findVideosByDate($video_date_start, $video_date_end, $user_id=DateSearchForm::ALL, $offset=0, $limit=10){
@@ -225,11 +229,16 @@ class Videos extends \yii\db\ActiveRecord
     /**
      * 根据标签查找$tag_relation，用于点击标签云
      * @param $tag_id
+     * @param int $offset
+     * @param int $limit
      * @return array|\yii\db\ActiveRecord[]
      */
-    public static function findVideosByTagId($tag_id){
+    public static function findVideosByTagId($tag_id, $offset=0, $limit=10){
         return TagRelation::find()
             ->where(['tag_id' => $tag_id])
+            ->offset($offset)
+            ->limit($limit)
+            ->orderBy(['video_id'=>SORT_DESC])
             ->all();
     }
 

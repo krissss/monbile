@@ -61,7 +61,7 @@ use yii\bootstrap\ActiveForm;
                         }]) ?>
                 <?php endif; ?>
             </span>
-            <?= $form->field($tagSearchForm, 'search_content')->textInput(['class'=>'form-control','placeholder'=>'输入标签']) ?>
+            <?= $form->field($tagSearchForm, 'search_content')->textInput(['class'=>'form-control','placeholder'=>'输入标签所包含的字或词']) ?>
             <span class="input-group-btn">
                 <?= Html::submitButton('<span class="glyphicon glyphicon-search" aria-hidden="true"></span>', ['class' => 'btn btn-default', 'name' => 'tag-search-button']) ?>
             </span>

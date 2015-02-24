@@ -204,6 +204,7 @@ class SiteController extends Controller
                 $collections_array = Collections::findAllVideoIdInCollectionsByUserId($user->uid);
             }
             return $this->render('search',[
+                'tag_id' => $id,
                 'collections_array' => $collections_array,
                 'videos_info' => Videos::findVideosByTagId($id)
             ]);
@@ -253,6 +254,7 @@ class SiteController extends Controller
         $date_end = Yii::$app->request->get('date_end');
         $search_type = Yii::$app->request->get('search_type');
         $search_content = Yii::$app->request->get('search_content');
+        $tag_id = Yii::$app->request->get('tag_id');
         $videos_info = null;
         $tag_relations = null;
         if($type == 'one_hour'){
@@ -263,6 +265,8 @@ class SiteController extends Controller
             $videos_info = Videos::findVideosByDate($date_start,$date_end,$search_type,$offset);
         }elseif($type == 'search_tag'){
             $videos_info = Videos::findVideosByTag($search_content,$search_type,$offset);
+        }elseif($type == 'search_tag_cloud'){
+            $videos_info = Videos::findVideosByTagId($tag_id,$offset);
         }
         //如果用户已登录
         $collections_array = array();
@@ -276,6 +280,7 @@ class SiteController extends Controller
             'date_end' => $date_end,
             'search_type' => $search_type,
             'search_content' => $search_content,
+            'tag_id' => $tag_id,
             'collections_array' => $collections_array,
             'videos_info' => $videos_info,
         ]);

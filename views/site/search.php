@@ -15,6 +15,8 @@
 /* @var $date_start :: render */
 /* @var $date_end :: render */
 /* @var $search_type :: render */
+/* 标签云搜索还需 */
+/* @var $tag_id :: render */
 /* 标签搜索还需 */
 /* @var $search_content :: render */
 /* @var $search_type :: render */
@@ -52,6 +54,13 @@ $is_other_user_video = true;
                         <?php require(__DIR__ . '/fragment/video_info_panel.php'); ?>
                     <?php endforeach; ?>
                     <div><button class="btn btn-primary btn-group-justified get_more" value="加载更多" data-type="search_date" data-count-num="<?=count($videos_info)?>" data-date-start="<?=$date_start?>" data-date-end="<?=$date_end?>" data-search-type="<?=$search_type?>">加载更多</button></div>
+                <?php elseif(isset($tag_id) && $tag_id): //标签云搜索的结果?>
+                    <?php foreach ($videos_info as $tag_relation): ?>
+                        <?php $video_info = $tag_relation->video?>
+                        <?php if(!isset($video_info->vid)){ continue; }//如果视频已被删除，则跳过?>
+                        <?php require(__DIR__ . '/fragment/video_info_panel.php'); ?>
+                    <?php endforeach; ?>
+                    <div><button class="btn btn-primary btn-group-justified get_more" value="加载更多" data-type="search_tag_cloud" data-count-num="<?=count($videos_info)?>" data-tag-id="<?=$tag_id?>">加载更多</button></div>
                 <?php else: //标签搜索的结果?>
                     <?php foreach ($videos_info as $tag_relation): ?>
                         <?php $video_info = $tag_relation->video?>
