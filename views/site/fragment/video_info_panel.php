@@ -13,6 +13,7 @@
 
 use \yii\helpers\Url;
 use \app\functions\Functions;
+use app\models\Users;
 
 ?>
 <div class="panel panel-default">
@@ -31,7 +32,15 @@ use \app\functions\Functions;
             </div>
             <div class="media-body">
                 <h4 class="media-heading">
-                    <span class="text-info"><strong><?= $video_info->user->nickname ?></strong></span>
+                    <?php if($video_info->user->sex == Users::USER_SEX_MALE):?>
+                        <strong class="text-primary"><?= $video_info->user->nickname ?></strong>
+                        <div class="self_icon icon_male_circle"></div>
+                    <?php elseif($video_info->user->sex == Users::USER_SEX_FEMALE):?>
+                        <strong class="text-danger"><?= $video_info->user->nickname ?></strong>
+                        <div class="self_icon icon_female_circle"></div>
+                    <?php else:?>
+                        <strong><?= $video_info->user->nickname ?></strong>
+                    <?php endif; ?>
                     <?php if(!$is_other_user_video):?>
                         <span class="glyphicon glyphicon-remove cursor_pointer pull-right delete_video" aria-hidden="true" title="删除" data-video-id="<?= $video_info->vid ?>"></span>
                     <?php endif; ?>

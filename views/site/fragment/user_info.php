@@ -38,6 +38,7 @@ $imgs = Url::to('/imgs/');
             </a>
             <?php endif; ?>
         </h3>
+        <p class="text-muted"><?=$user->introduce?$user->introduce:'这家伙很懒，都懒的介绍自己';?></p>
     </div>
     <div class="panel panel-default">
         <div class="panel-body text-center">
