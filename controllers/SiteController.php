@@ -70,6 +70,8 @@ class SiteController extends Controller
             $tagSearchForm = new TagSearchForm();
             if ($tagSearchForm->load(Yii::$app->request->post())) {
                 return $this->render("//site/search",[
+                    'search_type' => $tagSearchForm->search_type,
+                    'search_content' => $tagSearchForm->search_content,
                     'collections_array' => Collections::findAllVideoIdInCollectionsByUserId($user->uid),
                     'videos_info' => Videos::findVideosByTag($tagSearchForm->search_content,$tagSearchForm->search_type)
                 ]);
@@ -78,6 +80,9 @@ class SiteController extends Controller
             $dateSearchForm = new DateSearchForm();
             if ($dateSearchForm->load(Yii::$app->request->post())) {
                 return $this->render("//site/search",[
+                    'date_start' => $dateSearchForm->date_start,
+                    'date_end' => $dateSearchForm->date_end,
+                    'search_type' => $dateSearchForm->search_type,
                     'collections_array' => Collections::findAllVideoIdInCollectionsByUserId($user->uid),
                     'videos_info' => Videos::findVideosByDate($dateSearchForm->date_start,$dateSearchForm->date_end,$dateSearchForm->search_type)
                 ]);
@@ -101,6 +106,8 @@ class SiteController extends Controller
         $tagSearchForm = new TagSearchForm();
         if ($tagSearchForm->load(Yii::$app->request->post())) {
             return $this->render("//site/search",[
+                'search_type' => $tagSearchForm->search_type,
+                'search_content' => $tagSearchForm->search_content,
                 'collections_array' => array(),
                 'videos_info' => Videos::findVideosByTag($tagSearchForm->search_content,$tagSearchForm->search_type)
             ]);
@@ -109,6 +116,9 @@ class SiteController extends Controller
         $dateSearchForm = new DateSearchForm();
         if ($dateSearchForm->load(Yii::$app->request->post())) {
             return $this->render("//site/search",[
+                'date_start' => $dateSearchForm->date_start,
+                'date_end' => $dateSearchForm->date_end,
+                'search_type' => $dateSearchForm->search_type,
                 'collections_array' => array(),
                 'videos_info' => Videos::findVideosByDate($dateSearchForm->date_start,$dateSearchForm->date_end,$dateSearchForm->search_type)
             ]);
@@ -239,11 +249,20 @@ class SiteController extends Controller
     public function actionGetMore(){
         $type = Yii::$app->request->get('type');
         $offset = Yii::$app->request->get('offset');
+        $date_start = Yii::$app->request->get('date_start');
+        $date_end = Yii::$app->request->get('date_end');
+        $search_type = Yii::$app->request->get('search_type');
+        $search_content = Yii::$app->request->get('search_content');
         $videos_info = null;
+        $tag_relations = null;
         if($type == 'one_hour'){
             $videos_info = Videos::findOneHourVideos($offset);
         }elseif($type == 'one_day'){
             $videos_info = Videos::findOneDayVideos($offset);
+        }elseif($type == 'search_date'){
+            $videos_info = Videos::findVideosByDate($date_start,$date_end,$search_type,$offset);
+        }elseif($type == 'search_tag'){
+            $videos_info = Videos::findVideosByTag($search_content,$search_type,$offset);
         }
         //如果用户已登录
         $collections_array = array();
@@ -253,6 +272,10 @@ class SiteController extends Controller
         return $this->renderPartial('moreVideos', [
             'offset' => $offset,
             'type' => $type,
+            'date_start' => $date_start,
+            'date_end' => $date_end,
+            'search_type' => $search_type,
+            'search_content' => $search_content,
             'collections_array' => $collections_array,
             'videos_info' => $videos_info,
         ]);

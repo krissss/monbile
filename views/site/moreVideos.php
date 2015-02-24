@@ -7,6 +7,10 @@
 /* @var $videos_info :: render */
 /* @var $type :: render */
 /* @var $offset :: render */
+/* @var $date_start :: render */
+/* @var $date_end :: render */
+/* @var $search_type :: render */
+/* @var $search_content :: render */
 
 use yii\helpers\Url;
 
@@ -21,7 +25,9 @@ $count_num = count($videos_info);
     <div class="alert alert-warning text-center" role="alert">没有了 (⊙o⊙)</div>
 <?php else: ?>
     <?php foreach ($videos_info as $video_info): ?>
+        <?php if(isset($video_info->video)){ $video_info = $video_info->video; }//标签搜索的结果统一化?>
+        <?php if(!isset($video_info->vid)){ continue; }//如果视频已被删除，则跳过?>
         <?php require(__DIR__ . '/fragment/video_info_panel.php'); ?>
     <?php endforeach; ?>
-    <div><button class="btn btn-primary btn-group-justified get_more" value="加载更多" data-type="<?=$type?>" data-count-num="<?=$offset+$count_num?>">加载更多</button></div>
+    <div><button class="btn btn-primary btn-group-justified get_more" value="加载更多" data-type="<?=$type?>" data-count-num="<?=$offset+$count_num?>" data-date-start="<?=$date_start?>" data-date-end="<?=$date_end?>" data-search-type="<?=$search_type?>" data-search-content="<?=$search_content?>">加载更多</button></div>
 <? endif; ?>

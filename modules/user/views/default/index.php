@@ -55,18 +55,16 @@ $this->title = $user->nickname.'的主页';
                 <?php require(__DIR__ . '/../../../../views/site/fragment/video_send.php'); ?>
             <?php endif; ?>
             <?php require(__DIR__ . '/../../../../views/site/fragment/video_search.php'); ?>
-            <div class="btn-group">
-                <button type="button" class="btn btn-default">全部</button>
+            <?//以下待完成?>
+            <div class="btn-group" style="visibility: hidden;">
+                <button type="button" class="btn btn-default">看自己</button>
                 <button class="btn btn-default dropdown-toggle" type="button" data-toggle="dropdown" aria-expanded="false">
                     <span class="caret"></span>
                     <span class="sr-only">Toggle Dropdown</span>
                 </button>
                 <ul class="dropdown-menu" role="menu">
-                    <li role="presentation"><a role="menuitem" tabindex="-2" href="#">全部</a></li>
-                    <li role="presentation"><a role="menuitem" tabindex="-1" href="#">原创</a></li>
-                    <li role="presentation"><a role="menuitem" tabindex="-1" href="#">转发</a></li>
-                    <li role="presentation"><a role="menuitem" tabindex="-1" href="#">收藏</a></li>
-                    <li role="presentation"><a role="menuitem" tabindex="-1" href="#">标签</a></li>
+                    <li role="presentation"><a role="menuitem" tabindex="-2" href="#">看关注</a></li>
+                    <li role="presentation"><a role="menuitem" tabindex="-1" href="#">看粉丝</a></li>
                 </ul>
             </div>
             <?php if (!$is_other_user): ?>

@@ -48,6 +48,8 @@ class DefaultController extends Controller
             $tagSearchForm = new TagSearchForm();
             if ($tagSearchForm->load(Yii::$app->request->post())) {
                 return $this->render("//site/search",[
+                    'search_type' => $tagSearchForm->search_type,
+                    'search_content' => $tagSearchForm->search_content,
                     'collections_array' => Collections::findAllVideoIdInCollectionsByUserId($user->uid),
                     'videos_info' => Videos::findVideosByTag($tagSearchForm->search_content,$tagSearchForm->search_type)
                 ]);
@@ -56,6 +58,9 @@ class DefaultController extends Controller
             $dateSearchForm = new DateSearchForm();
             if ($dateSearchForm->load(Yii::$app->request->post())) {
                 return $this->render("//site/search",[
+                    'date_start' => $dateSearchForm->date_start,
+                    'date_end' => $dateSearchForm->date_end,
+                    'search_type' => $dateSearchForm->search_type,
                     'collections_array' => Collections::findAllVideoIdInCollectionsByUserId($user->uid),
                     'videos_info' => Videos::findVideosByDate($dateSearchForm->date_start,$dateSearchForm->date_end,$dateSearchForm->search_type)
                 ]);
@@ -79,6 +84,8 @@ class DefaultController extends Controller
                 $tagSearchForm = new TagSearchForm();
                 if ($tagSearchForm->load(Yii::$app->request->post())) {
                     return $this->render("//site/search",[
+                        'search_type' => $tagSearchForm->search_type,
+                        'search_content' => $tagSearchForm->search_content,
                         'collections_array' => $collections_array,
                         'videos_info' => Videos::findVideosByTag($tagSearchForm->search_content,$tagSearchForm->search_type)
                     ]);
@@ -87,6 +94,9 @@ class DefaultController extends Controller
                 $dateSearchForm = new DateSearchForm();
                 if ($dateSearchForm->load(Yii::$app->request->post())) {
                     return $this->render("//site/search",[
+                        'date_start' => $dateSearchForm->date_start,
+                        'date_end' => $dateSearchForm->date_end,
+                        'search_type' => $dateSearchForm->search_type,
                         'collections_array' => $collections_array,
                         'videos_info' => Videos::findVideosByDate($dateSearchForm->date_start,$dateSearchForm->date_end,$dateSearchForm->search_type)
                     ]);
@@ -98,6 +108,8 @@ class DefaultController extends Controller
             $tagSearchForm = new TagSearchForm();
             if ($tagSearchForm->load(Yii::$app->request->post())) {
                 return $this->render("//site/search",[
+                    'search_type' => $tagSearchForm->search_type,
+                    'search_content' => $tagSearchForm->search_content,
                     'collections_array' => array(),
                     'videos_info' => Videos::findVideosByTag($tagSearchForm->search_content,$tagSearchForm->search_type)
                 ]);
@@ -106,6 +118,9 @@ class DefaultController extends Controller
             $dateSearchForm = new DateSearchForm();
             if ($dateSearchForm->load(Yii::$app->request->post())) {
                 return $this->render("//site/search",[
+                    'date_start' => $dateSearchForm->date_start,
+                    'date_end' => $dateSearchForm->date_end,
+                    'search_type' => $dateSearchForm->search_type,
                     'collections_array' => array(),
                     'videos_info' => Videos::findVideosByDate($dateSearchForm->date_start,$dateSearchForm->date_end,$dateSearchForm->search_type)
                 ]);

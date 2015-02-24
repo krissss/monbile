@@ -11,6 +11,14 @@
 /* 若用户已经登录，还需以下变量 */
 /* @var $user :: session */
 /* @var $session_user :: session */
+/* 时间搜索还需 */
+/* @var $date_start :: render */
+/* @var $date_end :: render */
+/* @var $search_type :: render */
+/* 标签搜索还需 */
+/* @var $search_content :: render */
+/* @var $search_type :: render */
+
 
 use yii\helpers\Url;
 use yii\widgets\LinkPager;
@@ -39,16 +47,18 @@ $is_other_user_video = true;
             <?php else: ?>
                 <div class="alert alert-info" role="alert">搜索结果：</div>
                 <?php if(isset($videos_info[0]->vid)): //时间搜索的结果?>
-                    <?php foreach (array_reverse($videos_info) as $video_info): ?>
-                        <?php if(!isset($video_info->user)){ continue; }?>
+                    <?php foreach ($videos_info as $video_info): ?>
+                        <?php if(!isset($video_info->vid)){ continue; }//如果视频已被删除，则跳过?>
                         <?php require(__DIR__ . '/fragment/video_info_panel.php'); ?>
                     <?php endforeach; ?>
+                    <div><button class="btn btn-primary btn-group-justified get_more" value="加载更多" data-type="search_date" data-count-num="<?=count($videos_info)?>" data-date-start="<?=$date_start?>" data-date-end="<?=$date_end?>" data-search-type="<?=$search_type?>">加载更多</button></div>
                 <?php else: //标签搜索的结果?>
-                    <?php foreach (array_reverse($videos_info) as $tag_relation): ?>
+                    <?php foreach ($videos_info as $tag_relation): ?>
                         <?php $video_info = $tag_relation->video?>
-                        <?php if(!isset($video_info->user)){ continue; }?>
+                        <?php if(!isset($video_info->vid)){ continue; }//如果视频已被删除，则跳过?>
                         <?php require(__DIR__ . '/fragment/video_info_panel.php'); ?>
                     <?php endforeach; ?>
+                    <div><button class="btn btn-primary btn-group-justified get_more" value="加载更多" data-type="search_tag" data-count-num="<?=count($videos_info)?>" data-search-content="<?=$search_content?>" data-search-type="<?=$search_type?>">加载更多</button></div>
                 <?php endif; ?>
             <? endif; ?>
         </div>

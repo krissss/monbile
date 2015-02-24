@@ -159,7 +159,7 @@ class Videos extends \yii\db\ActiveRecord
      * @param int $user_id
      * @return array|\yii\db\ActiveRecord[]
      */
-    public static function findVideosByTag($tag_name, $user_id=TagSearchForm::ALL){
+    public static function findVideosByTag($tag_name, $user_id=TagSearchForm::ALL, $offset=0, $limit=10){
         $tags = Tags::find()
             ->where(['or like','tag_name', $tag_name])
             ->all();
@@ -173,11 +173,17 @@ class Videos extends \yii\db\ActiveRecord
         if($user_id==TagSearchForm::ALL){
             $tag_relation = TagRelation::find()
                 ->where(['in','tag_id',$tags_array])
+                ->offset($offset)
+                ->limit($limit)
+                ->orderBy(['video_id'=>SORT_DESC])
                 ->all();
         }else{
             $tag_relation = TagRelation::find()
                 ->where(['user_id'=>$user_id])
                 ->andWhere(['in','tag_id',$tags_array])
+                ->offset($offset)
+                ->limit($limit)
+                ->orderBy(['video_id'=>SORT_DESC])
                 ->all();
         }
         return $tag_relation;
@@ -190,25 +196,30 @@ class Videos extends \yii\db\ActiveRecord
      * @param int $user_id
      * @return array|\yii\db\ActiveRecord[]
      */
-    public static function findVideosByDate($video_date_start, $video_date_end, $user_id=DateSearchForm::ALL){
+    public static function findVideosByDate($video_date_start, $video_date_end, $user_id=DateSearchForm::ALL, $offset=0, $limit=10){
         if($video_date_start && $video_date_end){
             $video_date_start = date('Y-m-d 00:00:00',strtotime($video_date_start));
             $video_date_end = date('Y-m-d 23:59:59',strtotime($video_date_end));
             if($user_id==DateSearchForm::ALL){
                 $videos = Videos::find()
                     ->where(['between','video_date', $video_date_start, $video_date_end])
+                    ->offset($offset)
+                    ->limit($limit)
+                    ->orderBy(['vid' => SORT_DESC])
                     ->all();
             }else{
                 $videos = Videos::find()
                     ->where(['user_id'=>$user_id])
                     ->andWhere(['between','video_date', $video_date_start, $video_date_end])
+                    ->offset($offset)
+                    ->limit($limit)
+                    ->orderBy(['vid' => SORT_DESC])
                     ->all();
             }
             return $videos;
         }else{
             return array();
         }
-
     }
 
     /**
