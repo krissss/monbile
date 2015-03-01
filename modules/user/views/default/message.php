@@ -24,54 +24,56 @@ $messagesTotal = Yii::$app->getSession()->get('user')->messagesTotal;
             </ul>
             <div class="tab-content">
                 <div role="tabpanel" class="tab-pane fade in active" id="unRead">
-                    <div class="timeline animated">
+                    <section class="message_timeline">
+                        <ul class="timeline">
                     <?php foreach ($messagesUnRead as $message): ?>
-                        <div class="timeline-row">
-                            <!--<div class="timeline-time"><small>Oct 30</small>4:53 PM</div>-->
-                            <div class="timeline-time"><?=$message->message_date?></div>
-                            <div class="timeline-icon">
+                        <li class="event">
+                            <input type="radio" name="tl-group" checked/>
+                            <label></label>
+                            <div class="thumb">
                                 <a href="<?=Url::to(['/user/default/index','id'=>$message->fromUser->uid])?>">
-                                    <img src="<?= Url::to($heads . $message->fromUser->head) ?>" alt="<?= $message->fromUser->nickname ?>" title="<?= $message->fromUser->nickname ?>" class="img-circle img-responsiv img_height_50">
+                                    <img src="<?= Url::to($heads . $message->fromUser->head) ?>" alt="<?= $message->fromUser->nickname ?>" title="<?= $message->fromUser->nickname ?>" class="img-circle img-responsiv img_height_100">
                                 </a>
+                                <span class="time"><?=$message->message_date?></span>
                             </div>
-                            <div class="panel panel-default timeline-content">
-                                <div class="panel-body">
-                                    <h4><?=$message->message_content?></h4>
-                                    <h4><small>&nbsp;&nbsp;&nbsp;&nbsp;——<?=$message->message_title?></small></h4>
-                                    <h5><a href="<?=Url::to('')?>" class="has_face">#<?=$message->aboutVideo->video_title?></a></h5>
-                                    <video data-src="<?= Url::to($videos . $message->aboutVideo->video_path) ?>" controls="controls" class="col-xs-12 lazyload">
-                                        <p>您的浏览器不支持html5，请更换浏览器</p>
-                                    </video>
+                            <div class="content-perspective">
+                                <div class="content">
+                                    <div class="content-inner">
+                                        <h3><?=$message->message_content?></h3>
+                                        <p>Don't be too proud of this technological terror you've constructed. The ability to destroy a planet is insignificant next to the power of the Force. The plans you refer to will soon be back in our hands. A tremor in the Force. The last time I felt it was in the presence of my old master. Escape is not his plan. I must face him. Alone.</p>
+                                    </div>
                                 </div>
                             </div>
-                        </div>
+                        </li>
                     <?php endforeach; ?>
-                    </div>
+                        </ul>
+                    </section>
                 </div>
                 <div role="tabpanel" class="tab-pane fade" id="read">
-                    <div class="timeline animated">
+                    <section class="message_timeline">
+                    <ul class="timeline">
                     <?php foreach ($messagesTotal as $message): ?>
-                        <div class="timeline-row">
-                            <!--<div class="timeline-time"><small>Oct 30</small>4:53 PM</div>-->
-                            <div class="timeline-time"><?=$message->message_date?></div>
-                            <div class="timeline-icon">
+                        <li class="event">
+                            <input type="radio" name="tl-group" checked/>
+                            <label></label>
+                            <div class="thumb">
                                 <a href="<?=Url::to(['/user/default/index','id'=>$message->fromUser->uid])?>">
-                                    <img src="<?= Url::to($heads . $message->fromUser->head) ?>" alt="<?= $message->fromUser->nickname ?>" title="<?= $message->fromUser->nickname ?>" class="img-circle img-responsiv img_height_50">
+                                    <img src="<?= Url::to($heads . $message->fromUser->head) ?>" alt="<?= $message->fromUser->nickname ?>" title="<?= $message->fromUser->nickname ?>" class="img-circle img-responsiv img_height_100">
                                 </a>
+                                <span class="time"><?=$message->message_date?></span>
                             </div>
-                            <div class="panel panel-default timeline-content">
-                                <div class="panel-body">
-                                    <h4><?=$message->message_content?></h4>
-                                    <h4><small>&nbsp;&nbsp;&nbsp;&nbsp;——<?=$message->message_title?></small></h4>
-                                    <h5><a href="<?=Url::to('')?>" class="has_face">#<?=$message->aboutVideo->video_title?></a></h5>
-                                    <video data-src="<?= Url::to($videos . $message->aboutVideo->video_path) ?>" controls="controls" class="col-xs-12 lazyload">
-                                        <p>您的浏览器不支持html5，请更换浏览器</p>
-                                    </video>
+                            <div class="content-perspective">
+                                <div class="content">
+                                    <div class="content-inner">
+                                        <h3><?=$message->message_content?></h3>
+                                        <p>Don't be too proud of this technological terror you've constructed. The ability to destroy a planet is insignificant next to the power of the Force. The plans you refer to will soon be back in our hands. A tremor in the Force. The last time I felt it was in the presence of my old master. Escape is not his plan. I must face him. Alone.</p>
+                                    </div>
                                 </div>
                             </div>
-                        </div>
+                        </li>
                     <?php endforeach; ?>
-                    </div>
+                    </ul>
+                    </section>
                 </div>
             </div>
         </div>

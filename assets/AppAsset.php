@@ -18,6 +18,7 @@ class AppAsset extends AssetBundle
         'css/jquery-sinaEmotion-2.1.0.css',//新浪表情
         'css/jquery-tag-this.css',//写标签
         'css/sweet-alert.css',//弹出框
+        'css/3Dtimeline.css',//3D时间轴
         'css/style.css',//自定义的
     ];
     public $js = [
