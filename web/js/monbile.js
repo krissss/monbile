@@ -336,9 +336,11 @@ $(document).ready(function () {
      * ajax获取评论
      */
         .on('click','.show_comments',function(){
-            var obj =  $('.comment_video_id');
-            obj .val($(this).parent().attr('data-video-id'));
-            var video_id = obj.val();
+            var comment_video_id =  $('.comment_video_id');
+            comment_video_id .val($(this).parent().attr('data-video-id'));
+            var comment_to_user_id =  $('.comment_to_user_id');
+            comment_to_user_id .val($(this).parent().attr('data-video-user-id'));
+            var video_id = comment_video_id.val();
             var html = '<div class="load"><div class="loader">Loading...</div></div>';
             $('.comments_list').empty().html(html);
             getAndSetComments(video_id);
@@ -349,7 +351,8 @@ $(document).ready(function () {
         .on('click','.comment_send',function() {
             var comment_content = $(".comment_content").val();
             var comment_video_id = $(".comment_video_id").val();
-            if (!comment_content || !comment_video_id) {
+            var to_user_id = $(".comment_to_user_id").val();
+            if (!comment_content || !comment_video_id || !to_user_id) {
                 swal('评论内容未填写');
             } else {
                 var html = '<div class="load"><div class="loader">Loading...</div></div>';
@@ -357,7 +360,7 @@ $(document).ready(function () {
                 $.ajax({
                     type: "post",
                     url: "index.php?r=user/default/send-comment",
-                    data: {comment_content: comment_content, video_id: comment_video_id},
+                    data: {comment_content: comment_content, video_id: comment_video_id, to_user_id: to_user_id},
                     dataType: "text",
                     success: function ($date) {
                         if($date == 'error'){
@@ -740,6 +743,25 @@ $(document).ready(function () {
                 }
             });
         }
+    });
+
+    /**
+     * 时间轴
+     */
+    var timelineAnimate;
+    timelineAnimate = function(elem) {
+        return $(".timeline.animated .timeline-row").each(function(i) {
+            var bottom_of_object, bottom_of_window;
+            bottom_of_object = $(this).position().top + $(this).outerHeight();
+            bottom_of_window = $(window).scrollTop() + $(window).height();
+            if (bottom_of_window > bottom_of_object) {
+                return $(this).addClass("active");
+            }
+        });
+    };
+    timelineAnimate();
+    return $(window).scroll(function() {
+        return timelineAnimate();
     });
 
 });

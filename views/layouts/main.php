@@ -84,6 +84,7 @@ $user = Yii::$app->getSession()->get('user');
                                     </ul>
                                 </li>
                             <?php endif; ?>
+                            <li><a href="<?=Url::to(['/user/default/message'])?>"><span class="glyphicon glyphicon-comment" aria-hidden="true"></span>消息<span class="badge background_message"><?=count($user->messagesUnRead)?></span></a></li>
                             <li><a href="<?=Url::to(['/site/logout'])?>"><span class="glyphicon glyphicon-log-out" aria-hidden="true"></span>退出</a></li>
                         <?php endif;?>
                     </ul>

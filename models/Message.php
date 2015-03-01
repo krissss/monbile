@@ -1,0 +1,95 @@
+<?php
+
+namespace app\models;
+
+use Yii;
+
+/**
+ * This is the model class for table "{{%message}}".
+ *
+ * @property integer $mid
+ * @property integer $from_user_id
+ * @property integer $to_user_id
+ * @property string $message_title
+ * @property string $message_content
+ * @property string $message_date
+ * @property integer $message_state
+ * @property integer $about_video_id
+ */
+class Message extends \yii\db\ActiveRecord
+{
+    const ABOUT_VIDEO_NONE = -1;
+    const MESSAGE_STATE_UNREAD = 0;
+    const MESSAGE_STATE_READ = 1;
+
+    public static function tableName()
+    {
+        return '{{%message}}';
+    }
+
+    public function rules()
+    {
+        return [
+            [['from_user_id', 'to_user_id', 'message_title', 'message_content', 'message_date', 'message_state', 'about_video_id'], 'required'],
+            [['from_user_id', 'to_user_id', 'message_state', 'about_video_id'], 'integer'],
+            [['message_date'], 'safe'],
+            [['message_title', 'message_content'], 'string', 'max' => 255]
+        ];
+    }
+
+    public function attributeLabels()
+    {
+        return [
+            'mid' => Yii::t('app', 'Mid'),
+            'from_user_id' => Yii::t('app', 'From User ID'),
+            'to_user_id' => Yii::t('app', 'To User ID'),
+            'message_title' => Yii::t('app', 'Message Title'),
+            'message_content' => Yii::t('app', 'Message Content'),
+            'message_date' => Yii::t('app', 'Message Date'),
+            'message_state' => Yii::t('app', 'Message State'),
+            'about_video_id' => Yii::t('app', 'About Video ID'),
+        ];
+    }
+
+    /**
+     * 一对一关联，一个message只有一个from_user_id
+     * @return \yii\db\ActiveQuery
+     */
+    public function getFromUser()
+    {
+        return $this->hasOne(Users::className(), ['uid' => 'from_user_id']);
+    }
+
+    /**
+     * 一对一关联，一个message只有一个video_id
+     * @return \yii\db\ActiveQuery
+     */
+    public function getAboutVideo()
+    {
+        return $this->hasOne(Videos::className(), ['vid' => 'about_video_id']);
+    }
+
+    /**
+     * 发送消息
+     * @param $from_user_id
+     * @param $to_user_id
+     * @param $message_title
+     * @param $message_content
+     * @param int $about_video_id
+     * @return bool
+     */
+    public static function sendMessage($from_user_id, $to_user_id, $message_title, $message_content, $about_video_id=Message::ABOUT_VIDEO_NONE, $message_state=Message::MESSAGE_STATE_UNREAD){
+        $message = new Message();
+        $message->from_user_id = $from_user_id;
+        $message->to_user_id = $to_user_id;
+        $message->message_title = $message_title;
+        $message->message_content = $message_content;
+        $message->about_video_id = $about_video_id;
+        $message->message_date = date('Y-m-d H:i:s');
+        $message->message_state = $message_state;
+        if($message->save()){
+            return true;
+        }
+        return false;
+    }
+}

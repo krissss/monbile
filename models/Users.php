@@ -82,6 +82,29 @@ class Users extends \yii\db\ActiveRecord
     }
 
     /**
+     * 一对多关联，一个user有多个未读message
+     * 按时间倒序排序
+     * @return \yii\db\ActiveQuery
+     */
+    public function getMessagesUnRead()
+    {
+        return $this->hasMany(Message::className(), ['to_user_id' => 'uid'])
+            ->where(['message_state'=>Message::MESSAGE_STATE_UNREAD])
+            ->orderBy(['message_date'=>SORT_DESC]);
+    }
+
+    /**
+     * 一对多关联，一个user有多个全部message
+     * 按时间倒序排序
+     * @return \yii\db\ActiveQuery
+     */
+    public function getMessagesTotal()
+    {
+        return $this->hasMany(Message::className(), ['to_user_id' => 'uid'])
+            ->orderBy(['message_date'=>SORT_DESC]);
+    }
+
+    /**
      * 一对多关联，一个user有多个关注对象
      * @return \yii\db\ActiveQuery
      */

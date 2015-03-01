@@ -20,6 +20,7 @@ use \yii\helpers\Url;
             <div class="modal-body">
                 <div class="row">
                     <input type="hidden" value="" class="comment_video_id" >
+                    <input type="hidden" value="" class="comment_to_user_id" >
                     <?php if($session_user): ?>
                     <div class="col-xs-1 text-center">
                         <img src="<?= Url::to($heads . $session_user->head) ?>" alt="<?=$session_user->nickname?>" title="<?=$session_user->nickname?>" class="img-circle img-responsiv img_height_35">

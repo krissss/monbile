@@ -7,6 +7,7 @@ use app\models\Comments;
 use app\models\forms\DateSearchForm;
 use app\models\forms\TagSearchForm;
 use app\models\forms\VideoSendForm;
+use app\models\Message;
 use app\models\Relations;
 use app\models\Users;
 use app\models\Videos;
@@ -264,6 +265,10 @@ class DefaultController extends Controller
         return $this->redirect(Url::to(['/site/login']));
     }
 
+    public function actionMessage(){
+        return $this->render('message');
+    }
+
     /**
      * 修改信息页面
      * @return string|\yii\web\Response
@@ -340,6 +345,7 @@ class DefaultController extends Controller
     {
         if ($user = Yii::$app->getSession()->get('user')) {
             $video_id = Yii::$app->request->post('video_id');
+            $to_user_id = Yii::$app->request->post('to_user_id');
             $comment_content = Yii::$app->request->post('comment_content');
             $comment = new Comments();
             $comment->video_id = $video_id;
@@ -347,8 +353,14 @@ class DefaultController extends Controller
             $comment->comment_content = $comment_content;
             $comment->comment_state = Comments::COMMENT_ENABLE;
             $comment->comment_date = date('Y-m-d H:i:s');
-            if($comment->save() && Videos::updateCommentCountByVideoId($video_id)){
-                return 'ok';
+            if($to_user_id == $user->uid){//若发送者是给自己评论的，则报讯消息已读
+                if($comment->save() && Videos::updateCommentCountByVideoId($video_id) && Message::sendMessage($user->uid,$to_user_id,'来自评论',$comment->comment_content,$video_id,Message::MESSAGE_STATE_READ)){
+                    return 'ok';
+                }
+            }else{//否则，消息未读
+                if($comment->save() && Videos::updateCommentCountByVideoId($video_id) && Message::sendMessage($user->uid,$to_user_id,'来自评论',$comment->comment_content,$video_id)){
+                    return 'ok';
+                }
             }
             return 'error';
         }
