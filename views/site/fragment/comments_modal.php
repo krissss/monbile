@@ -19,15 +19,13 @@ use \yii\helpers\Url;
             </div>
             <div class="modal-body">
                 <div class="row">
-                    <input type="hidden" value="" class="comment_video_id" >
-                    <input type="hidden" value="" class="comment_to_user_id" >
                     <?php if($session_user): ?>
                     <div class="col-xs-1 text-center">
                         <img src="<?= Url::to($heads . $session_user->head) ?>" alt="<?=$session_user->nickname?>" title="<?=$session_user->nickname?>" class="img-circle img-responsiv img_height_35">
                     </div>
                     <form class="form form-group col-xs-11">
                         <div class="input-group">
-                            <input type="text" class="form-control comment_content" placeholder="30字以内" maxlength="30">
+                            <input type="text" class="form-control comment_content" placeholder="30字以内" maxlength="30" data-comment-video-id="" data-comment-to-user-id="" data-comment-parent-id="0">
                             <span class="input-group-btn">
                                 <button class="btn btn-primary comment_send" type="button">OK</button>
                             </span>

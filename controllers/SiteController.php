@@ -285,4 +285,18 @@ class SiteController extends Controller
             'videos_info' => $videos_info,
         ]);
     }
+
+    public function actionVideo(){
+        $video_id = Yii::$app->request->get('id');
+        $video_info = Videos::findOne($video_id);
+        //如果用户已登录
+        $collections_array = array();
+        if ($user = Yii::$app->getSession()->get('user')) {
+            $collections_array = Collections::findAllVideoIdInCollectionsByUserId($user->uid);
+        }
+        return $this->render('video',[
+            'video_info' => $video_info,
+            'collections_array' => $collections_array
+        ]);
+    }
 }

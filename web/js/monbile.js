@@ -336,23 +336,21 @@ $(document).ready(function () {
      * ajax获取评论
      */
         .on('click','.show_comments',function(){
-            var comment_video_id =  $('.comment_video_id');
-            comment_video_id .val($(this).parent().attr('data-video-id'));
-            var comment_to_user_id =  $('.comment_to_user_id');
-            comment_to_user_id .val($(this).parent().attr('data-video-user-id'));
-            var video_id = comment_video_id.val();
+            $('.comment_content').attr({'data-comment-video-id':$(this).parent().attr('data-video-id'),'data-comment-to-user-id':$(this).parent().attr('data-video-user-id')});
             var html = '<div class="load"><div class="loader">Loading...</div></div>';
             $('.comments_list').empty().html(html);
-            getAndSetComments(video_id);
+            getAndSetComments($(this).parent().attr('data-video-id'));
         })
     /**
      * ajax提交评论
      */
         .on('click','.comment_send',function() {
-            var comment_content = $(".comment_content").val();
-            var comment_video_id = $(".comment_video_id").val();
-            var to_user_id = $(".comment_to_user_id").val();
-            if (!comment_content || !comment_video_id || !to_user_id) {
+            var comment_content_obj = $(this).parent('.input-group-btn').prev(".comment_content");
+            var comment_content = comment_content_obj.val();
+            var comment_video_id = comment_content_obj.attr('data-comment-video-id');
+            var to_user_id = comment_content_obj.attr('data-comment-to-user-id');
+            var parent_id = comment_content_obj.attr('data-comment-parent-id');
+            if (!comment_content || !comment_video_id || !to_user_id || !parent_id) {
                 swal('评论内容未填写');
             } else {
                 var html = '<div class="load"><div class="loader">Loading...</div></div>';
@@ -360,14 +358,13 @@ $(document).ready(function () {
                 $.ajax({
                     type: "post",
                     url: "index.php?r=user/default/send-comment",
-                    data: {comment_content: comment_content, video_id: comment_video_id, to_user_id: to_user_id},
+                    data: {comment_content: comment_content, video_id: comment_video_id, to_user_id: to_user_id, parent_id: parent_id},
                     dataType: "text",
                     success: function ($date) {
                         if($date == 'error'){
                             alert('字数超出范围');
                         }
-                        var video_id = $('.comment_video_id').val();
-                        getAndSetComments(video_id);
+                        getAndSetComments(comment_video_id);
                     },
                     complete : function(XMLHttpRequest,status){
                         if(status != 'success'){
@@ -384,7 +381,7 @@ $(document).ready(function () {
      * ajax评论刷新
      */
         .on('click','.comments_refresh',function(){
-            var video_id = $('.comment_video_id').val();
+            var video_id = $('.comment_content').attr('data-comment-video-id');
             var html = '<div class="load"><div class="loader">Loading...</div></div>';
             $('.comments_list').empty().html(html);
             getAndSetComments(video_id);
@@ -743,25 +740,6 @@ $(document).ready(function () {
                 }
             });
         }
-    });
-
-    /**
-     * 时间轴
-     */
-    var timelineAnimate;
-    timelineAnimate = function(elem) {
-        return $(".timeline.animated .timeline-row").each(function(i) {
-            var bottom_of_object, bottom_of_window;
-            bottom_of_object = $(this).position().top + $(this).outerHeight();
-            bottom_of_window = $(window).scrollTop() + $(window).height();
-            if (bottom_of_window > bottom_of_object) {
-                return $(this).addClass("active");
-            }
-        });
-    };
-    timelineAnimate();
-    return $(window).scroll(function() {
-        return timelineAnimate();
     });
 
 });

@@ -15,10 +15,12 @@ use Yii;
  * @property string $message_date
  * @property integer $message_state
  * @property integer $about_video_id
+ * @property integer $about_comment_id
  */
 class Message extends \yii\db\ActiveRecord
 {
     const ABOUT_VIDEO_NONE = -1;
+    const ABOUT_COMMENT_NONE = 0;
     const MESSAGE_STATE_UNREAD = 0;
     const MESSAGE_STATE_READ = 1;
 
@@ -30,8 +32,8 @@ class Message extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
-            [['from_user_id', 'to_user_id', 'message_title', 'message_content', 'message_date', 'message_state', 'about_video_id'], 'required'],
-            [['from_user_id', 'to_user_id', 'message_state', 'about_video_id'], 'integer'],
+            [['from_user_id', 'to_user_id', 'message_title', 'message_content', 'message_date', 'message_state', 'about_video_id', 'about_comment_id'], 'required'],
+            [['from_user_id', 'to_user_id', 'message_state', 'about_video_id', 'about_comment_id'], 'integer'],
             [['message_date'], 'safe'],
             [['message_title', 'message_content'], 'string', 'max' => 255]
         ];
@@ -48,6 +50,7 @@ class Message extends \yii\db\ActiveRecord
             'message_date' => Yii::t('app', 'Message Date'),
             'message_state' => Yii::t('app', 'Message State'),
             'about_video_id' => Yii::t('app', 'About Video ID'),
+            'about_comment_id' => Yii::t('app', 'About Comment ID'),
         ];
     }
 
@@ -78,13 +81,14 @@ class Message extends \yii\db\ActiveRecord
      * @param int $about_video_id
      * @return bool
      */
-    public static function sendMessage($from_user_id, $to_user_id, $message_title, $message_content, $about_video_id=Message::ABOUT_VIDEO_NONE, $message_state=Message::MESSAGE_STATE_UNREAD){
+    public static function sendMessage($from_user_id, $to_user_id, $message_title, $message_content, $about_video_id=Message::ABOUT_VIDEO_NONE, $about_comment_id=Message::ABOUT_COMMENT_NONE, $message_state=Message::MESSAGE_STATE_UNREAD){
         $message = new Message();
         $message->from_user_id = $from_user_id;
         $message->to_user_id = $to_user_id;
         $message->message_title = $message_title;
         $message->message_content = $message_content;
         $message->about_video_id = $about_video_id;
+        $message->about_comment_id = $about_comment_id;
         $message->message_date = date('Y-m-d H:i:s');
         $message->message_state = $message_state;
         if($message->save()){
