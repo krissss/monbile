@@ -79,7 +79,8 @@ class Videos extends \yii\db\ActiveRecord
      * @return \yii\db\ActiveQuery
      */
     public function getComments(){
-        return $this->hasMany(Comments::className(), ['video_id' => 'vid']);
+        return $this->hasMany(Comments::className(), ['video_id' => 'vid'])
+            ->orderBy(['comment_date'=>SORT_DESC]);
     }
 
     /**

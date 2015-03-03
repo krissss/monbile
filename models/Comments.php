@@ -56,6 +56,16 @@ class Comments extends \yii\db\ActiveRecord
         return $this->hasOne(Users::className(), ['uid' => 'user_id']);
     }
 
+    /**
+     * 一对多关联，一个comment有多个子comments
+     * @return \yii\db\ActiveQuery
+     */
+    public function getChildren()
+    {
+        return $this->hasMany(Comments::className(), ['parent_id' => 'cid'])
+            ->orderBy(['comment_date'=>SORT_DESC]);
+    }
+
     public static function findCommentsByVideoId($video_id){
         return Comments::find()
             ->joinWith('user')

@@ -1,16 +1,15 @@
 <?php
 /**
- * 筛选榜单
+ * 消息页面
  */
 /* @var $this \yii\web\View */
-/* @var $tops_info :: render */
 
 use yii\helpers\Url;
 
 $heads = Url::to('/heads/');
 $videos = Url::to('/videos/');
 
-$this->title = '筛选榜单';
+$this->title = '消息';
 
 $messagesUnRead = Yii::$app->getSession()->get('user')->messagesUnRead;
 $messagesTotal = Yii::$app->getSession()->get('user')->messagesTotal;
@@ -23,6 +22,7 @@ $messagesTotal = Yii::$app->getSession()->get('user')->messagesTotal;
                 <li role="presentation"><a href="#read" aria-controls="one_hour" role="tab" data-toggle="tab">全部消息</a></li>
             </ul>
             <div class="tab-content">
+                <?//未读消息?>
                 <div role="tabpanel" class="tab-pane fade in active" id="unRead">
                     <section class="message_timeline">
                         <ul class="timeline">
@@ -60,10 +60,12 @@ $messagesTotal = Yii::$app->getSession()->get('user')->messagesTotal;
                         </ul>
                     </section>
                 </div>
+                <?//全部消息?>
                 <div role="tabpanel" class="tab-pane fade" id="read">
                     <section class="message_timeline">
                     <ul class="timeline">
                     <?php foreach ($messagesTotal as $message): ?>
+                        <?//if(isset($message->aboutComment->parent_id) && $message->aboutComment->parent_id!=0){ continue;}?>
                         <li class="event">
                             <input type="radio" name="tl-group" checked/>
                             <label></label>

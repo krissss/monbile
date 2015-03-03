@@ -73,6 +73,15 @@ class Message extends \yii\db\ActiveRecord
     }
 
     /**
+     * 一对一关联，一个message只有一个comment_id
+     * @return \yii\db\ActiveQuery
+     */
+    public function getAboutComment()
+    {
+        return $this->hasOne(Comments::className(), ['cid' => 'about_comment_id']);
+    }
+
+    /**
      * 发送消息
      * @param $from_user_id
      * @param $to_user_id

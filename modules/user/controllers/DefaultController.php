@@ -383,17 +383,28 @@ class DefaultController extends Controller
      */
     public function actionShowComments()
     {
-        $video_id = Yii::$app->request->post('video_id');
+        $video_id = Yii::$app->request->get('video_id');
         $comments = Comments::findCommentsByVideoId($video_id);
         $arrs = array();
         foreach( $comments as $comment){
             $arr = array(
+               /* 'comment' => $comment*/
                 'uid'=>$comment->user->uid,
                 'head'=>$comment->user->head,
                 'nickname'=>$comment->user->nickname,
                 'comment_content'=>$comment->comment_content,
                 'comment_date'=>$comment->comment_date
             );
+            /*foreach( $comment->children as $comment_child){
+                $arr_child = array(
+                    'uid'=>$comment_child->user->uid,
+                    'head'=>$comment_child->user->head,
+                    'nickname'=>$comment_child->user->nickname,
+                    'comment_content'=>$comment_child->comment_content,
+                    'comment_date'=>$comment_child->comment_date,
+                );
+                array_push($arr,$arr_child);
+            }*/
             array_push($arrs,$arr);
         }
         return json_encode($arrs);

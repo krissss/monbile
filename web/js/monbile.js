@@ -290,19 +290,44 @@ $(document).ready(function () {
                 var html = '';
                 var count = data.length;
                 $.each(data, function(index, content){
+                    if(content.parent_id){
+
+                    }
                     /*comments原型
+                     <div class="comments_list">
+                     <?php foreach($video_info->comments as $comment):?>
+                     <?php if(isset($comment->parent_id)&&$comment->parent_id!=0){ continue; }?>
                      <div class="comments_item">
                      <div class="media">
                      <div class="media-left">
                      <a href="#">
-                     <img class="media-object img-circle img-responsiv img_height_35" src="heads/head (1).jpg" alt="飒沓" title="飒沓">
+                     <img class="media-object img-circle img-responsiv img_height_35" src="heads/<?=$comment->user->head?>" alt="飒沓" title="飒沓">
                      </a>
                      </div>
                      <div class="media-body">
-                     <p><span class="text-danger">飒沓</span> : 哈哈哈</p>
-                     <h5><small>2015-12-12 10:10:20</small></h5>
+                     <p><span class="text-danger"><?=$comment->user->nickname?></span> : <?=$comment->comment_content?></p>
+                     <h5><small><?=$comment->comment_date?></small></h5>
                      </div>
                      </div>
+                     <div class="comments_list">
+                     <?php foreach($comment->children as $comment_child):?>
+                     <div class="comments_item_children">
+                     <div class="media">
+                     <div class="media-left">
+                     <a href="#">
+                     <img class="media-object img-circle img-responsiv img_height_35" src="heads/<?=$comment_child->user->head?>" alt="飒沓" title="飒沓">
+                     </a>
+                     </div>
+                     <div class="media-body">
+                     <p><span class="text-danger"><?=$comment_child->user->nickname?></span> : <?=$comment_child->comment_content?></p>
+                     <h5><small><?=$comment_child->comment_date?></small></h5>
+                     </div>
+                     </div>
+                     </div>
+                     <?php endforeach; ?>
+                     </div>
+                     </div>
+                     <?php endforeach; ?>
                      </div>
                      */
                     html += '<div class="comments_item"><div class="media"><div class="media-left">' +
