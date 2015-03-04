@@ -385,6 +385,8 @@ class DefaultController extends Controller
     {
         $video_id = Yii::$app->request->post('video_id');
         $comments = Comments::findCommentsByVideoId($video_id);
+        $video = Videos::findOne($video_id);
+        $to_user_id = $video->user->uid;
         $arrs = array();
         foreach( $comments as $comment){
             $arrs_child = array();
@@ -403,6 +405,8 @@ class DefaultController extends Controller
                 'uid'=>$comment->user->uid,
                 'head'=>$comment->user->head,
                 'nickname'=>$comment->user->nickname,
+                'cid'=>$comment->cid,
+                'to_user_id'=>$to_user_id,
                 'comment_content'=>$comment->comment_content,
                 'comment_date'=>$comment->comment_date,
                 'parent_id' =>$comment->parent_id,

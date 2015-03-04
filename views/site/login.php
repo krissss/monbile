@@ -21,7 +21,7 @@ $imgs = Url::to('/imgs/');
     <div class="panel panel-default">
         <div class="panel-body">
             <?php $form = ActiveForm::begin([
-                'id' => 'register-form',
+                'id' => 'login-form',
                 'options' => ['class' => 'form-horizontal'],
                 'fieldConfig' => [
                     'template' => "{label}\n<div class=\"col-xs-12 col-md-3\">{input}</div>\n<div class=\"col-xs-12 col-md-4\">{error}</div>",

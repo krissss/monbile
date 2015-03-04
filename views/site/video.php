@@ -85,7 +85,18 @@ $is_other_user_video = true;
                 </div>
                 <div class="media-body">
                     <p><span class="text-danger"><?=$comment->user->nickname?></span> : <?=$comment->comment_content?></p>
-                    <h5><small><?=$comment->comment_date?><span class="pull-right">回复</span></small></h5>
+                    <h5><small><?=$comment->comment_date?><a class="pull-right" data-toggle="collapse" href="#collapseExample_<?=$comment->cid?>">回复</a></small></h5>
+                    <div class="collapse well" id="collapseExample_<?=$comment->cid?>">
+                        <form class="form form-group">
+                            <div class="input-group">
+                                <span class="input-group-addon" id="basic-addon1">@<?=$comment->user->nickname?></span>
+                                <input type="text" class="form-control comment_content" placeholder="30字以内" maxlength="30" data-comment-video-id="<?=$video_info->vid?>" data-comment-to-user-id="<?=$video_info->user_id?>" data-comment-parent-id="<?=$comment->cid?>">
+                            <span class="input-group-btn">
+                                <button class="btn btn-primary comment_send" type="button">回复</button>
+                            </span>
+                            </div>
+                        </form>
+                    </div>
                 </div>
             </div>
             <div class="comments_list">
