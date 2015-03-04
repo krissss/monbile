@@ -2,7 +2,6 @@
 
 namespace app\models\forms;
 
-use app\models\Roles;
 use app\models\Users;
 use Yii;
 use yii\base\Model;
@@ -62,6 +61,7 @@ class LoginForm extends Model
 
     public function getUser()
     {
+        new DateSearchForm();
         if ($this->_user === false) {
             $this->_user = Users::findByEmail($this->email);
         }

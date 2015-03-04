@@ -4,6 +4,7 @@ namespace app\controllers;
 
 use app\models\Collections;
 use app\models\forms\DateSearchForm;
+use app\models\forms\LoginForm;
 use app\models\forms\RegisterForm;
 use app\models\forms\TagSearchForm;
 use app\models\forms\VideoSendForm;
@@ -15,8 +16,6 @@ use app\models\Users;
 use app\models\Videos;
 use Yii;
 use yii\web\Controller;
-use app\models\forms\LoginForm;
-use app\models\forms\ContactForm;
 use yii\web\UploadedFile;
 
 class SiteController extends Controller

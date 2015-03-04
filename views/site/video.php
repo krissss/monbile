@@ -85,7 +85,7 @@ $is_other_user_video = true;
                 </div>
                 <div class="media-body">
                     <p><span class="text-danger"><?=$comment->user->nickname?></span> : <?=$comment->comment_content?></p>
-                    <h5><small><?=$comment->comment_date?></small></h5>
+                    <h5><small><?=$comment->comment_date?><span class="pull-right">回复</span></small></h5>
                 </div>
             </div>
             <div class="comments_list">

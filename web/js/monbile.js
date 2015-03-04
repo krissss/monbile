@@ -287,54 +287,64 @@ $(document).ready(function () {
             data: {video_id:video_id},
             dataType: "json",
             success: function(data){
+                /*comments原型
+                 <div class="comments_list">
+                 <?php foreach($video_info->comments as $comment):?>
+                 <?php if(isset($comment->parent_id)&&$comment->parent_id!=0){ continue; }?>
+                 <div class="comments_item">
+                 <div class="media">
+                 <div class="media-left">
+                 <a href="#">
+                 <img class="media-object img-circle img-responsiv img_height_35" src="heads/<?=$comment->user->head?>" alt="飒沓" title="飒沓">
+                 </a>
+                 </div>
+                 <div class="media-body">
+                 <p><span class="text-danger"><?=$comment->user->nickname?></span> : <?=$comment->comment_content?></p>
+                 <h5><small><?=$comment->comment_date?></small></h5>
+                 </div>
+                 </div>
+                 <div class="comments_list">
+                 <?php foreach($comment->children as $comment_child):?>
+                 <div class="comments_item_children">
+                 <div class="media">
+                 <div class="media-left">
+                 <a href="#">
+                 <img class="media-object img-circle img-responsiv img_height_35" src="heads/<?=$comment_child->user->head?>" alt="飒沓" title="飒沓">
+                 </a>
+                 </div>
+                 <div class="media-body">
+                 <p><span class="text-info"><?=$comment_child->user->nickname?></span> : <?=$comment_child->comment_content?></p>
+                 <h5><small><?=$comment_child->comment_date?></small></h5>
+                 </div>
+                 </div>
+                 </div>
+                 <?php endforeach; ?>
+                 </div>
+                 </div>
+                 <?php endforeach; ?>
+                 </div>
+                 */
                 var html = '';
                 var count = data.length;
                 $.each(data, function(index, content){
-                    if(content.parent_id){
-
+                    if(content.parent_id!=0){
+                        return true;
                     }
-                    /*comments原型
-                     <div class="comments_list">
-                     <?php foreach($video_info->comments as $comment):?>
-                     <?php if(isset($comment->parent_id)&&$comment->parent_id!=0){ continue; }?>
-                     <div class="comments_item">
-                     <div class="media">
-                     <div class="media-left">
-                     <a href="#">
-                     <img class="media-object img-circle img-responsiv img_height_35" src="heads/<?=$comment->user->head?>" alt="飒沓" title="飒沓">
-                     </a>
-                     </div>
-                     <div class="media-body">
-                     <p><span class="text-danger"><?=$comment->user->nickname?></span> : <?=$comment->comment_content?></p>
-                     <h5><small><?=$comment->comment_date?></small></h5>
-                     </div>
-                     </div>
-                     <div class="comments_list">
-                     <?php foreach($comment->children as $comment_child):?>
-                     <div class="comments_item_children">
-                     <div class="media">
-                     <div class="media-left">
-                     <a href="#">
-                     <img class="media-object img-circle img-responsiv img_height_35" src="heads/<?=$comment_child->user->head?>" alt="飒沓" title="飒沓">
-                     </a>
-                     </div>
-                     <div class="media-body">
-                     <p><span class="text-danger"><?=$comment_child->user->nickname?></span> : <?=$comment_child->comment_content?></p>
-                     <h5><small><?=$comment_child->comment_date?></small></h5>
-                     </div>
-                     </div>
-                     </div>
-                     <?php endforeach; ?>
-                     </div>
-                     </div>
-                     <?php endforeach; ?>
-                     </div>
-                     */
                     html += '<div class="comments_item"><div class="media"><div class="media-left">' +
                     '<a href="index.php?r=user/default/index&id='+content.uid+'">' +
                     '<img class="media-object img-circle img-responsiv img_height_35" src="heads/'+content.head+'" alt="'+content.nickname+'" title="'+content.nickname+'">' +
                     '</a> </div> <div class="media-body">' +
-                    '<p><span class="text-danger">'+content.nickname+'</span> :'+content.comment_content+'</p> <h5><small>'+content.comment_date+'</small></h5></div></div></div>';
+                    '<p><span class="text-danger">'+content.nickname+'</span> :'+content.comment_content+'</p> <h5><small>'+content.comment_date+'</small></h5></div></div>';
+                    if(content.children.length>0) {
+                        $.each(content.children, function (index, content) {
+                            html+= '<div class="comments_list"><div class="comments_item"><div class="media"><div class="media-left">' +
+                            '<a href="index.php?r=user/default/index&id='+content.uid+'">' +
+                            '<img class="media-object img-circle img-responsiv img_height_35" src="heads/'+content.head+'" alt="'+content.nickname+'" title="'+content.nickname+'">' +
+                            '</a> </div> <div class="media-body">' +
+                            '<p><span class="text-info">'+content.nickname+'</span> :'+content.comment_content+'</p> <h5><small>'+content.comment_date+'</small></h5></div></div></div></div>';
+                        });
+                    }
+                    html+='</div>';
                 });
                 if(!html){
                     html = '<div class="comments_item"><p>暂无评论</p></div>';
