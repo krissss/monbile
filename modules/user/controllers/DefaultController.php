@@ -266,7 +266,19 @@ class DefaultController extends Controller
     }
 
     public function actionMessage(){
-        return $this->render('message');
+        if ($user = Yii::$app->getSession()->get('user')) {
+            $messagesUnRead = Message::findMessageUnRead($user->uid);
+            foreach($messagesUnRead as $message){
+                $message->message_state = Message::MESSAGE_STATE_READ;
+                $message->update();
+            }
+            $messagesTotal = Message::find()->where(['to_user_id'=>$user->uid])->orderBy(['message_date'=>SORT_DESC])->all();
+            return $this->render('message',[
+                'messagesUnRead' => $messagesUnRead,
+                'messagesTotal' =>$messagesTotal,
+            ]);
+        }
+        return $this->redirect(Url::to(['/site/login']));
     }
 
     /**

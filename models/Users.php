@@ -82,29 +82,6 @@ class Users extends \yii\db\ActiveRecord
     }
 
     /**
-     * 一对多关联，一个user有多个未读message
-     * 按时间倒序排序
-     * @return \yii\db\ActiveQuery
-     */
-    public function getMessagesUnRead()
-    {
-        return $this->hasMany(Message::className(), ['to_user_id' => 'uid'])
-            ->where(['message_state'=>Message::MESSAGE_STATE_UNREAD])
-            ->orderBy(['message_date'=>SORT_DESC]);
-    }
-
-    /**
-     * 一对多关联，一个user有多个全部message
-     * 按时间倒序排序
-     * @return \yii\db\ActiveQuery
-     */
-    public function getMessagesTotal()
-    {
-        return $this->hasMany(Message::className(), ['to_user_id' => 'uid'])
-            ->orderBy(['message_date'=>SORT_DESC]);
-    }
-
-    /**
      * 一对多关联，一个user有多个关注对象
      * @return \yii\db\ActiveQuery
      */
@@ -225,5 +202,17 @@ class Users extends \yii\db\ActiveRecord
         }
         rsort($arrays);
         return $arrays;
+    }
+
+    /**
+     * 查询已登录用户的未读信息数量，用在main.php上
+     * @param $session_user_id
+     * @return array|\yii\db\ActiveRecord[]
+     */
+    public function findMessagesUnReadCount($session_user_id)
+    {
+        return Message::find()
+            ->where(['to_user_id' => $session_user_id,'message_state'=>Message::MESSAGE_STATE_UNREAD])
+            ->all();
     }
 }

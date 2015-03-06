@@ -285,6 +285,10 @@ class SiteController extends Controller
         ]);
     }
 
+    /**
+     * 单个视频显示页面::还没完全完成//TODO
+     * @return string
+     */
     public function actionVideo(){
         $video_id = Yii::$app->request->get('id');
         $video_info = Videos::findOne($video_id);

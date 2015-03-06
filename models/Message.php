@@ -82,6 +82,18 @@ class Message extends \yii\db\ActiveRecord
     }
 
     /**
+     * 查询已登录用户的未读消息
+     * @param $login_user_id
+     * @return array|\yii\db\ActiveRecord[]
+     */
+    public static function findMessageUnRead($login_user_id){
+        return Message::find()
+            ->where(['to_user_id'=>$login_user_id,'message_state'=>Message::MESSAGE_STATE_UNREAD])
+            ->orderBy(['message_date'=>SORT_DESC])
+            ->all();
+    }
+
+    /**
      * 发送消息
      * @param $from_user_id
      * @param $to_user_id
