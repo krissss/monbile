@@ -27,6 +27,7 @@ $imgs = Url::to('/imgs/');
             ]); ?>
             <?= $form->field($model, 'nickname') ?>
             <?= $form->field($model, 'email') ?>
+            <?= $form->field($model, 'school')->dropDownList(['1'=>'三江学院','2'=>'南京工业大学'],['prompt'=>'请选择']) ?>
             <?= $form->field($model, 'verifyCode')->widget(Captcha::className(), [
                 'template' => '<div class="row"><div class="col-md-6">{image}</div><div class="col-md-6">{input}</div></div>',
             ]) ?>

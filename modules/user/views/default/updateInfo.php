@@ -36,6 +36,7 @@ $session = Yii::$app->getSession();
             <?= $form->field($model, 'sex')->radioList([Users::USER_SEX_MALE=>'男',Users::USER_SEX_FEMALE=>'女']) ?>
             <?= $form->field($model, 'birthday')->input('date') ?>
             <?= $form->field($model, 'currentplace')->textInput() ?>
+            <?= $form->field($model, 'school_id')->dropDownList(['1'=>'三江学院','2'=>'南京工业大学'],['prompt'=>'请选择']) ?>
             <?/**类型暂时只用英雄联盟,需要选择类型打开以下注释
             <?= $form->field($model, 'love_game_id')->dropDownList(['1'=>'英雄联盟','2'=>'DOTA','3'=>'剑灵'],['prompt'=>'请选择']) ?>
              */?>

@@ -12,6 +12,7 @@ use app\models\forms\TagSearchForm;
 use app\models\forms\VideoSendForm;
 use app\models\Games;
 use app\models\Relations;
+use app\models\Schools;
 use app\models\Tags;
 use app\models\Tops;
 use app\models\Users;

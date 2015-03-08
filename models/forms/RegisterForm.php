@@ -11,13 +11,14 @@ class RegisterForm extends Model
 {
     public $nickname;
     public $email;
+    public $school;
     public $password;
     public $verifyCode;
 
     public function rules()
     {
         return [
-            [['email', 'nickname'], 'required'],
+            [['email', 'nickname','school'], 'required'],
             [['email', 'nickname'], 'filter', 'filter' => 'trim'],
             [['nickname'], 'string','min'=>2, 'max' => 20],
             ['email', 'email'],
@@ -31,6 +32,7 @@ class RegisterForm extends Model
         return [
             'email' => Yii::t('app', 'Email'),
             'nickname' => Yii::t('app', 'Nickname'),
+            'school' => Yii::t('app', 'School'),
             'verifyCode' => Yii::t('app', 'VerifyCode'),
         ];
     }
@@ -56,6 +58,7 @@ class RegisterForm extends Model
         $user = new Users();
         $user->email = $this->email;
         $user->nickname = $this->nickname;
+        $user->school_id = $this->school;
         $user->password = Users::password_encrypt($this->password);
         $user->head = Users::createRandHead();
         $user->role_id = Roles::ROLE_USER_GENERAL;

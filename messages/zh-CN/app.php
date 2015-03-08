@@ -14,6 +14,8 @@ return [
     /* site/login  site/register */
     'Email' => '邮箱',
     'Nickname' => '昵称',
+    'School' => '学校',
+    'School Id' => '学校',
     'Password' => '密码',
     'Password_2' => '确认密码',
     'Head' => '头像',

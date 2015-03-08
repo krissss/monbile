@@ -23,6 +23,7 @@ use Yii;
  * @property string $currentplace
  * @property integer $love_game_id
  * @property integer $love_game_partition_id
+ * @property integer $school_id
  */
 class Users extends \yii\db\ActiveRecord
 {
@@ -37,8 +38,8 @@ class Users extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
-            [['email', 'password', 'nickname', 'head', 'role_id', 'create_date', 'update_date'], 'required'],
-            [['role_id', 'sex', 'love_game_id', 'love_game_partition_id'], 'integer'],
+            [['email', 'password', 'nickname', 'head', 'role_id', 'create_date', 'update_date','school_id'], 'required'],
+            [['role_id', 'sex', 'love_game_id', 'love_game_partition_id','school_id'], 'integer'],
             ['telphone', 'string', 'max' => 11],
             ['telphone', 'match', 'pattern' => '^1(3[0-9]|5[0-35-9]|8[025-9])\\d{8}$^'],
             [['create_date', 'update_date', 'birthday'], 'safe'],
@@ -66,6 +67,7 @@ class Users extends \yii\db\ActiveRecord
             'currentplace' => Yii::t('app', 'Currentplace'),
             'love_game_id' => Yii::t('app', 'Love Game ID'),
             'love_game_partition_id' => Yii::t('app', 'Love Game Partition ID'),
+            'school_id' => Yii::t('app', 'School Id'),
         ];
     }
 
