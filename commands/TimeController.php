@@ -18,6 +18,7 @@ class TimeController extends Controller {
         }else{
             echo date('Y-m-d').'___week___wrong  ';
         }
+        return 0;
     }
 
     /**
@@ -29,6 +30,7 @@ class TimeController extends Controller {
         }else{
             echo date('Y-m-d').'___month___wrong  ';
         }
+        return 0;
     }
 
     /**
@@ -40,5 +42,6 @@ class TimeController extends Controller {
         }else{
             echo date('Y-m-d').'___year__wrong  ';
         }
+        return 0;
     }
 }

@@ -2,6 +2,8 @@
 
 namespace app\controllers;
 
+use app\commands\FfmpegController;
+use app\functions\Functions;
 use app\models\Collections;
 use app\models\forms\DateSearchForm;
 use app\models\forms\LoginForm;
@@ -29,7 +31,7 @@ class SiteController extends Controller
             'captcha' => [
                 'class' => 'yii\captcha\CaptchaAction',
                 'fixedVerifyCode' => YII_ENV_TEST ? 'testme' : null,
-            ],
+            ]
         ];
     }
 
@@ -58,6 +60,8 @@ class SiteController extends Controller
                     $video_send->video_path->saveAs('videos/' . $video_name . '.' . $video_send->video_path->extension);
                     $video_send->video_path = $video_name . '.' . $video_send->video_path->extension;
                     $video_send->videoSave();
+                    //视频保存后截取第一帧
+                    Functions::cutFrame($video_name);
                     $email = $user->email;
                     Yii::$app->getSession()->remove('user');
                     Yii::$app->getSession()->set('user',Users::findByEmail($email));
@@ -143,7 +147,6 @@ class SiteController extends Controller
     public function actionLogin()
     {
         $model = new LoginForm();
-        $model->load(Yii::$app->request->post());
         if ($model->load(Yii::$app->request->post()) && $user = $model->login()) {
             $session = Yii::$app->getSession();
             $session->set('user', $user);
@@ -301,5 +304,9 @@ class SiteController extends Controller
             'video_info' => $video_info,
             'collections_array' => $collections_array
         ]);
+    }
+
+    public function actionTest(){
+        //Functions::cutFrame();
     }
 }

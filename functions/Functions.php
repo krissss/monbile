@@ -55,4 +55,12 @@ class Functions {
         }
     }
 
+    public static function cutFrame($video_name='b',$startTime=1,$size='350*240'){
+        $root = $_SERVER['DOCUMENT_ROOT'];
+        $ffpmeg = $root.'\ffmpeg.exe';
+        $video = $root.'\videos\\';
+        $thumbnail = $root.'\thumbnail\\';
+        exec('start '.$ffpmeg.' -i '.$video.$video_name.'.mp4 -y -f image2 -ss '.$startTime.' -t 0.001 -s '.$size.' '.$thumbnail.$video_name.'.jpg');
+    }
+
 }

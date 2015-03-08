@@ -16,6 +16,7 @@ class AppAsset extends AssetBundle
     public $css = [
         'css/site.css',//原本的
         'css/jquery-sinaEmotion-2.1.0.css',//新浪表情
+        'css/video-js.css',//html5视频播放器
         'css/jquery-tag-this.css',//写标签
         'css/sweet-alert.css',//弹出框
         'css/3Dtimeline.css',//3D时间轴
@@ -25,6 +26,7 @@ class AppAsset extends AssetBundle
         //'js/jquery.cookie.js',
         'js/charCount.js',//统计字数
         'js/jquery-sinaEmotion-2.1.0.js',//新浪表情
+        'js/video.js',//html5视频播放器
         'js/jquery.tagcanvas.js',//标签云
         'js/jquery-tag-this.js',//写标签
         /* 上传头像 只在@app\modules\user\views\default\updatehead.php 中使用*/

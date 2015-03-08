@@ -2,6 +2,7 @@
 
 namespace app\modules\user\controllers;
 
+use app\functions\Functions;
 use app\models\Collections;
 use app\models\Comments;
 use app\models\forms\DateSearchForm;
@@ -38,6 +39,8 @@ class DefaultController extends Controller
                     $video_send->video_path->saveAs('videos/' . $video_name . '.' . $video_send->video_path->extension);
                     $video_send->video_path = $video_name . '.' . $video_send->video_path->extension;
                     $video_send->videoSave();
+                    //视频保存后截取第一帧
+                    Functions::cutFrame($video_name);
                     $email = $user->email;
                     Yii::$app->getSession()->remove('user');
                     Yii::$app->getSession()->set('user',Users::findByEmail($email));

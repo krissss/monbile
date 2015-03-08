@@ -2,6 +2,8 @@
  * Created by kriss on 2015/2/2.
  */
 
+videojs.options.flash.swf = "video-js.swf";
+
 $(document).ready(function () {
     /**
      * 返回顶部

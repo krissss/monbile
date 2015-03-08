@@ -38,16 +38,12 @@ $this->title = $user->nickname.'的视频';
                         <div class="col-xs-12 col-md-6">
                             <div class="panel panel-default">
                                 <div class="panel-body">
-                                    <!--<video data-src="<?/*= Url::to($videos . $video_info->video_path) */?>" controls="controls" class="col-xs-12 lazyload">
-                                        <p>您的浏览器不支持html5，请更换浏览器</p>
-                                    </video>-->
-                                    <object width="100%" height="200">
-                                        <param name="movie" value="flvplayer.swf">
-                                        <param name="quality" value="high">
-                                        <param name="allowFullScreen" value="true">
-                                        <param name="FlashVars" value="vcastr_file=<?= Url::to($videos . $video_info->video_path) ?>&LogoText=www.monbile.cn&BufferTime=3&IsAutoPlay=0">
-                                        <embed src="flvplayer.swf" allowfullscreen="true" flashvars="vcastr_file=<?= Url::to($videos . $video_info->video_path) ?>&LogoText=www.monbile.cn&BufferTime=3&IsAutoPlay=0" quality="high" width="100%" height="200"></embed>
-                                    </object>
+                                    <video class="video-js vjs-default-skin" controls preload="none" width="100%" height="120"
+                                           poster="<?=Url::to('thumbnail/'.explode('.',$video_info->video_path)[0].'.jpg')?>"
+                                           data-setup='{}'>
+                                        <source src="<?= Url::to($videos . $video_info->video_path) ?>" type='video/mp4' />
+                                        <p class="vjs-no-js">观看本视频需要您开启浏览器javascript，并且需要浏览器支持HTML5</p>
+                                    </video>
                                     <h5><small><?= $video_info->video_date; ?></small></h5>
                                     <div class="has_tag">
                                         <?php foreach ($video_info->tagRelations as $tagRelation_info): ?>

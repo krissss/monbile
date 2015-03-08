@@ -48,7 +48,7 @@ use app\models\Users;
                         <span class="text-danger pull-right"><strong>第<?= $key+1 ?>名</strong></span>
                     <?php endif; ?>
                 </h4>
-                <p class="has_face text-muted"><?= $video_info->video_title ?></p>
+                <p class="has_face text-muted"><a href="<?=Url::to(['/site/video','id'=>$video_info->vid])?>"><?= $video_info->video_title ?></a></p>
                 <div class="has_tag">
                     <?php foreach ($video_info->tagRelations as $tagRelation_info): ?>
                         <span class="tag tag-color-<?= rand(0, 6) ?>"><?= $tagRelation_info->tag->tag_name ?></span>
@@ -56,16 +56,12 @@ use app\models\Users;
                 </div>
                 <div class="media">
                     <div class="media-middle">
-                        <!--<video data-src="<?/*= Url::to($videos . $video_info->video_path) */?>" controls="controls" class="col-xs-12 lazyload">
-                            <p>您的浏览器不支持html5，请更换浏览器</p>
-                        </video>-->
-                        <object width="100%" height="400">
-                            <param name="movie" value="flvplayer.swf">
-                            <param name="quality" value="high">
-                            <param name="allowFullScreen" value="true">
-                            <param name="FlashVars" value="vcastr_file=<?= Url::to($videos . $video_info->video_path) ?>&LogoText=www.monbile.cn&BufferTime=3&IsAutoPlay=0">
-                            <embed src="flvplayer.swf" allowfullscreen="true" flashvars="vcastr_file=<?= Url::to($videos . $video_info->video_path) ?>&LogoText=www.monbile.cn&BufferTime=3&IsAutoPlay=0" quality="high" width="100%" height="400"></embed>
-                        </object>
+                        <video class="video-js vjs-default-skin" controls preload="none" width="100%" height="240"
+                               poster="<?=Url::to('thumbnail/'.explode('.',$video_info->video_path)[0].'.jpg')?>"
+                               data-setup='{}'>
+                            <source src="<?= Url::to($videos . $video_info->video_path) ?>" type='video/mp4' />
+                            <p class="vjs-no-js">观看本视频需要您开启浏览器javascript，并且需要浏览器支持HTML5</p>
+                        </video>
                     </div>
                 </div>
                 <div class="row">
