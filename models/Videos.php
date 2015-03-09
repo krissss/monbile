@@ -3,7 +3,6 @@
 namespace app\models;
 
 use app\models\forms\DateSearchForm;
-use app\models\forms\SearchForm;
 use app\models\forms\TagSearchForm;
 use Yii;
 

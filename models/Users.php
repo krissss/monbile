@@ -192,6 +192,7 @@ class Users extends \yii\db\ActiveRecord
     public static function findHotUsers()
     {
         $users = Users::find()
+            ->where(['in','sex',[1,2]])
             ->joinWith(['relationsBack'])
             ->all();
         $arrays = array();
@@ -204,6 +205,22 @@ class Users extends \yii\db\ActiveRecord
         }
         rsort($arrays);
         return $arrays;
+    }
+
+    /**
+     * 随机查询同学校的用户，要求用户男女信息已填写,排除自己（$except_id）
+     * @param $school_id
+     * @param int $limit
+     * @return array|\yii\db\ActiveRecord[]
+     */
+    public static function findSameSchoolUser($school_id, $except_id, $limit=10){
+        return Users::find()
+            ->where(['school_id'=>$school_id])
+            ->andWhere(['in','sex',[1,2]])
+            ->andWhere(['not in','uid',[$except_id]])
+            ->orderBy('rand()')
+            ->limit($limit)
+            ->all();
     }
 
     /**

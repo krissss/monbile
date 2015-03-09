@@ -70,11 +70,21 @@ class DefaultController extends Controller
                 ]);
             }
             //自己首页展示
+            //当用户没有发布过视频时，查询推荐关注
+            if(count($user->videos)<1){
+                $sameSchoolUser = Users::findSameSchoolUser(1,$user->uid);
+                $relations_array = Relations::findAllBackIdInRelationsByFrontId($user->uid);
+            }else{
+                $sameSchoolUser = null;
+                $relations_array = array();
+            }
             return $this->render('index', [
                 'video_send' => $video_send,
                 'tagSearchForm' => $tagSearchForm,
                 'dateSearchForm' => $dateSearchForm,
                 'collections_array' => Collections::findAllVideoIdInCollectionsByUserId($user->uid),
+                'sameSchoolUser' => $sameSchoolUser,
+                'relations_array' => $relations_array,
             ]);
         }
         //访问他人

@@ -17,10 +17,11 @@ $session = Yii::$app->getSession();
 
 <div class="user-default-updateinfo">
     <div class="text-center">
-        <img src="<?= Url::to($heads . $model->head) ?>" alt="点我修改头像" title="点我修改头像" class="img-circle img-responsiv img_height_150">
+        <img src="<?= Url::to($heads . $model->head) ?>" alt="" title="" class="img-circle img-responsiv img_height_150">
     </div>
     <div class="panel panel-default">
         <div class="panel-body">
+            <div class="alert alert-info text-center" role="alert">完善信息才能进入榜单和被其他同校好友看到</div>
             <?php $form = ActiveForm::begin([
                 'id' => 'update-info-form',
                 'options' => ['class' => 'form-horizontal'],
@@ -35,7 +36,7 @@ $session = Yii::$app->getSession();
             <?= $form->field($model, 'telphone')->input('tel') ?>
             <?= $form->field($model, 'sex')->radioList([Users::USER_SEX_MALE=>'男',Users::USER_SEX_FEMALE=>'女']) ?>
             <?= $form->field($model, 'birthday')->input('date') ?>
-            <?= $form->field($model, 'currentplace')->textInput() ?>
+            <?//= $form->field($model, 'currentplace')->textInput() ?>
             <?= $form->field($model, 'school_id')->dropDownList(['1'=>'三江学院','2'=>'南京工业大学'],['prompt'=>'请选择']) ?>
             <?/**类型暂时只用英雄联盟,需要选择类型打开以下注释
             <?= $form->field($model, 'love_game_id')->dropDownList(['1'=>'英雄联盟','2'=>'DOTA','3'=>'剑灵'],['prompt'=>'请选择']) ?>

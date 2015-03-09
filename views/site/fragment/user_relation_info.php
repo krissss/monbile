@@ -6,6 +6,7 @@
  */
 /* @var $user_relation :: foreach */
 /* @var $relations_array :: render */
+/* @var $session_user :: session */
 /* @var $is_hot_user :: false or true(用于hot_user) */
 
 use yii\helpers\Url;

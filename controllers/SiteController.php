@@ -2,7 +2,6 @@
 
 namespace app\controllers;
 
-use app\commands\FfmpegController;
 use app\functions\Functions;
 use app\models\Collections;
 use app\models\forms\DateSearchForm;
@@ -12,7 +11,6 @@ use app\models\forms\TagSearchForm;
 use app\models\forms\VideoSendForm;
 use app\models\Games;
 use app\models\Relations;
-use app\models\Schools;
 use app\models\Tags;
 use app\models\Tops;
 use app\models\Users;
@@ -305,9 +303,5 @@ class SiteController extends Controller
             'video_info' => $video_info,
             'collections_array' => $collections_array
         ]);
-    }
-
-    public function actionTest(){
-        //Functions::cutFrame();
     }
 }

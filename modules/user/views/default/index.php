@@ -72,7 +72,8 @@ $this->title = $user->nickname.'的主页';
             <?php endif; ?>
             <a href="#search_video" data-toggle="collapse" aria-expanded="false" aria-controls="search_video" role="tab" class="btn btn-default pull-right">我要“搜”视频</a>
             <?php if (count($user->videos) < 1): ?>
-                <div class="alert alert-info" role="alert">还没有发布任何视频</div>
+                <div class="alert alert-info" role="alert">您还没有发布任何视频,可以先关注同校好友</div>
+                <?php require(__DIR__ . '/../../../../views/site/fragment/recommend_user.php'); ?>
             <?php else: ?>
                 <?php foreach ($user->videos as $video_info): ?>
                     <?php require(__DIR__ . '/../../../../views/site/fragment/video_info_panel.php'); ?>
