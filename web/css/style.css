@@ -460,3 +460,8 @@ a:active {
     background-position:-37px 0;
 }
 
+/* video-js.css 修正,兼容ie9 */
+.media video{
+    width: 100%;;
+}
+
