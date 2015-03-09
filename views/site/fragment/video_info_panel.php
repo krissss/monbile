@@ -56,7 +56,7 @@ use app\models\Users;
                 </div>
                 <div class="media">
                     <div class="media-middle">
-                        <video class="video-js vjs-default-skin" controls preload="none" width="100%" height="240"
+                        <video class="video-js vjs-default-skin" controls preload="none" width="" height="240"
                                poster="<?=Url::to('thumbnail/'.explode('.',$video_info->video_path)[0].'.jpg')?>"
                                data-setup='{}'>
                             <source src="<?= Url::to($videos . $video_info->video_path) ?>" type='video/mp4' />
