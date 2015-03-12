@@ -37,7 +37,7 @@ $config = [
                 'charset'=>'UTF-8',
                 'from'=>['462679766@qq.com'=>'www.monbile.cn']
             ],
-            'useFileTransport' => true,//设为false开启真实发送邮件，true只是保存在runtime中
+            'useFileTransport' => false,//设为false开启真实发送邮件，true只是保存在runtime中
         ],
         'log' => [
             'traceLevel' => YII_DEBUG ? 3 : 0,

@@ -351,7 +351,7 @@ $(document).ready(function () {
                     html+='<div class="collapse" id="collapseExample_'+content.cid+'"> <form class="form form-group">' +
                     ' <div class="input-group"> <span class="input-group-addon" id="basic-addon1">@'+content.nickname+'</span>' +
                     ' <input type="text" class="form-control comment_content" placeholder="30字以内" maxlength="30" ' +
-                    'data-comment-video-id="'+video_id+'" data-comment-to-user-id="'+content.to_user_id+'" data-comment-parent-id="'+content.cid+'"> ' +
+                    'data-comment-video-id="'+video_id+'" data-comment-to-user-id="'+content.uid+'" data-comment-parent-id="'+content.cid+'"> ' +
                     '<span class="input-group-btn"> <button class="btn btn-primary comment_send" type="button">回复</button> </span> </div> </form> </div>';
 
                     html+='</div></div>';

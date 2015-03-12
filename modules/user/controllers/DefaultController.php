@@ -75,7 +75,7 @@ class DefaultController extends Controller
                 $sameSchoolUser = Users::findSameSchoolUser(1,$user->uid);
                 $relations_array = Relations::findAllBackIdInRelationsByFrontId($user->uid);
             }else{
-                $sameSchoolUser = null;
+                $sameSchoolUser = array();
                 $relations_array = array();
             }
             return $this->render('index', [
@@ -145,6 +145,7 @@ class DefaultController extends Controller
                 'dateSearchForm' => $dateSearchForm,
                 'other_user' => Users::findOne($id),
                 'relations_array' => $relations_array,
+                'sameSchoolUser' => array(),
                 'collections_array' => $collections_array,
             ]);
         }
@@ -410,8 +411,6 @@ class DefaultController extends Controller
     {
         $video_id = Yii::$app->request->post('video_id');
         $comments = Comments::findCommentsByVideoId($video_id);
-        $video = Videos::findOne($video_id);
-        $to_user_id = $video->user->uid;
         $arrs = array();
         foreach( $comments as $comment){
             $arrs_child = array();
@@ -431,7 +430,6 @@ class DefaultController extends Controller
                 'head'=>$comment->user->head,
                 'nickname'=>$comment->user->nickname,
                 'cid'=>$comment->cid,
-                'to_user_id'=>$to_user_id,
                 'comment_content'=>$comment->comment_content,
                 'comment_date'=>$comment->comment_date,
                 'parent_id' =>$comment->parent_id,

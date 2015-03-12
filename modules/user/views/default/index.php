@@ -16,6 +16,7 @@
 /* @var $user :: render($other_user) */
 /* @var $is_other_user :: true :: 相对user_info.php那块而言 */
 /* @var $is_other_user_video :: true :: 相对video_info_panel.php那块而言,视频不可以删除 */
+/* @var $sameSchoolUser :: render   ::用来推荐关注 */
 
 use yii\helpers\Url;
 
@@ -72,7 +73,11 @@ $this->title = $user->nickname.'的主页';
             <?php endif; ?>
             <a href="#search_video" data-toggle="collapse" aria-expanded="false" aria-controls="search_video" role="tab" class="btn btn-default pull-right">我要“搜”视频</a>
             <?php if (count($user->videos) < 1): ?>
-                <div class="alert alert-info" role="alert">您还没有发布任何视频,可以先关注同校好友</div>
+                <?php if (!$is_other_user): ?>
+                    <div class="alert alert-info" role="alert">您还没有发布任何视频,可以先关注同校好友</div>
+                <?php else: ?>
+                    <div class="alert alert-info" role="alert">他还没有发布任何视频</div>
+                <?php endif; ?>
                 <?php require(__DIR__ . '/../../../../views/site/fragment/recommend_user.php'); ?>
             <?php else: ?>
                 <?php foreach ($user->videos as $video_info): ?>
