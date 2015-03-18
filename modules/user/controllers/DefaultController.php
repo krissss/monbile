@@ -413,18 +413,6 @@ class DefaultController extends Controller
         $comments = Comments::findCommentsByVideoId($video_id);
         $arrs = array();
         foreach( $comments as $comment){
-            $arrs_child = array();
-            foreach( $comment->children as $comment_child){
-                $arr_child = array(
-                    'uid'=>$comment_child->user->uid,
-                    'head'=>$comment_child->user->head,
-                    'nickname'=>$comment_child->user->nickname,
-                    'comment_content'=>$comment_child->comment_content,
-                    'comment_date'=>$comment_child->comment_date,
-                    'parent_id' =>$comment_child->parent_id,
-                );
-                array_push($arrs_child,$arr_child);
-            }
             $arr = array(
                 'uid'=>$comment->user->uid,
                 'head'=>$comment->user->head,
@@ -433,7 +421,6 @@ class DefaultController extends Controller
                 'comment_content'=>$comment->comment_content,
                 'comment_date'=>$comment->comment_date,
                 'parent_id' =>$comment->parent_id,
-                'children' => $arrs_child
             );
             array_push($arrs,$arr);
         }

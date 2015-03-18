@@ -82,11 +82,11 @@ $is_other_user_video = true;
                 <div class="media-body">
                     <p><span class="text-danger"><?=$comment->user->nickname?></span> : <?=$comment->comment_content?></p>
                     <h5><small><?=$comment->comment_date?><a class="pull-right" data-toggle="collapse" href="#collapseExample_<?=$comment->cid?>">回复</a></small></h5>
-                    <div class="collapse well" id="collapseExample_<?=$comment->cid?>">
+                    <div class="collapse" id="collapseExample_<?=$comment->cid?>">
                         <form class="form form-group">
                             <div class="input-group">
                                 <span class="input-group-addon" id="basic-addon1">@<?=$comment->user->nickname?></span>
-                                <input type="text" class="form-control comment_content" placeholder="30字以内" maxlength="30" data-comment-video-id="<?=$video_info->vid?>" data-comment-to-user-id="<?=$video_info->user_id?>" data-comment-parent-id="<?=$comment->cid?>">
+                                <input type="text" class="form-control comment_content" placeholder="30字以内" maxlength="30" data-comment-video-id="<?=$video_info->vid?>" data-comment-to-user-id="<?=$comment->user->uid?>" data-comment-parent-id="<?=$comment->cid?>">
                             <span class="input-group-btn">
                                 <button class="btn btn-primary comment_send" type="button">回复</button>
                             </span>
@@ -101,12 +101,53 @@ $is_other_user_video = true;
                         <div class="media">
                             <div class="media-left">
                                 <a href="#">
-                                    <img class="media-object img-circle img-responsiv img_height_35" src="heads/<?=$comment_child->user->head?>" alt="飒沓" title="飒沓">
+                                    <img class="media-object img-circle img-responsiv img_height_35" src="heads/<?=$comment_child->user->head?>">
                                 </a>
                             </div>
                             <div class="media-body">
                                 <p><span class="text-danger"><?=$comment_child->user->nickname?></span> : <?=$comment_child->comment_content?></p>
-                                <h5><small><?=$comment_child->comment_date?></small></h5>
+                                <h5>
+                                    <small><?=$comment_child->comment_date?>
+                                        <?php if(count($comment_child->children)>0):?>
+                                            <a class="pull-right" data-toggle="collapse" href="#collapseComments_<?=$comment_child->cid?>">查看对话</a>
+                                        <?php endif;?>
+                                    </small>
+                                </h5>
+                                <?php if(count($comment_child->children)>0):?>
+                                    <?php foreach($comment_child->children as $comment_child_comments):?>
+                                        <div class="collapse" id="collapseComments_<?=$comment_child->cid?>">
+                                            <div class="media">
+                                                <div class="media-left">
+                                                    <a href="#">
+                                                        <img class="media-object img-circle img-responsiv img_height_35" src="heads/<?=$comment_child_comments->user->head?>" alt="飒沓" title="飒沓">
+                                                    </a>
+                                                </div>
+                                                <div class="media-body">
+                                                    <p><span class="text-danger"><?=$comment_child_comments->user->nickname?></span> : <?=$comment_child_comments->comment_content?></p>
+                                                    <h5><small><?=$comment_child_comments->comment_date?></small></h5>
+                                                </div>
+                                            </div>
+                                            <?php while(true):?>
+                                                <?php if(count($comment_child_comments->children)>0):?>
+                                                    <?php foreach(array_reverse($comment_child_comments->children) as $comment_child_comments):?>
+                                                        <div class="media media-remove-margin-top">
+                                                            <div class="media-left">
+                                                                <a href="#">
+                                                                    <img class="media-object img-circle img-responsiv img_height_35" src="heads/<?=$comment_child_comments->user->head?>" alt="飒沓" title="飒沓">
+                                                                </a>
+                                                            </div>
+                                                            <div class="media-body">
+                                                                <p><span class="text-danger"><?=$comment_child_comments->user->nickname?></span> : <?=$comment_child_comments->comment_content?></p>
+                                                                <h5><small><?=$comment_child_comments->comment_date?></small></h5>
+                                                            </div>
+                                                        </div>
+                                                    <?php endforeach; ?>
+                                                <?php else: break;?>
+                                                <?php endif;?>
+                                            <?php endwhile;?>
+                                        </div>
+                                    <?php endforeach; ?>
+                                <?php endif;?>
                             </div>
                         </div>
                     </div>

@@ -289,52 +289,6 @@ $(document).ready(function () {
             data: {video_id:video_id},
             dataType: "json",
             success: function(data){
-                /*comments原型
-                 <?php foreach($video_info->comments as $comment):?>
-                 <?php if(isset($comment->parent_id)&&$comment->parent_id!=0){ continue; }?>
-                 <div class="comments_item">
-                 <div class="media">
-                 <div class="media-left">
-                 <a href="#">
-                 <img class="media-object img-circle img-responsiv img_height_35" src="heads/<?=$comment->user->head?>" alt="飒沓" title="飒沓">
-                 </a>
-                 </div>
-                 <div class="media-body">
-                 <p><span class="text-danger"><?=$comment->user->nickname?></span> : <?=$comment->comment_content?></p>
-                 <h5><small><?=$comment->comment_date?><a class="pull-right" data-toggle="collapse" href="#collapseExample_<?=$comment->cid?>">回复</a></small></h5>
-                 <div class="collapse well" id="collapseExample_<?=$comment->cid?>">
-                 <form class="form form-group">
-                 <div class="input-group">
-                 <span class="input-group-addon" id="basic-addon1">@<?=$comment->user->nickname?></span>
-                 <input type="text" class="form-control comment_content" placeholder="30字以内" maxlength="30" data-comment-video-id="<?=$video_info->vid?>" data-comment-to-user-id="<?=$video_info->user_id?>" data-comment-parent-id="<?=$comment->cid?>">
-                 <span class="input-group-btn">
-                 <button class="btn btn-primary comment_send" type="button">回复</button>
-                 </span>
-                 </div>
-                 </form>
-                 </div>
-                 </div>
-                 </div>
-                 <div class="comments_list">
-                 <?php foreach($comment->children as $comment_child):?>
-                 <div class="comments_item_children">
-                 <div class="media">
-                 <div class="media-left">
-                 <a href="#">
-                 <img class="media-object img-circle img-responsiv img_height_35" src="heads/<?=$comment_child->user->head?>" alt="飒沓" title="飒沓">
-                 </a>
-                 </div>
-                 <div class="media-body">
-                 <p><span class="text-danger"><?=$comment_child->user->nickname?></span> : <?=$comment_child->comment_content?></p>
-                 <h5><small><?=$comment_child->comment_date?></small></h5>
-                 </div>
-                 </div>
-                 </div>
-                 <?php endforeach; ?>
-                 </div>
-                 </div>
-                 <?php endforeach; ?>
-                 */
                 var html = '';
                 var count = data.length;
                 $.each(data, function(index, content){
@@ -346,7 +300,8 @@ $(document).ready(function () {
                     '<img class="media-object img-circle img-responsiv img_height_35" src="heads/'+content.head+'" alt="'+content.nickname+'" title="'+content.nickname+'">' +
                     '</a> </div> <div class="media-body">' +
                     '<p><span class="text-danger">'+content.nickname+'</span> :'+content.comment_content+'</p>' +
-                    ' <h5><small>'+content.comment_date+'<a class="pull-right" data-toggle="collapse" href="#collapseExample_'+content.cid+'">回复</a></small></h5>';
+                    '<h5><small>'+content.comment_date+'<a class="pull-right" data-toggle="collapse" href="#collapseExample_'+content.cid+'">回复</a>' +
+                    '<a class="pull-right margin_right_20" href="index.php?r=site/video&id='+ video_id +'" target="_blank">查看回复</a></small></h5>';
 
                     html+='<div class="collapse" id="collapseExample_'+content.cid+'"> <form class="form form-group">' +
                     ' <div class="input-group"> <span class="input-group-addon" id="basic-addon1">@'+content.nickname+'</span>' +
@@ -355,15 +310,6 @@ $(document).ready(function () {
                     '<span class="input-group-btn"> <button class="btn btn-primary comment_send" type="button">回复</button> </span> </div> </form> </div>';
 
                     html+='</div></div>';
-                    if(content.children.length>0) {
-                        $.each(content.children, function (index, content) {
-                            html+= '<div class="comments_list"><div class="comments_item"><div class="media"><div class="media-left">' +
-                            '<a href="index.php?r=user/default/index&id='+content.uid+'">' +
-                            '<img class="media-object img-circle img-responsiv img_height_35" src="heads/'+content.head+'" alt="'+content.nickname+'" title="'+content.nickname+'">' +
-                            '</a> </div> <div class="media-body">' +
-                            '<p><span class="text-info">'+content.nickname+'</span> :'+content.comment_content+'</p> <h5><small>'+content.comment_date+'</small></h5></div></div></div></div>';
-                        });
-                    }
                     html+='</div>';
                 });
                 if(!html){
