@@ -20,6 +20,7 @@ class AppAsset extends AssetBundle
         'css/jquery-tag-this.css',//写标签
         'css/sweet-alert.css',//弹出框
         'css/3Dtimeline.css',//3D时间轴
+        'css/jquery-labelauty.css', //单选多选
         'css/style.css',//自定义的
     ];
     public $js = [
@@ -32,6 +33,7 @@ class AppAsset extends AssetBundle
         /* 上传头像 只在@app\modules\user\views\default\updatehead.php 中使用*/
        // 'js/fullAvatarEditor.js',
        // 'js/swfobject.js',
+        'js/jquery-labelauty.js',//单选多选
         'js/sweet-alert.js',//弹出框
         'js/lazysizes.min.js',//懒加载图片和视频    需懒加载的src改为data-src ,添加class="lazyload"  目前仅仅用在video的加载上
         /* 总方法调用 */

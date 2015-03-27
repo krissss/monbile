@@ -25,4 +25,8 @@ return [
     'Birthday' => '生日',
     'Currentplace' => '住址',
     'Love Game ID' => '最常玩的游戏',
+
+    'Video Describe'=>'视频介绍',
+    'Video URL'=>'视频链接',
+    'Hero Chose'=>'英雄选择'
 ];

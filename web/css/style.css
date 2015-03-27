@@ -40,6 +40,10 @@
     margin: 10px 0;
 }
 
+.text-white{
+    color: #ffffff;
+}
+
 a{
     color: inherit;
 }
@@ -468,4 +472,24 @@ a:active {
 .media video{
     width: 100%;;
 }
+
+/* viode_info_panel */
+.video_user_media{
+    position: absolute;
+    z-index: 999;
+    padding-top: 20px;
+    margin-left: 20px;
+}
+
+/* 单选多选 */
+.dowebok ul{list-style-type: none;}
+.dowebok li{display: inline-block;}
+.dowebok li{margin: 10px 0;}
+.dowebok input.labelauty + label{font:12px "Microsoft Yahei";}
+
+.video_play_button{
+    position: absolute;
+    z-index: 999;
+}
+
 

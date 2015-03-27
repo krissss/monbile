@@ -11,10 +11,10 @@ use Yii;
  *
  * @property integer $vid
  * @property integer $user_id
- * @property integer $game_id
  * @property string $video_title
  * @property string $video_date
  * @property string $video_path
+ * @property string $video_thumbnail
  * @property integer $comment_count
  * @property integer $praise_count
  * @property integer $video_state
@@ -32,11 +32,11 @@ class Videos extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
-            [['user_id', 'game_id', 'video_title', 'video_date', 'video_path', 'comment_count', 'praise_count', 'video_state'], 'required'],
-            [['user_id', 'game_id', 'comment_count', 'praise_count', 'video_state'], 'integer'],
+            [['user_id', 'video_title', 'video_date', 'video_path','video_thumbnail', 'comment_count', 'praise_count', 'video_state'], 'required'],
+            [['user_id', 'comment_count', 'praise_count', 'video_state'], 'integer'],
             [['video_date'], 'safe'],
             [['video_title'], 'string', 'max' => 100],
-            [['video_path'], 'string', 'max' => 255]
+            [['video_path', 'video_thumbnail'], 'string', 'max' => 255]
         ];
     }
 
@@ -45,10 +45,10 @@ class Videos extends \yii\db\ActiveRecord
         return [
             'vid' => Yii::t('app', 'Vid'),
             'user_id' => Yii::t('app', 'User ID'),
-            'game_id' => Yii::t('app', 'Game ID'),
             'video_title' => Yii::t('app', 'Video Title'),
             'video_date' => Yii::t('app', 'Video Date'),
             'video_path' => Yii::t('app', 'Video Path'),
+            'video_thumbnail' => Yii::t('app', 'Video Thumbnail'),
             'comment_count' => Yii::t('app', 'Comment Count'),
             'praise_count' => Yii::t('app', 'Praise Count'),
             'video_state' => Yii::t('app', 'Video State'),

@@ -32,19 +32,15 @@ class DefaultController extends Controller
         if (($user && $id == $user->uid) || ($user && $id == null)) {
             //用户发视频
             $video_send = new VideoSendForm();
-            if ($video_send->load(Yii::$app->request->post()) && $video_send->validate(['user_id', 'video_title', 'tags', 'game_id'])) {
-                $video_send->video_path = UploadedFile::getInstance($video_send, 'video_path');
-                if ($video_send->validate(['video_path']) && $video_send->video_path) {
-                    $video_name = uniqid();
-                    $video_send->video_path->saveAs('videos/' . $video_name . '.' . $video_send->video_path->extension);
-                    $video_send->video_path = $video_name . '.' . $video_send->video_path->extension;
-                    $video_send->videoSave();
-                    //视频保存后截取第一帧
-                    Functions::cutFrame($video_name);
+            if ($video_send->load(Yii::$app->request->post()) && $video_send->validate()) {
+                if($video_send->videoSave($user->uid)){
                     $email = $user->email;
                     Yii::$app->getSession()->remove('user');
                     Yii::$app->getSession()->set('user',Users::findByEmail($email));
-                    Yii::$app->session->setFlash('success_message', '发布成功');
+                    Yii::$app->session->setFlash('success_message','发布成功');
+                    return $this->refresh();
+                }else{
+                    Yii::$app->session->setFlash('wrong_message','出现一些问题，您可以稍后重试');
                     return $this->refresh();
                 }
             }

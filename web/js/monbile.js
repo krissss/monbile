@@ -2,9 +2,38 @@
  * Created by kriss on 2015/2/2.
  */
 
-videojs.options.flash.swf = "video-js.swf";
+//videojs.options.flash.swf = "video-js.swf";
 
 $(document).ready(function () {
+    /**
+     * 打开赞的popover
+     */
+    $('.praise').popover({
+        html: true,
+        content: $("#popoverContent").html(),
+        container: 'body',
+        placement: 'top'
+    }).hover(function(){
+        $(this).popover('show');
+    },function(){
+        $(this).popover('hide');
+    });
+
+    /**
+     * 单选多选
+     */
+    $('.dowebok :input').labelauty();
+
+    /**
+     * 选择英雄后把英雄名字放到button上，把value传给hero input
+     */
+    $("input[name='hero_radio']").click(function(){
+        var heroName = $(this).parent('li').find('span.labelauty-unchecked').text();
+        var heroPinYin = $(this).val();
+        $('.heroChose').html(heroName).removeClass('btn-default').addClass('btn-primary');
+        $('#videosendform-hero').val(heroPinYin);
+    });
+
     /**
      * 返回顶部
      */
@@ -17,6 +46,33 @@ $(document).ready(function () {
     });
     $('.actGoTop').click(function(){
         $('html,body').animate({scrollTop: '0px'}, 800);
+    });
+
+    /**
+     * 视频播放按钮的位置定位
+     */
+    function playButtonPosition(){
+        var video_thumbnail_bg = $(".video_thumbnail_bg");
+        var video_play_button = $(".video_play_button");
+        var bg_width = video_thumbnail_bg.width();
+        var bg_height  = video_thumbnail_bg.height();
+        var btn_width  = video_play_button.width();
+        var btn_height  = video_play_button.height();
+        video_play_button.css({"margin-top":bg_height/2-btn_height/2,"margin-left":bg_width/2-btn_width/2});
+    }
+    $(window).load(function(){
+        playButtonPosition();
+    }).resize(function(){
+        playButtonPosition();
+    });
+
+    /**
+     * 视频播放按钮的hover样子改变
+     */
+    $(".video_play_button").hover(function(){
+        $(this).attr('src','./imgs/play_hover.png');
+    },function(){
+        $(this).attr('src','./imgs/play.png');
     });
 
     /**
@@ -51,11 +107,11 @@ $(document).ready(function () {
         //$("#videosendform-video_title").charCount();
 
         //custom usage
-    $("#videosendform-video_title").charCount({
+/*    $("#videosendform-video_title").charCount({
         allowed: 100,
         warning: 20,
         counterText: '剩余字数: '
-    });
+    });*/
 
 
     /**
@@ -249,6 +305,7 @@ $(document).ready(function () {
      */
     var success_message;
     var warning_message;
+    var wrong_message;
     var success_go_url;
     var warning_go_url;
     if(success_message = $('.success_message').val()) {
@@ -274,6 +331,12 @@ $(document).ready(function () {
                     window.location.href = warning_go_url;
                 }
             }
+        });
+    }
+    if(wrong_message = $('.wrong_message').val()){
+        swal({
+            title: wrong_message,
+            type: 'error'
         });
     }
 

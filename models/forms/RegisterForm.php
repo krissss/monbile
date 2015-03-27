@@ -2,6 +2,7 @@
 
 namespace app\models\forms;
 
+use app\functions\Functions;
 use app\models\Roles;
 use app\models\Users;
 use Yii;
@@ -65,6 +66,10 @@ class RegisterForm extends Model
         $user->create_date = date('Y-m-d H:i:s');
         $user->update_date = date('Y-m-d H:i:s');
         if($user->save()){
+            //用户注册时生成印章
+            $nickname = $user->nickname;
+            $user_id = $user->uid;
+            Functions::createSealWithNickName($nickname,$user_id);
             return $user;
         }
         return null;

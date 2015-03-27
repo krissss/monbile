@@ -19,6 +19,7 @@
 /* @var $sameSchoolUser :: render   ::用来推荐关注 */
 
 use yii\helpers\Url;
+use yii\helpers\Html;
 
 $heads = Url::to('/heads/');
 $videos = Url::to('/videos/');
@@ -39,6 +40,7 @@ if(isset($other_user) && $other_user){
 $this->title = $user->nickname.'的主页';
 ?>
 <input class="success_message" type="hidden" value="<?= $session->hasFlash('success_message') ? $session->getFlash('success_message') : '' ?>">
+<input class="wrong_message" type="hidden" value="<?= $session->hasFlash('wrong_message') ? $session->getFlash('wrong_message') : '' ?>">
 <input class="warning_message" type="hidden" value="<?= !$is_other_user && $user->create_date == $user->update_date ? '您的密码未修改#存在不安全因素，也可能给您下次登录带来麻烦，请尽快修改。' : '' ?>">
 <input class="warning_go_url" type="hidden" value="<?= Url::to(['/user/default/update-paw']) ?>">
 <?php require(__DIR__ . '/../../../../views/site/fragment/comments_modal.php'); ?>
