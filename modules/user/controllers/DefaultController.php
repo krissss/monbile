@@ -8,6 +8,7 @@ use app\models\Comments;
 use app\models\forms\DateSearchForm;
 use app\models\forms\TagSearchForm;
 use app\models\forms\VideoSendForm;
+use app\models\Hero;
 use app\models\Message;
 use app\models\Relations;
 use app\models\Users;
@@ -26,6 +27,10 @@ class DefaultController extends Controller
      */
     public function actionIndex()
     {
+        //获取所有英雄并存入session
+        if(!Yii::$app->getSession()->has(' heroes')){
+            Yii::$app->getSession()->set('heroes',Hero::find()->all());
+        }
         $id = Yii::$app->request->get('id');
         $user = Yii::$app->getSession()->get('user');
         //访问自己

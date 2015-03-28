@@ -11,6 +11,8 @@
 use yii\helpers\Html;
 use yii\bootstrap\ActiveForm;
 
+$heroes = Yii::$app->getSession()->get('heroes');
+
 ?>
 <div class="panel panel-default collapse" id="send_video">
     <div class="panel-body">
@@ -29,7 +31,7 @@ use yii\bootstrap\ActiveForm;
                 选择英雄
             </button>
             <?= Html::submitButton('发布', ['class' => 'btn btn-primary', 'name' => 'video-send-submit', 'id'=> 'video-send-submit']) ?>
-            <?=$form->field($video_send,'hero')->hiddenInput()->label(false)?>
+            <?=$form->field($video_send,'hero_id')->hiddenInput()->label(false)?>
         </div>
         <?php ActiveForm::end(); ?>
     </div>
@@ -43,16 +45,9 @@ use yii\bootstrap\ActiveForm;
             </div>
             <div class="modal-body">
                 <ul class="dowebok">
-                    <li><?=Html::radio('hero_radio',false,['data-labelauty'=>'皮城女警 凯瑟琳','value'=>'kaiseling'])?></li>
-                    <li><?=Html::radio('hero_radio',false,['data-labelauty'=>'审判天使 凯尔','value'=>'kaier'])?></li>
-                    <li><?=Html::radio('hero_radio',false,['data-labelauty'=>'盲僧','value'=>'mangsen'])?></li>
-                    <li><?=Html::radio('hero_radio',false,['data-labelauty'=>'死亡歌颂者 凯尔萨斯','value'=>'kaiersasi'])?></li>
-                    <li><?=Html::radio('hero_radio',false,['data-labelauty'=>'暴走萝莉 金克丝','value'=>'jinkesi'])?></li>
-                    <li><?=Html::radio('hero_radio',false,['data-labelauty'=>'皮城女警 凯瑟琳','value'=>'kaiseling'])?></li>
-                    <li><?=Html::radio('hero_radio',false,['data-labelauty'=>'审判天使 凯尔','value'=>'kaier'])?></li>
-                    <li><?=Html::radio('hero_radio',false,['data-labelauty'=>'盲僧','value'=>'mangsen'])?></li>
-                    <li><?=Html::radio('hero_radio',false,['data-labelauty'=>'死亡歌颂者 凯尔萨斯','value'=>'kaiersasi'])?></li>
-                    <li><?=Html::radio('hero_radio',false,['data-labelauty'=>'暴走萝莉 金克丝','value'=>'jinkesi'])?></li>
+                    <?php foreach($heroes as $hero):?>
+                        <li><?=Html::radio('hero_radio',false,['data-labelauty'=>$hero->hero_nickname.' '.$hero->hero_name_cn,'value'=>$hero->hid])?></li>
+                    <?php endforeach; ?>
                 </ul>
             </div>
             <div class="modal-footer">

@@ -10,6 +10,7 @@ use app\models\forms\RegisterForm;
 use app\models\forms\TagSearchForm;
 use app\models\forms\VideoSendForm;
 use app\models\Games;
+use app\models\Hero;
 use app\models\Relations;
 use app\models\Tags;
 use app\models\Tops;
@@ -42,29 +43,29 @@ class SiteController extends Controller
     {
         //获取热门标签并将其放入session
         if(!Yii::$app->getSession()->has('tags_hot')){
-            Yii::$app->getSession()->set('tags_hot',Tags::findHotTags());
+            Yii::$app->getSession()->set('tags_hot',Hero::findHotHero());
         }
         //获取热门人物并将其放入session
         if(!Yii::$app->getSession()->has('users_hot')){
             Yii::$app->getSession()->set('users_hot',Users::findHotUsers());
         }
+        //获取所有英雄并存入session
+        if(!Yii::$app->getSession()->has(' heroes')){
+            Yii::$app->getSession()->set('heroes',Hero::find()->all());
+        }
         //用户已登录
         if ($user = Yii::$app->getSession()->get('user')) {
             //用户发视频
             $video_send = new VideoSendForm();
-            if ($video_send->load(Yii::$app->request->post()) && $video_send->validate(['user_id', 'video_title', 'tags', 'game_id'])) {
-                $video_send->video_path = UploadedFile::getInstance($video_send, 'video_path');
-                if ($video_send->validate(['video_path']) && $video_send->video_path) {
-                    $video_name = uniqid();
-                    $video_send->video_path->saveAs('videos/' . $video_name . '.' . $video_send->video_path->extension);
-                    $video_send->video_path = $video_name . '.' . $video_send->video_path->extension;
-                    $video_send->videoSave();
-                    //视频保存后截取第一帧
-                    Functions::cutFrame($video_name);
+            if ($video_send->load(Yii::$app->request->post()) && $video_send->validate()) {
+                if($video_send->videoSave($user->uid)){
                     $email = $user->email;
                     Yii::$app->getSession()->remove('user');
                     Yii::$app->getSession()->set('user',Users::findByEmail($email));
                     Yii::$app->session->setFlash('success_message','发布成功');
+                    return $this->refresh();
+                }else{
+                    Yii::$app->session->setFlash('wrong_message','出现一些问题，您可以稍后重试');
                     return $this->refresh();
                 }
             }

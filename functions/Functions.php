@@ -77,13 +77,13 @@ class Functions {
 
     /**
      * 合成英雄形象到一张背景图,并把一份对应的坐标文件复制过去
-     * @param $heroName ::英雄名字
+     * @param $heroId ::英雄id
      * @param $thumbnailName    ::生成的缩略图名称,不需要后缀
      */
-    public static function createHeroToBackground($heroName,$thumbnailName){
+    public static function createHeroToBackground($heroId,$thumbnailName){
         $dst_im = imagecreatefrompng('./imgs/bg/bg_'.rand(1,10).'.png');
         imagesavealpha($dst_im, true);
-        $src_im = imagecreatefrompng('./imgs/hero/'.$heroName.'.png');
+        $src_im = imagecreatefrompng('./imgs/hero/hero_'.$heroId.'.png');
         imagesavealpha($src_im, true);
         if(imagecopy($dst_im,$src_im,250,150,0,0,imagesx($src_im),imagesy($src_im))){
             imagepng($dst_im,'./imgs/thumbnail/'.$thumbnailName.'.png');
@@ -150,7 +150,7 @@ class Functions {
         $src_w = imagesx($src_im);
         $src_h = imagesy($src_im);
         if(imagecopy($dst_im,$src_im,$x,$y,0,0,$src_w,$src_h)){
-            imagepng($dst_im,'./imgs/thumbnail/'.$thumbnailName.'2.png');
+            imagepng($dst_im,'./imgs/thumbnail/'.$thumbnailName.'.png');
         }
         imagedestroy($dst_im);
         unlink($tempImg);

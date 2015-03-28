@@ -146,7 +146,7 @@ class Users extends \yii\db\ActiveRecord
      */
     public static function createRandHead()
     {
-        return 'head (' . rand(1, 10) . ').jpg';
+        return 'head (' . rand(1, 9) . ').jpg';
     }
 
     /**

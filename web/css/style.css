@@ -481,12 +481,13 @@ a:active {
     margin-left: 20px;
 }
 
-/* 单选多选 */
+/* 英雄选择 */
 .dowebok ul{list-style-type: none;}
 .dowebok li{display: inline-block;}
 .dowebok li{margin: 10px 0;}
 .dowebok input.labelauty + label{font:12px "Microsoft Yahei";}
 
+/* 视频播放 */
 .video_play_button{
     position: absolute;
     z-index: 999;

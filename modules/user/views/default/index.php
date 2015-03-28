@@ -43,7 +43,6 @@ $this->title = $user->nickname.'的主页';
 <input class="wrong_message" type="hidden" value="<?= $session->hasFlash('wrong_message') ? $session->getFlash('wrong_message') : '' ?>">
 <input class="warning_message" type="hidden" value="<?= !$is_other_user && $user->create_date == $user->update_date ? '您的密码未修改#存在不安全因素，也可能给您下次登录带来麻烦，请尽快修改。' : '' ?>">
 <input class="warning_go_url" type="hidden" value="<?= Url::to(['/user/default/update-paw']) ?>">
-<?php require(__DIR__ . '/../../../../views/site/fragment/comments_modal.php'); ?>
 
 <div class="user-default-index">
     <div class="row">
@@ -87,5 +86,22 @@ $this->title = $user->nickname.'的主页';
                 <?php endforeach; ?>
             <? endif; ?>
         </div>
+    </div>
+</div>
+
+<?php require(__DIR__ . '/../../../../views/site/fragment/comments_modal.php'); ?>
+<div id="popoverContent" class="hidden">
+    <div class="row">
+        <?php if($session_user):?>
+            <a href="javascript:void(0);" class="seal_button" data-seal="seal_1"><?=Html::img("./imgs/seal/".$session_user->uid."/seal_1.png",['class'=>'col-xs-6','title'=>'便便'])?></a>
+            <a href="javascript:void(0);" class="seal_button" data-seal="seal_2"><?=Html::img("./imgs/seal/".$session_user->uid."/seal_2.png",['class'=>'col-xs-6','title'=>'火火火'])?></a>
+            <a href="javascript:void(0);" class="seal_button" data-seal="seal_3"><?=Html::img("./imgs/seal/".$session_user->uid."/seal_3.png",['class'=>'col-xs-6','title'=>'水水水'])?></a>
+            <a href="javascript:void(0);" class="seal_button" data-seal="seal_4"><?=Html::img("./imgs/seal/".$session_user->uid."/seal_4.png",['class'=>'col-xs-6','title'=>'王者风范'])?></a>
+        <?php else:?>
+            <a href="javascript:void(0);" class="seal_button"><?=Html::img("./imgs/seal/seal_1.png",['class'=>'col-xs-6','title'=>'便便'])?></a>
+            <a href="javascript:void(0);" class="seal_button"><?=Html::img("./imgs/seal/seal_2.png",['class'=>'col-xs-6','title'=>'火火火'])?></a>
+            <a href="javascript:void(0);" class="seal_button"><?=Html::img("./imgs/seal/seal_3.png",['class'=>'col-xs-6','title'=>'水水水'])?></a>
+            <a href="javascript:void(0);" class="seal_button"><?=Html::img("./imgs/seal/seal_4.png",['class'=>'col-xs-6','title'=>'王者风范'])?></a>
+        <?php endif; ?>
     </div>
 </div>

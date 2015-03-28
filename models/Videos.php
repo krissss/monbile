@@ -11,6 +11,7 @@ use Yii;
  *
  * @property integer $vid
  * @property integer $user_id
+ * @property integer $hero_id
  * @property string $video_title
  * @property string $video_date
  * @property string $video_path
@@ -32,8 +33,8 @@ class Videos extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
-            [['user_id', 'video_title', 'video_date', 'video_path','video_thumbnail', 'comment_count', 'praise_count', 'video_state'], 'required'],
-            [['user_id', 'comment_count', 'praise_count', 'video_state'], 'integer'],
+            [['user_id', 'hero_id', 'video_title', 'video_date', 'video_path','video_thumbnail', 'comment_count', 'praise_count', 'video_state'], 'required'],
+            [['user_id', 'hero_id', 'comment_count', 'praise_count', 'video_state'], 'integer'],
             [['video_date'], 'safe'],
             [['video_title'], 'string', 'max' => 100],
             [['video_path', 'video_thumbnail'], 'string', 'max' => 255]
@@ -45,6 +46,7 @@ class Videos extends \yii\db\ActiveRecord
         return [
             'vid' => Yii::t('app', 'Vid'),
             'user_id' => Yii::t('app', 'User ID'),
+            'hero_id' => Yii::t('app', 'Hero ID'),
             'video_title' => Yii::t('app', 'Video Title'),
             'video_date' => Yii::t('app', 'Video Date'),
             'video_path' => Yii::t('app', 'Video Path'),
@@ -63,6 +65,24 @@ class Videos extends \yii\db\ActiveRecord
     {
         return $this->hasOne(Users::className(), ['uid' => 'user_id'])
             ->inverseOf('videos');
+    }
+
+    /**
+     * 一对一关联，一个video只有一个user
+     * @return \yii\db\ActiveQuery
+     */
+    public function getHero()
+    {
+        return $this->hasOne(Hero::className(), ['hid' => 'hero_id'])
+            ->inverseOf('videos');
+    }
+
+    /**
+     * 一对多关联，一个video有多个praises
+     * @return \yii\db\ActiveQuery
+     */
+    public function getPraises(){
+        return $this->hasMany(Praise::className(), ['video_id' => 'vid']);
     }
 
     /**

@@ -71,27 +71,11 @@ $imgs = Url::to('./imgs/')
             </div>
         </div>
         <a href="<?= $video_info->video_path?>" target="_blank" class="col-xs-4"><img src="<?=Url::to($imgs . 'play.png')?>" class="video_play_button" width="60%"></a>
-        <img src="<?= Url::to($thumbnail_path . $video_info->video_thumbnail.'.png') ?>" alt="video_thumbnail" class="col-xs-12 video_thumbnail_bg" height="100%">
+        <img src="<?= Url::to($imgs.'loading.gif')?>" data-src="<?= Url::to($thumbnail_path . $video_info->video_thumbnail.'.png') ?>" alt="video_thumbnail" class="col-xs-12 lazyload video_thumbnail_bg video_<?= $video_info->vid ?>" height="100%">
     </div>
-    <div class="btn-group btn-group-justified" role="group" aria-label="菜单" data-video-id="" data-video-user-id="">
+    <div class="btn-group btn-group-justified" role="group" aria-label="菜单" data-video-id="<?=$video_info->vid?>" data-video-user-id="<?=$video_info->user->uid?>">
         <a href="javascript:void(0);" class="btn btn-default add_collection" role="button"><span class="glyphicon glyphicon-star <?= in_array($video_info->vid,$collections_array,true)?'glyphicon-inverse':'' ?>" aria-hidden="true"></span><?= in_array($video_info->vid,$collections_array,true)?'已':'' ?>收藏</a>
         <a href="javascript:void(0);" class="btn btn-default show_comments" role="button" data-toggle="modal" data-target="#commentsModal"><span class="glyphicon glyphicon-comment" aria-hidden="true"></span>评论<span class="badge comment_count_<?=$video_info->vid?>"><?= $video_info->comment_count ?></span></a>
-        <a href="javascript:void(0);" class="btn btn-default praise" tabindex="0" role="button" data-toggle="popover" title="选择点赞图"><span class="glyphicon glyphicon-thumbs-up" aria-hidden="true"></span>赞<span class="badge praise_count"><?= $video_info->praise_count ?></span></span></a>
-    </div>
-</div>
-
-<div id="popoverContent" class="hidden">
-    <div class="row">
-        <?php if($session_user):?>
-            <a href="javascript:void(0);"><?=Html::img("./imgs/seal/".$session_user->uid."/seal_1.png",['class'=>'col-xs-6','title'=>'便便'])?></a>
-            <a href="javascript:void(0);"><?=Html::img("./imgs/seal/".$session_user->uid."/seal_2.png",['class'=>'col-xs-6','title'=>'火火火'])?></a>
-            <a href="javascript:void(0);"><?=Html::img("./imgs/seal/".$session_user->uid."/seal_3.png",['class'=>'col-xs-6','title'=>'水水水'])?></a>
-            <a href="javascript:void(0);"><?=Html::img("./imgs/seal/".$session_user->uid."/seal_4.png",['class'=>'col-xs-6','title'=>'王者风范'])?></a>
-        <?php else:?>
-            <a href="javascript:void(0);"><?=Html::img("./imgs/seal/seal_1.png",['class'=>'col-xs-6','title'=>'便便'])?></a>
-            <a href="javascript:void(0);"><?=Html::img("./imgs/seal/seal_2.png",['class'=>'col-xs-6','title'=>'火火火'])?></a>
-            <a href="javascript:void(0);"><?=Html::img("./imgs/seal/seal_3.png",['class'=>'col-xs-6','title'=>'水水水'])?></a>
-            <a href="javascript:void(0);"><?=Html::img("./imgs/seal/seal_4.png",['class'=>'col-xs-6','title'=>'王者风范'])?></a>
-        <?php endif; ?>
+        <a href="javascript:void(0);" class="btn btn-default praise" tabindex="0" role="button" data-toggle="popover" title="选择点赞图" data-video="<?=$video_info->vid?>"><span class="glyphicon glyphicon-thumbs-up" aria-hidden="true"></span>赞<span class="badge praise_count_<?= $video_info->vid ?>"><?= $video_info->praise_count ?></span></span></a>
     </div>
 </div>
