@@ -1,10 +1,5 @@
 <?php
-/**
- * 热门标签
- * site/index   site/search
- * 在包含页面需定义以下变量
- */
-/* @var $tags_hot :: session */
+/* @var $tags_hot */
 
 use \yii\helpers\Url;
 ?>

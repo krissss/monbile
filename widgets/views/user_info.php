@@ -1,23 +1,16 @@
 <?php
-/**
- * 用户信息
- * site/index   user/default/index  user/default/videos
- * 在包含页面需定义以下变量
- */
-/* @var $user :: session or render($other_user) */
-/* @var $is_other_user :: false or true */
-/* @var $relations_array :: render */
-/* @var $heads = Url::to('/heads/'); */
-/* @var $imgs = Url::to('/imgs/'); */
+/* @var $user */
+/* @var $is_other_user */
+/* @var $relations_array */
+/* @var $head_path */
+/* @var $img_path */
 
 use yii\helpers\Url;
 use app\models\Users;
-
-$imgs = Url::to('/imgs/');
 ?>
 <div class="user-info">
     <div class="text-center">
-        <img src="<?= Url::to($heads . $user->head) ?>" alt="<?=$user->nickname?>" title="<?=$user->nickname?>" class="img-circle img-responsiv img_height_150">
+        <img src="<?= Url::to($head_path . $user->head) ?>" alt="<?=$user->nickname?>" title="<?=$user->nickname?>" class="img-circle img-responsiv img_height_150">
         <h3>
             <?php if($user->sex == Users::USER_SEX_MALE):?>
                 <strong class="text-primary"><?= $user->nickname ?></strong>

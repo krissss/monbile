@@ -3,6 +3,7 @@
  * 个人主页 or XX的主页
  */
 /* @var $this \yii\web\View */
+/* @var $user_id :: 访问的用户的id */
 /* @var $collections_array :: render */
 /* @var $relations_array :: render */
 /* @var $session_user :: session */
@@ -50,7 +51,7 @@ $this->title = $user->nickname.'的主页';
             <button type="button" class="close" data-dismiss="alert"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
         </div>
         <div class="col-xs-12 col-md-4 pull-right">
-            <?php require(__DIR__ . '/../../../../views/site/fragment/user_info.php'); ?>
+            <?= \app\widgets\UserInfoWidget::widget(['user_id'=>$user_id]) ?>
         </div>
         <div class="col-xs-12 col-md-8 pull-left">
             <?php if (!$is_other_user): ?>
@@ -82,26 +83,14 @@ $this->title = $user->nickname.'的主页';
                 <?php require(__DIR__ . '/../../../../views/site/fragment/recommend_user.php'); ?>
             <?php else: ?>
                 <?php foreach ($user->videos as $video_info): ?>
-                    <?php require(__DIR__ . '/../../../../views/site/fragment/video_info_panel.php'); ?>
+                    <?php /*\require(__DIR__ . '/../../../../views/site/fragment/video_info_panel.php'); */?>
+                    <?= \app\widgets\VideoInfoWidget::widget(['video_info'=>$video_info]) ?>
                 <?php endforeach; ?>
             <? endif; ?>
         </div>
     </div>
 </div>
 
-<?php require(__DIR__ . '/../../../../views/site/fragment/comments_modal.php'); ?>
-<div id="popoverContent" class="hidden">
-    <div class="row">
-        <?php if($session_user):?>
-            <a href="javascript:void(0);" class="seal_button" data-seal="seal_1"><?=Html::img("./imgs/seal/".$session_user->uid."/seal_1.png",['class'=>'col-xs-6','title'=>'便便'])?></a>
-            <a href="javascript:void(0);" class="seal_button" data-seal="seal_2"><?=Html::img("./imgs/seal/".$session_user->uid."/seal_2.png",['class'=>'col-xs-6','title'=>'火火火'])?></a>
-            <a href="javascript:void(0);" class="seal_button" data-seal="seal_3"><?=Html::img("./imgs/seal/".$session_user->uid."/seal_3.png",['class'=>'col-xs-6','title'=>'水水水'])?></a>
-            <a href="javascript:void(0);" class="seal_button" data-seal="seal_4"><?=Html::img("./imgs/seal/".$session_user->uid."/seal_4.png",['class'=>'col-xs-6','title'=>'王者风范'])?></a>
-        <?php else:?>
-            <a href="javascript:void(0);" class="seal_button"><?=Html::img("./imgs/seal/seal_1.png",['class'=>'col-xs-6','title'=>'便便'])?></a>
-            <a href="javascript:void(0);" class="seal_button"><?=Html::img("./imgs/seal/seal_2.png",['class'=>'col-xs-6','title'=>'火火火'])?></a>
-            <a href="javascript:void(0);" class="seal_button"><?=Html::img("./imgs/seal/seal_3.png",['class'=>'col-xs-6','title'=>'水水水'])?></a>
-            <a href="javascript:void(0);" class="seal_button"><?=Html::img("./imgs/seal/seal_4.png",['class'=>'col-xs-6','title'=>'王者风范'])?></a>
-        <?php endif; ?>
-    </div>
-</div>
+<?php /*require(__DIR__ . '/../../../../views/site/fragment/comments_modal.php'); */?>
+<?= \app\widgets\CommentModalWidget::widget() ?>
+<?= \app\widgets\SealPopoverWidget::widget() ?>

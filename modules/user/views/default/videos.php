@@ -15,6 +15,8 @@ use yii\helpers\Url;
 
 $heads = Url::to('/heads/');
 $videos = Url::to('/videos/');
+$imgs = Url::to('/imgs/');
+$thumbnail_path = Url::to('./imgs/thumbnail/');
 
 $session = Yii::$app->getSession();
 $user = $session->get('user');
@@ -30,34 +32,19 @@ $this->title = $user->nickname.'的视频';
 <div class="user-default-videos">
     <div class="row">
         <div class="col-xs-12 col-md-8">
-            <div class="row">
-                <?php if (count($user->videos) < 1): ?>
-                    <div class="alert alert-info col-xs-12" role="alert">还没有发布任何视频</div>
-                <?php else: ?>
-                    <?php foreach ($user->videos as $video_info): ?>
-                        <div class="col-xs-12 col-md-6">
-                            <div class="panel panel-default">
-                                <div class="panel-body">
-                                    <video class="video-js vjs-default-skin" controls preload="none" width="100%" height="120"
-                                           poster="<?=Url::to('thumbnail/'.explode('.',$video_info->video_path)[0].'.jpg')?>"
-                                           data-setup='{}'>
-                                        <source src="<?= Url::to($videos . $video_info->video_path) ?>" type='video/mp4' />
-                                        <p class="vjs-no-js">观看本视频需要您开启浏览器javascript，并且需要浏览器支持HTML5</p>
-                                    </video>
-                                    <h5><small><?= $video_info->video_date; ?></small></h5>
-                                    <div class="has_tag">
-                                        <?php foreach ($video_info->tagRelations as $tagRelation_info): ?>
-                                            <span class="tag tag-color-<?= rand(0, 6) ?>"><?= $tagRelation_info->tag->tag_name ?></span>
-                                        <?php endforeach; ?>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    <?php endforeach; ?>
-                <?php endif; ?>
-            </div>
+            <?php if (count($user->videos) < 1): ?>
+                <div class="alert alert-info col-xs-12" role="alert">还没有发布任何视频</div>
+            <?php else: ?>
+                <?php foreach ($user->videos as $video_info): ?>
+                    <div class="col-xs-12 col-md-6">
+                        <a href="<?= $video_info->video_path?>" target="_blank" class="col-xs-4"><img src="<?=Url::to($imgs . 'play.png')?>" class="video_play_button" width="60%"></a>
+                        <img src="<?= Url::to($imgs.'loading.gif')?>" data-src="<?= Url::to($thumbnail_path . $video_info->video_thumbnail.'.png') ?>" alt="video_thumbnail" class="lazyload video_thumbnail_bg video_<?= $video_info->vid ?>" width="100%" height="100%">
+                        <h5><small><?= $video_info->video_date; ?></small></h5>
+                    </div>
+                <?php endforeach; ?>
+            <?php endif; ?>
         </div>
-        <div class="col-xs-12 col-md-4">
+        <div class="col-xs-12 col-md-4 hidden-xs hidden-sm">
             <?php require(__DIR__ . '/../../../../views/site/fragment/user_info.php'); ?>
         </div>
     </div>

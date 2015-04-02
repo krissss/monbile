@@ -64,7 +64,7 @@ $user = Yii::$app->getSession()->get('user');
                                 <a href="javascript:void(0);" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false"><span class="glyphicon glyphicon-user" aria-hidden="true"></span><?=$user->nickname?><span class="caret"></span></a>
                                 <ul class="dropdown-menu" role="menu">
                                     <li><a href="<?=Url::to(['/user/default/index'])?>">我的主页</a></li>
-                                    <li><a href="<?=Url::to(['/user/default/videos'])?>">我的视频</a></li>
+                                    <?php /*?><li><a href="<?=Url::to(['/user/default/videos'])?>">我的视频</a></li><?php */?>
                                     <li><a href="<?=Url::to(['/user/default/collections'])?>">我的收藏</a></li>
                                     <li><a href="<?=Url::to(['/user/default/relations-front'])?>">我的关注</a></li>
                                     <li><a href="<?=Url::to(['/user/default/relations-back'])?>">我的粉丝</a></li>

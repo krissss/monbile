@@ -41,14 +41,6 @@ class SiteController extends Controller
      */
     public function actionIndex()
     {
-        //获取热门标签并将其放入session
-        if(!Yii::$app->getSession()->has('tags_hot')){
-            Yii::$app->getSession()->set('tags_hot',Hero::findHotHero());
-        }
-        //获取热门人物并将其放入session
-        if(!Yii::$app->getSession()->has('users_hot')){
-            Yii::$app->getSession()->set('users_hot',Users::findHotUsers());
-        }
         //获取所有英雄并存入session
         if(!Yii::$app->getSession()->has(' heroes')){
             Yii::$app->getSession()->set('heroes',Hero::find()->all());
@@ -208,7 +200,7 @@ class SiteController extends Controller
             return $this->render('search',[
                 'tag_id' => $id,
                 'collections_array' => $collections_array,
-                'videos_info' => Videos::findVideosByTagId($id)
+                'videos_info' => Videos::findVideosByHeroId($id)
             ]);
         }else{
             return $this->goHome();

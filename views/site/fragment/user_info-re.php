@@ -42,13 +42,15 @@ $imgs = Url::to('/imgs/');
     </div>
     <div class="panel panel-default">
         <div class="panel-body text-center">
-            <div class="col-xs-5"><a href="<?= Url::to(['/user/default/relations-front','id'=>$user->uid]) ?>">关注<span class="badge"><?=count($user->relationsFront)?></span></a></div>
+            <div class="col-xs-3"><a href="<?= Url::to(['/user/default/relations-front','id'=>$user->uid]) ?>">关注<span class="badge"><?=count($user->relationsFront)?></span></a></div>
             <div class="col-xs-1">|</div>
-            <div class="col-xs-5"><a href="<?= Url::to(['/user/default/relations-back','id'=>$user->uid]) ?>">粉丝<span class="badge fans_<?=$user->uid?>"><?=count($user->relationsBack)?></span></a></div>
+            <div class="col-xs-3"><a href="<?= Url::to(['/user/default/relations-back','id'=>$user->uid]) ?>">粉丝<span class="badge fans_<?=$user->uid?>"><?=count($user->relationsBack)?></span></a></div>
+            <div class="col-xs-1">|</div>
+            <div class="col-xs-3"><a href="<?= Url::to(['/user/default/collections','id'=>$user->uid]) ?>">收藏<span class="badge"><?=count($user->collections)?></span></a></div>
             <div class="col-xs-12 line_horizontal_height_21"></div>
-            <div class="col-xs-5"><a href="<?= Url::to(['/user/default/index','id'=>$user->uid]) ?>"><?=$is_other_user?'他的主页':'我的主页'?><span class="badge"><?=count($user->videos)?></span></a></div>
+            <div class="col-xs-5"><a href="<?= Url::to(['/user/default/index','id'=>$user->uid]) ?>"><?=$is_other_user?'他的主页':'我的主页'?></a></div>
             <div class="col-xs-1">|</div>
-            <div class="col-xs-5"><a href="<?= Url::to(['/user/default/collections','id'=>$user->uid]) ?>"><?=$is_other_user?'他的收藏':'我的收藏'?><span class="badge"><?=count($user->collections)?></span></a></div>
+            <div class="col-xs-5"><a href="<?= Url::to(['/user/default/videos','id'=>$user->uid]) ?>"><?=$is_other_user?'他的视频':'我的视频'?><span class="badge"><?=count($user->videos)?></span></a></div>
         </div>
     </div>
 </div>

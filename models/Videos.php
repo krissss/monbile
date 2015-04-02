@@ -262,4 +262,22 @@ class Videos extends \yii\db\ActiveRecord
             ->all();
     }
 
+    /**
+     * 根据标签查找$tag_relation，用于点击标签云
+     * @param $tag_id
+     * @param int $offset
+     * @param int $limit
+     * @return array|\yii\db\ActiveRecord[]
+     */
+    public static function findVideosByHeroId($hero_id, $offset=0, $limit=10){
+        return Videos::find()
+            ->where(['hero_id' => $hero_id])
+            ->offset($offset)
+            ->limit($limit)
+            ->orderBy(['vid'=>SORT_DESC])
+            ->all();
+    }
+
+
+
 }

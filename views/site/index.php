@@ -22,6 +22,7 @@
 
 use yii\helpers\Url;
 use yii\helpers\Html;
+use app\widgets\VideoInfoWidget;
 
 $this->title = Yii::t('app', 'monbile');
 
@@ -39,7 +40,6 @@ $is_other_user = false;
 $is_other_user_video = true;
 ?>
 <input class="success_message" type="hidden" value="<?= $session->hasFlash('success_message') ? $session->getFlash('success_message') : '' ?>">
-<?php require(__DIR__ . '/fragment/comments_modal.php'); ?>
 
 <div class="site-index">
     <div class="row">
@@ -70,7 +70,8 @@ $is_other_user_video = true;
                             <div class="alert alert-warning" role="alert">该时段没有动态</div>
                         <?php else: ?>
                             <?php foreach ($videos_one_hour as $video_info): ?>
-                                <?php require(__DIR__ . '/fragment/video_info_panel.php'); ?>
+                                <?php /*require(__DIR__ . '/fragment/video_info_panel.php'); */?>
+                                <?= VideoInfoWidget::widget(['video_info'=>$video_info]) ?>
                             <?php endforeach; ?>
                             <div><button class="btn btn-primary btn-group-justified get_more" value="加载更多" data-type="one_hour" data-count-num="<?=count($videos_one_hour)?>">加载更多</button></div>
                         <? endif; ?>
@@ -80,7 +81,8 @@ $is_other_user_video = true;
                             <div class="alert alert-warning" role="alert">该时段没有动态</div>
                         <?php else: ?>
                             <?php foreach ($videos_one_day as $video_info): ?>
-                                <?php require(__DIR__ . '/fragment/video_info_panel.php'); ?>
+                                <?php /*require(__DIR__ . '/fragment/video_info_panel.php'); */?>
+                                <?= VideoInfoWidget::widget(['video_info'=>$video_info]) ?>
                             <?php endforeach; ?>
                             <div><button class="btn btn-primary btn-group-justified get_more" value="加载更多" data-type="one_day" data-count-num="<?=count($videos_one_day)?>">加载更多</button></div>
                         <? endif; ?>
@@ -132,26 +134,13 @@ $is_other_user_video = true;
         </div>
         <div class="col-xs-12 col-md-4 hidden-sm hidden-xs">
             <?php if ($user): ?>
-                <?php require(__DIR__ . '/fragment/user_info.php'); ?>
+                <?= \app\widgets\UserInfoWidget::widget(['user'=>$user]) ?>
             <?php endif; ?>
-            <?php require(__DIR__ . '/fragment/hot_tag.php'); ?>
-            <?php require(__DIR__ . '/fragment/hot_user.php'); ?>
+            <?= \app\widgets\HotTagWidget::widget() ?>
+            <?= \app\widgets\HotUserWidget::widget() ?>
         </div>
     </div>
 </div>
 
-<div id="popoverContent" class="hidden">
-    <div class="row">
-        <?php if($session_user):?>
-            <a href="javascript:void(0);" class="seal_button" data-seal="seal_1"><?=Html::img("./imgs/seal/".$session_user->uid."/seal_1.png",['class'=>'col-xs-6','title'=>'便便'])?></a>
-            <a href="javascript:void(0);" class="seal_button" data-seal="seal_2"><?=Html::img("./imgs/seal/".$session_user->uid."/seal_2.png",['class'=>'col-xs-6','title'=>'火火火'])?></a>
-            <a href="javascript:void(0);" class="seal_button" data-seal="seal_3"><?=Html::img("./imgs/seal/".$session_user->uid."/seal_3.png",['class'=>'col-xs-6','title'=>'水水水'])?></a>
-            <a href="javascript:void(0);" class="seal_button" data-seal="seal_4"><?=Html::img("./imgs/seal/".$session_user->uid."/seal_4.png",['class'=>'col-xs-6','title'=>'王者风范'])?></a>
-        <?php else:?>
-            <a href="javascript:void(0);" class="seal_button"><?=Html::img("./imgs/seal/seal_1.png",['class'=>'col-xs-6','title'=>'便便'])?></a>
-            <a href="javascript:void(0);" class="seal_button"><?=Html::img("./imgs/seal/seal_2.png",['class'=>'col-xs-6','title'=>'火火火'])?></a>
-            <a href="javascript:void(0);" class="seal_button"><?=Html::img("./imgs/seal/seal_3.png",['class'=>'col-xs-6','title'=>'水水水'])?></a>
-            <a href="javascript:void(0);" class="seal_button"><?=Html::img("./imgs/seal/seal_4.png",['class'=>'col-xs-6','title'=>'王者风范'])?></a>
-        <?php endif; ?>
-    </div>
-</div>
+<?= \app\widgets\CommentModalWidget::widget() ?>
+<?= \app\widgets\SealPopoverWidget::widget() ?>

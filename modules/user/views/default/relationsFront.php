@@ -37,7 +37,8 @@ $this->title = $user->nickname.'的关注';
                     <?php foreach ($user->relationsFront as $relationFront): ?>
                         <?php $user_relation = $relationFront->back?>
                         <div class="col-xs-12 col-md-6">
-                            <?php require(__DIR__ . '/../../../../views/site/fragment/user_relation_info.php'); ?>
+                            <?php /*require(__DIR__ . '/../../../../views/site/fragment/user_relation_info.php'); */?>
+                            <?=\app\widgets\UserRelationInfoWidget::widget(['user_relation'=>$user_relation])?>
                         </div>
                     <?php endforeach; ?>
                 <?php endif; ?>

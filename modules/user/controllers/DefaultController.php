@@ -80,6 +80,7 @@ class DefaultController extends Controller
                 $relations_array = array();
             }
             return $this->render('index', [
+                'user_id' => $user->uid,
                 'video_send' => $video_send,
                 'tagSearchForm' => $tagSearchForm,
                 'dateSearchForm' => $dateSearchForm,
@@ -142,6 +143,7 @@ class DefaultController extends Controller
             }
             //无论用户登录与否，其他人首页展示
             return $this->render('index', [
+                'user_id' => $id,
                 'tagSearchForm' => $tagSearchForm,
                 'dateSearchForm' => $dateSearchForm,
                 'other_user' => Users::findOne($id),

@@ -9,6 +9,8 @@
 namespace app\functions;
 
 
+use app\models\Hero;
+
 class Functions {
     /**
      * 创建随机名字
@@ -83,7 +85,8 @@ class Functions {
     public static function createHeroToBackground($heroId,$thumbnailName){
         $dst_im = imagecreatefrompng('./imgs/bg/bg_'.rand(1,10).'.png');
         imagesavealpha($dst_im, true);
-        $src_im = imagecreatefrompng('./imgs/hero/hero_'.$heroId.'.png');
+        $hero_name_py = Hero::findOne($heroId)->hero_name_py;
+        $src_im = imagecreatefrompng('./imgs/hero/hero_'.$hero_name_py.'.png');
         imagesavealpha($src_im, true);
         if(imagecopy($dst_im,$src_im,250,150,0,0,imagesx($src_im),imagesy($src_im))){
             imagepng($dst_im,'./imgs/thumbnail/'.$thumbnailName.'.png');

@@ -37,7 +37,8 @@ $this->title = $user->nickname.'的粉丝';
                     <?php foreach ($user->relationsBack as $relationBack): ?>
                         <?php $user_relation = $relationBack->front?>
                         <div class="col-xs-12 col-md-6">
-                            <?php require(__DIR__ . '/../../../../views/site/fragment/user_relation_info.php'); ?>
+                            <?php /*require(__DIR__ . '/../../../../views/site/fragment/user_relation_info.php'); */?>
+                            <?=\app\widgets\UserRelationInfoWidget::widget(['user_relation'=>$user_relation])?>
                         </div>
                     <?php endforeach; ?>
                 <?php endif; ?>

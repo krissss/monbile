@@ -10,8 +10,10 @@
 
 use yii\helpers\Html;
 use yii\bootstrap\ActiveForm;
+use yii\helpers\Url;
 
 $heroes = Yii::$app->getSession()->get('heroes');
+$hero_path = Url::to('./imgs/hero');
 
 ?>
 <div class="panel panel-default collapse" id="send_video">
@@ -46,7 +48,7 @@ $heroes = Yii::$app->getSession()->get('heroes');
             <div class="modal-body">
                 <ul class="dowebok">
                     <?php foreach($heroes as $hero):?>
-                        <li><?=Html::radio('hero_radio',false,['data-labelauty'=>$hero->hero_nickname.' '.$hero->hero_name_cn,'value'=>$hero->hid])?></li>
+                        <li><img src="<?=Url::to('./imgs/hero/head_loading.gif')?>" data-src="./imgs/hero/head_<?=$hero->hero_name_py?>.png" class="img_height_35 pull-left lazyload"><?=Html::radio('hero_radio',false,['data-labelauty'=>$hero->hero_nickname.' '.$hero->hero_name_cn,'value'=>$hero->hid])?></li>
                     <?php endforeach; ?>
                 </ul>
             </div>
